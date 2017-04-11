@@ -1,13 +1,15 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include "GameState.cpp"
 #include <boost/property_tree/ptree.hpp>
+#include <iostream>
+#include <SFML/Graphics.hpp>
+
+#include "GameState.cpp"
 #include "Parser.h"
+#include "Player.h"
 
 using boost::property_tree::ptree;
 using std::string;
 
-/* IMPORTANT CONSTANTS THAT GET TO BE GLOBAL */
+/* IMPORTANT CONSTANTS/VARIABLES THAT GET TO BE GLOBAL */
 const string kGameVersion = "1.0";
 const bool kDebugMode = true;
 GameState game_state = MAIN_LOOP;
@@ -15,13 +17,13 @@ GameState game_state = MAIN_LOOP;
 
 class Game {
  public:
-  Game() : tex_parser("./res/cfg/textures.json") {
-    tex_parser.parse();
+  Game() : tex_parser_("./res/cfg/textures.json") {
+    tex_parser_.Parse();
+    tex_parse_tree_ = tex_parser_.GetParseTree();
+    player_.SetMainTexture(tex_parse_tree_.get<string>("player.player_texture"));
   }
 
   void start() {
-    std::cout << "ddd" << std::endl;
-    std::cout << tex_parser.get_parse_tree().get<string>("player.player_texture") << std::endl;
     sf::RenderWindow window(sf::VideoMode(800, 600), "Avarus v" + kGameVersion);
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
@@ -32,13 +34,15 @@ class Game {
           window.close();
       }
       window.clear();
-      window.draw(shape);
+      window.draw(player_);
+      //window.draw(shape);
       window.display();
     }
   }
  private:
-  Parser tex_parser;
-//  Player p;
+  Parser tex_parser_, map_parser_;
+  ptree tex_parse_tree_, map_parse_tree_;
+  Player player_;
 };
 
 int main() {

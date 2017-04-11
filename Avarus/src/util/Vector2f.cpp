@@ -10,19 +10,19 @@ Vector2f::Vector2f(float x, float y) {
   this->y = y;
 }
 
-const float Vector2f::distance(Vector2f other) {
+const float Vector2f::Distance(Vector2f other) const {
   return sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2));
 }
 
-const float Vector2f::dot(Vector2f other) {
+const float Vector2f::Dot(Vector2f other) const {
   return this->x * other.x + this->y * other.y;
 }
 
-const float Vector2f::angle(Vector2f other) {
-  return acos(this->dot(other) / (this->magnitude() * other.magnitude()));
+const float Vector2f::Angle(Vector2f other) const {
+  return acos(Dot(other) / (this->Magnitude() * other.Magnitude()));
 }
 
-const float Vector2f::magnitude() const {
+const float Vector2f::Magnitude() const {
   return sqrt(this->x * this-> x + this->y * this->y);
 }
 

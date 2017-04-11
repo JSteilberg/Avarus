@@ -5,21 +5,32 @@
 #include <cmath>
 
 // Class for a mutable vector of two floats, including some useful member functions
+// Suspends some minor bits of the Google style guide since it is inheriting from a library
+// that does not follow Google style guide
 class Vector2f : public sf::Vector2f {
  public:
+  // Constructs a Vector2f with no initial values
   Vector2f();
+
+  // Constructs a Vector2f with the given initial values
   Vector2f(float x, float y);
-  virtual ~Vector2f();
+
   // Dot this Vector2d with another and return the result
-  const float dot(Vector2f other);
+  const float Dot(Vector2f other) const;
+
   // Return the magnitude of this Vector2d
-  const float magnitude() const;
+  const float Magnitude() const;
+
   // Multiply this Vector2f by a float and return it
-  Vector2f operator*(const float scalar);
+  Vector2f operator*(const float scalar) const;
+
   // Return the distance between this Vector2f and the given
-  const float distance(Vector2f other);
+  const float Distance(Vector2f other) const;
+
   // Return the angle between this Vector2f and the given, in radians
-  const float angle(Vector2f other);
+  const float Angle(Vector2f other) const;
+
+  virtual ~Vector2f();
  protected:
 
  private:
