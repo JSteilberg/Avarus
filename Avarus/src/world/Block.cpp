@@ -1,11 +1,9 @@
 #include "Block.h"
 
-Block::Block()
-{
-    //ctor
+Block::Block() {
+  //ctor
 }
 
-Block::~Block()
-{
-    //dtor
+Block::~Block() {
+  //dtor
 }
