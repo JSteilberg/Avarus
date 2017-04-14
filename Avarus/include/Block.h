@@ -1,10 +1,9 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "Corporeal.h"
 
-
-class Block : public sf::RectangleShape {
+class Block : public Corporeal {
  public:
   Block();
   virtual ~Block();

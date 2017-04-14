@@ -22,7 +22,10 @@ class Vector2f : public sf::Vector2f {
   const float Magnitude() const;
 
   // Multiply this Vector2f by a float and return it
-  Vector2f operator*(const float scalar) const;
+  Vector2f operator*(float scalar) const;
+
+  // Add another Vector2f to this Vector2f and return it
+  Vector2f operator+(const Vector2f& other) const;
 
   // Return the distance between this Vector2f and the given
   const float Distance(Vector2f other) const;

@@ -23,8 +23,17 @@ const float Vector2f::Angle(Vector2f other) const {
 }
 
 const float Vector2f::Magnitude() const {
-  return sqrt(this->x * this-> x + this->y * this->y);
+  return sqrt(this->x * this->x + this->y * this->y);
 }
+
+Vector2f Vector2f::operator*(float scalar) const {
+  return Vector2f(this->x * scalar, this->y * scalar);
+}
+
+Vector2f Vector2f::operator+(const Vector2f& other) const {
+  return Vector2f(this->x + other.x, this->y + other.y);
+}
+
 
 Vector2f::~Vector2f() {
   //dtor

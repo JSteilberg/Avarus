@@ -1,45 +1,27 @@
 #include "Entity.h"
 
 Entity::Entity() {
+
 }
 
-Entity::Entity(string main_texture) {
-  SetMainTexture(main_texture);
+Entity::Entity(const sf::Texture& texture) : Corporeal(texture) {}
+
+Entity::Entity(const sf::VertexArray& vertices) : Corporeal(vertices) {}
+
+void Entity::SetVel(Vector2f vel) {
+  vel_ = vel;
 }
 
-Entity::Entity(const sf::Texture& texture) {
-  SetMainTexture(texture);
+void Entity::SetAcc(Vector2f acc) {
+  acc_ = acc;
 }
 
-Entity::Entity(const sf::VertexArray& vertices) {
-  vertices_ = vertices;
+void Entity::AddVel(Vector2f velOffset) {
+  vel_ = vel_ + velOffset;
 }
 
-void Entity::SetMainTexture(string main_texture) {
-  sf::Texture texture;
-  if (!texture.loadFromFile(main_texture)) {
-    throw new std::runtime_error("Error loading texture " + main_texture + "in Entity.");
-  }
-  this->SetMainTexture(texture);
-}
-
-void Entity::SetMainTexture(const sf::Texture& texture) {
-  std::cout << "working" << std::endl;
-  textures_["main"] = texture;
-  current_texture_ = texture;
-}
-
-void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  // getTransform() is defined by sf::Transformable
-  states.transform *= getTransform();
-
-  // Apply the current texture
-  states.texture = &current_texture_;
-
-  // TODO override states.shader or states.blendMode if you want
-
-  // Draw the vertex array
-  target.draw(vertices_, states);
+void Entity::AddAcc(Vector2f accOffset) {
+  acc_ = acc_ + accOffset;
 }
 
 Entity::~Entity() {
