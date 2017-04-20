@@ -4,6 +4,8 @@
 //class GameState;
 class Game;
 
+#include <SFML/Graphics.hpp>
+
 #include "GameState.h"
 #include "Player.h"
 
@@ -15,10 +17,12 @@ class MainLoop : public GameState {
   MainLoop();
 
   // Create an instance of MainLoop with a specified game
-  MainLoop(Game* game);
+  MainLoop(Player player);
 
   // This is how the main loop do
-  virtual void Update();
+  virtual void Update(const sf::Time& deltaTime, const sf::Event& event) override;
+
+  virtual void Draw(sf::RenderWindow& window);
 
   virtual ~MainLoop();
 

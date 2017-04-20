@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include <iostream>
 
 Entity::Entity() {
 
@@ -7,6 +8,12 @@ Entity::Entity() {
 Entity::Entity(const sf::Texture& texture) : Corporeal(texture) {}
 
 Entity::Entity(const sf::VertexArray& vertices) : Corporeal(vertices) {}
+
+void Entity::Update(const sf::Time& deltaTime) {
+  vel_ = vel_ + acc_;
+  AddPos(vel_ * deltaTime.asSeconds());
+  acc_ = Vector2f(0, 0);
+}
 
 void Entity::SetVel(Vector2f vel) {
   vel_ = vel;

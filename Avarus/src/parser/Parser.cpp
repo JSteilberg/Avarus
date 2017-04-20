@@ -11,7 +11,7 @@ Parser::Parser(const char file_name[]) {
 
 void Parser::Parse() {
   read_json(file_name_, parse_tree_);
-  this->parsed_ = true;
+  parsed_ = true;
 }
 
 ptree Parser::GetParseTree() {

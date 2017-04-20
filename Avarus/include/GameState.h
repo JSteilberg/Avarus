@@ -1,6 +1,8 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
+#include <SFML/Graphics.hpp>
+
 class Game;
 
 // Usually going on an std::stack of GameStates, an instance of GameState represents a
@@ -11,11 +13,10 @@ class GameState {
     // Creates a GameState with no attributes
     GameState();
 
-    // The GameState should be created with a Game to operate on
-    GameState(Game* game);
-
     // This method should be called during every update in the main Game loop
-    virtual void Update();
+    virtual void Update(const sf::Time& deltaTime, const sf::Event& event) = 0;
+
+    virtual void Draw(sf::RenderWindow& window) = 0;
 
     virtual ~GameState();
 

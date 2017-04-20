@@ -41,6 +41,8 @@ class Entity : public Corporeal {
   // Apply a force to this Entity, as a vector with units N*m/s^2
   void Force(Vector2f forceVect);
 
+  void Update(const sf::Time& deltaTime);
+
   virtual ~Entity();
 
  protected:

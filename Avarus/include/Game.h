@@ -33,10 +33,13 @@ class Game {
   const bool kDebugMode = true;
 
   // Used to get the amount of time to draw a frame
-  sf::Clock deltaClock;
+  sf::Clock delta_clock_;
+
+  // Used to ensure updating happens a max of 60 times per second
+  sf::Clock update_clock_;
 
   // Holds the current state of the game (Used for menus, main loop, etc.)
-  std::stack<GameState> state_stack_;
+  std::stack<GameState*> state_stack_;
 
   virtual ~Game();
 
@@ -54,6 +57,8 @@ class Game {
   sf::Texture player_texture_;
 
   sf::RenderWindow window_;
+
+  MainLoop main_loop_;
   //sf::Texture atlas_;
 };
 
