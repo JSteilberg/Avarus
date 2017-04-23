@@ -11,11 +11,8 @@
 using std::string;
 
 // A Corporeal is a Drawable with the ability to collide and return opposite forces
-class Corporeal : public sf::Drawable {
+class Corporeal : public sf::Drawable, public sf::Transformable {
  public:
-
-  // Sets the main texture based on a sf::Texture, wrapper for sf::Sprite::setTexture
-  void SetTexture(const sf::Texture& texture);
 
   // Set the main bounding rectangle for this Corporeal's sf::Texture
   void SetMainTextureRect(const sf::IntRect& rectangle);
@@ -46,6 +43,8 @@ class Corporeal : public sf::Drawable {
 
   // Array of sf::Vector2f that define the shape of this Corporeal
   sf::VertexArray vertices_;
+
+  const sf::Texture& texture_;
 
  private:
 };

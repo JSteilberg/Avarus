@@ -47,14 +47,14 @@ class Game {
   // Parsers for the game's map (will be removed at some point)
   Parser map_parser_;
 
+  // Main window for the game
+  sf::RenderWindow window_;
+
   // Used for converting sprite int IDs into corresponding names
   IdRegister id_registry_;
 
   // Property trees that correspond to the above parsers
   ptree tex_parse_tree_, map_parse_tree_;
-
-  // Main window for the game
-  sf::RenderWindow window_;
 
   // Holds main texture and texture coordinates for all Sprites in the game
   Atlas game_atlas_;

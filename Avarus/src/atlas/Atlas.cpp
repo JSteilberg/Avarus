@@ -58,16 +58,16 @@ void Atlas::LoadTextureRects() {
       // Create the rect
       sf::IntRect rect(rects.second.get<int>("x"),
                        rects.second.get<int>("y"),
-                       rects.second.get<int>("l"),
-                       rects.second.get<int>("w"));
+                       rects.second.get<int>("w"),
+                       rects.second.get<int>("l"));
 
       // Add the rect to the rects map
       atlas_rects_map_[string(v.first.data())][rects.second.get<string>("name")] = rect;
       Logger::RawLog("Rect " + rects.second.get<string>("name") +
                      ": x=" + rects.second.get<string>("x") +
                      ", y=" + rects.second.get<string>("y") +
-                     ", l=" + rects.second.get<string>("l") +
-                     ", w=" + rects.second.get<string>("w"), INFO);
+                     ", w=" + rects.second.get<string>("w") +
+                     ", l=" + rects.second.get<string>("l"), INFO);
     }
   }
 
@@ -82,8 +82,8 @@ void Atlas::LoadTextureRects() {
       // Create the rect
       sf::IntRect rect(rects.second.get<int>("x"),
                        rects.second.get<int>("y"),
-                       rects.second.get<int>("l"),
-                       rects.second.get<int>("w"));
+                       rects.second.get<int>("w"),
+                       rects.second.get<int>("l"));
 
       // Add the rect to the rects map
       atlas_rects_map_[v.first.data()][rects.second.get<string>("name")] = rect;
@@ -91,8 +91,8 @@ void Atlas::LoadTextureRects() {
       Logger::RawLog("Rect " + rects.second.get<string>("name") +
                      ": x=" + rects.second.get<string>("x") +
                      ", y=" + rects.second.get<string>("y") +
-                     ", l=" + rects.second.get<string>("l") +
-                     ", w=" + rects.second.get<string>("w"), INFO);
+                     ", w=" + rects.second.get<string>("w") +
+                     ", l=" + rects.second.get<string>("l"), INFO);
     }
   }
 
@@ -108,8 +108,8 @@ void Atlas::LoadTextureRects() {
       // Create the rect
       sf::IntRect rect(rects.second.get<int>("x"),
                        rects.second.get<int>("y"),
-                       rects.second.get<int>("l"),
-                       rects.second.get<int>("w"));
+                       rects.second.get<int>("w"),
+                       rects.second.get<int>("l"));
 
       // Add the rect to the rects map
       atlas_rects_map_[v.first.data()][rects.second.get<string>("name")] = rect;
@@ -117,8 +117,8 @@ void Atlas::LoadTextureRects() {
       Logger::RawLog("Rect " + rects.second.get<string>("name") +
                      ": x=" + rects.second.get<string>("x") +
                      ", y=" + rects.second.get<string>("y") +
-                     ", l=" + rects.second.get<string>("l") +
-                     ", w=" + rects.second.get<string>("w"), INFO);
+                     ", w=" + rects.second.get<string>("w") +
+                     ", l=" + rects.second.get<string>("l"), INFO);
     }
   }
 }

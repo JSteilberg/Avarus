@@ -4,17 +4,13 @@ Corporeal::Corporeal(const sf::Texture& texture,
                      const std::map<string, sf::IntRect>& texture_rects,
                      const sf::VertexArray& vertices) :
   texture_rects_(texture_rects),
-  vertices_(vertices) {
-  SetTexture(texture);
-  SetMainTextureRect(sf::IntRect(208, 0, 64, 32));//texture_rects_.at("norm"));
-}
-
-void Corporeal::SetTexture(const sf::Texture& texture) {
-  setTexture(texture);
+  vertices_(vertices),
+  texture_(texture) {
+  SetMainTextureRect(texture_rects_.at("norm"));
 }
 
 void Corporeal::SetMainTextureRect(const sf::IntRect& rectangle) {
-  setTextureRect(rectangle);
+  vertices_[0].texCoords = sf::Vector2f(rectangle.left, rectangle.top);  vertices_[1].texCoords = sf::Vector2f(rectangle.left, rectangle.top + rectangle.height);  vertices_[2].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top + rectangle.height);  vertices_[3].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top);
 }
 
 void Corporeal::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -22,7 +18,7 @@ void Corporeal::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   states.transform *= getTransform();
 
   // Apply the current texture
-  states.texture = getTexture();
+  states.texture = &texture_;
 
   // TODO override states.shader or states.blendMode if you want
 
