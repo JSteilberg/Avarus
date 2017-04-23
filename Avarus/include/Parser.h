@@ -23,7 +23,7 @@ class Parser
     Parser(const char file_name[]);
 
     // Returns a boost::property_tree::ptree of the parsed file. Throws exception if called before parse();
-    ptree GetParseTree();
+    const ptree& GetParseTree() const;
 
     // Parses the file being held in state
     void Parse();

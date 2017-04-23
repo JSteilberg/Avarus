@@ -1,20 +1,12 @@
 #include "Corporeal.h"
 
-Corporeal::Corporeal() {
-  //ctor
-}
-
-Corporeal::Corporeal(const sf::Texture& texture) {
+Corporeal::Corporeal(const sf::Texture& texture,
+                     const std::map<string, sf::IntRect>& texture_rects,
+                     const sf::VertexArray& vertices) :
+  texture_rects_(texture_rects),
+  vertices_(vertices) {
   SetTexture(texture);
-}
-
-Corporeal::Corporeal(const sf::Texture& texture, const sf::IntRect& rectangle) {
-  SetTexture(texture);
-  SetMainTextureRect(rectangle);
-}
-
-Corporeal::Corporeal(const sf::VertexArray& vertices) {
-  vertices_ = vertices;
+  SetMainTextureRect(sf::IntRect(208, 0, 64, 32));//texture_rects_.at("norm"));
 }
 
 void Corporeal::SetTexture(const sf::Texture& texture) {

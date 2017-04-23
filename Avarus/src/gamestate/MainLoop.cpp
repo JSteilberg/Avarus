@@ -1,11 +1,7 @@
 #include "MainLoop.h"
 
-MainLoop::MainLoop() {
-  //ctor
-}
+MainLoop::MainLoop(Player& player) : player_(player) {
 
-MainLoop::MainLoop(Player player) {
-  player_ = player;
 }
 
 void MainLoop::Update(const sf::Time& deltaTime, const sf::Event& event) {

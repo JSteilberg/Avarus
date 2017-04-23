@@ -11,17 +11,21 @@ using std::string;
 class Player : public Entity {
  public:
 
-  // Create a Player with nothing. How useless.
-  Player();
 
-  // Create a Player with an initial sf::Texture
-  Player(sf::Texture& texture);
+
+  // Create a Player with an initial Atlas
+  Player(Atlas& atlas);
 
   virtual ~Player();
+
+  virtual const int GetTypeId() const override;
 
  protected:
 
  private:
+
+   // Corresponds to the player "type"
+   const int type_id_ = 50000;
 };
 
 #endif // PLAYER_H

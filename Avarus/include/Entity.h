@@ -17,15 +17,6 @@ using std::string;
 class Entity : public Corporeal {
  public:
 
-  // Create an entity with no initial parameters. How useless.
-  Entity();
-
-  // Create an entity with an initial main sf::Texture, specified by a string
-  Entity(string main_texture);
-
-  // Create an entity with an initial main sf::Texture
-  Entity(const sf::Texture& texture);
-
   // Set this Entity's velocity
   void SetVel(Vector2f vel);
 
@@ -41,12 +32,19 @@ class Entity : public Corporeal {
   // Apply a force to this Entity, as a vector with units N*m/s^2
   void Force(Vector2f forceVect);
 
+  // Update this Entity with a given deltaTime
   void Update(const sf::Time& deltaTime);
+
+  // Get the type ID for this Corporeal
+  virtual const int GetTypeId() const = 0;
 
   virtual ~Entity();
 
  protected:
-  Entity(const sf::VertexArray& vertices);
+  // Used internally to initialize textures and vertices
+  Entity(const sf::Texture& texture,
+         const std::map<string, sf::IntRect>& texture_rects,
+         const sf::VertexArray& vertices);
 
   // x and y velocity of this Entity
   Vector2f vel_;

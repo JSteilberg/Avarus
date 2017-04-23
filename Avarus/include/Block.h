@@ -3,7 +3,7 @@
 
 #include "Corporeal.h"
 
-class Block : public Corporeal {
+class Block {
  public:
   Block();
   virtual ~Block();

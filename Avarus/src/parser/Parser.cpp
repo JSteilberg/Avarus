@@ -14,7 +14,7 @@ void Parser::Parse() {
   parsed_ = true;
 }
 
-ptree Parser::GetParseTree() {
+const ptree& Parser::GetParseTree() const {
   if(!parsed_) {
     throw new std::runtime_error("Called GetParseTree before calling Parse()");
   }

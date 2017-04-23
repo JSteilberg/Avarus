@@ -8,9 +8,11 @@
 #include <stdexcept>
 #include <vector>
 
+#include "Atlas.h"
 #include "Corporeal.h"
 #include "Gamestate.h"
 #include "MainLoop.h"
+#include "ObjRegister.h"
 #include "Parser.h"
 #include "Player.h"
 
@@ -29,9 +31,6 @@ class Game {
   // Current version of the game... self explanatory
   const string kGameVersion = "1.0";
 
-  // Debug mode
-  const bool kDebugMode = true;
-
   // Used to get the amount of time to draw a frame
   sf::Clock delta_clock_;
 
@@ -45,21 +44,27 @@ class Game {
 
  private:
 
-  // Parsers for the game's textures and map (map will be changed at some point)
-  Parser tex_parser_, map_parser_;
+  // Parsers for the game's map (will be removed at some point)
+  Parser map_parser_;
+
+  // Used for converting sprite int IDs into corresponding names
+  IdRegister id_registry_;
 
   // Property trees that correspond to the above parsers
   ptree tex_parse_tree_, map_parse_tree_;
 
-
-  Player player_;
-
-  sf::Texture player_texture_;
-
+  // Main window for the game
   sf::RenderWindow window_;
 
+  // Holds main texture and texture coordinates for all Sprites in the game
+  Atlas game_atlas_;
+
+  // Main player for the game
+  Player player_;
+
+  // Main loop for the game
   MainLoop main_loop_;
-  //sf::Texture atlas_;
+
 };
 
 #endif // GAME_H

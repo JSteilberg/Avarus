@@ -13,15 +13,14 @@ class Game;
 class MainLoop : public GameState {
  public:
 
-  // Create an instance of MainLoop without any game to operate on
-  MainLoop();
-
-  // Create an instance of MainLoop with a specified game
-  MainLoop(Player player);
+  // Create an instance of MainLoop with a specified player
+  // Important: Does modify player
+  MainLoop(Player& player);
 
   // This is how the main loop do
   virtual void Update(const sf::Time& deltaTime, const sf::Event& event) override;
 
+  // This is how the drawing do
   virtual void Draw(sf::RenderWindow& window);
 
   virtual ~MainLoop();
@@ -30,7 +29,7 @@ class MainLoop : public GameState {
 
  private:
   // Main game player
-  Player player_;
+  Player& player_;
 
   // Main game player's texture
   sf::Texture player_texture_;

@@ -1,13 +1,9 @@
 #include "Entity.h"
-#include <iostream>
 
-Entity::Entity() {
-
-}
-
-Entity::Entity(const sf::Texture& texture) : Corporeal(texture) {}
-
-Entity::Entity(const sf::VertexArray& vertices) : Corporeal(vertices) {}
+Entity::Entity(const sf::Texture& texture,
+               const std::map<string, sf::IntRect>& texture_rects,
+               const sf::VertexArray& vertices) :
+  Corporeal(texture, texture_rects, vertices) {}
 
 void Entity::Update(const sf::Time& deltaTime) {
   vel_ = vel_ + acc_;
