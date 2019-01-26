@@ -10,7 +10,6 @@
 
 #include "Logger.h"
 #include "Corporeal.h"
-#include "VertexArray.h"
 
 using std::string;
 
@@ -29,7 +28,6 @@ class Entity : public Corporeal {
   // Used internally to initialize textures and vertices
   Entity(const sf::Texture& texture,
          const std::map<string, sf::IntRect>& texture_rects,
-         const VertexArray& vertices,
          b2World& world);
 
  private:

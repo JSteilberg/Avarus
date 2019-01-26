@@ -2,10 +2,8 @@
 
 Corporeal::Corporeal(const sf::Texture& texture,
                      const std::map<string, sf::IntRect>& texture_rects,
-                     const VertexArray& vertices,
                      b2World& world) :
   texture_rects_(texture_rects),
-  vertices_(vertices),
   texture_(texture),
   sprite_(texture, texture_rects.at("norm")) {
 
@@ -16,10 +14,10 @@ Corporeal::Corporeal(const sf::Texture& texture,
 }
 
 void Corporeal::SetMainTextureRect(const sf::IntRect& rectangle) {
-  vertices_[0].texCoords = sf::Vector2f(rectangle.left, rectangle.top);
-  vertices_[1].texCoords = sf::Vector2f(rectangle.left, rectangle.top + rectangle.height);
-  vertices_[2].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top + rectangle.height);
-  vertices_[3].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top);
+  //vertices_[0].texCoords = sf::Vector2f(rectangle.left, rectangle.top);
+  //vertices_[1].texCoords = sf::Vector2f(rectangle.left, rectangle.top + rectangle.height);
+  //vertices_[2].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top + rectangle.height);
+  //vertices_[3].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top);
 }
 
 const sf::Sprite& Corporeal::GetSprite() const {

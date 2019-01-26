@@ -8,7 +8,6 @@
 
 #include "Atlas.h"
 #include "Constants.h"
-#include "VertexArray.h"
 
 using std::string;
 
@@ -57,17 +56,17 @@ class Corporeal {
 
  protected:
 
-  // Constructs this Corporeal without any texture, only vertices
+  // Basic constructor that includes the atlas texture and corresponding
+  // texture rects
   Corporeal(const sf::Texture& texture,
             const std::map<string, sf::IntRect>& texture_rects,
-            const VertexArray& vertices,
             b2World& world);
 
   // Map of texture subsets to be used by this Corporeal. The first texture will be mapped to "main".
   const std::map<string, sf::IntRect>& texture_rects_;
 
   // Array of sf::Vector2f that define the shape of this Corporeal
-  VertexArray vertices_;
+  //VertexArray vertices_;
 
   // Reference to the texture to be used
   const sf::Texture& texture_;
