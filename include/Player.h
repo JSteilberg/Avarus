@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "Entity.h"
-#include "Vector2f.h"
 
 using std::string;
 

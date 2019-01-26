@@ -10,7 +10,6 @@
 
 #include "Logger.h"
 #include "Corporeal.h"
-#include "Vector2f.h"
 #include "VertexArray.h"
 
 using std::string;

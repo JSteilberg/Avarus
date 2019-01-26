@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "Atlas.h"
+#include "Constants.h"
 #include "Corporeal.h"
 #include "Gamestate.h"
 #include "MainLoop.h"
@@ -28,9 +29,6 @@ class Game {
   void Start();
 
   void Update(const sf::Event& event);
-
-  // Current version of the game... self explanatory
-  const string kGameVersion = "1.0";
 
   // Used to get the amount of time to draw a frame
   sf::Clock delta_clock_;

@@ -2,11 +2,11 @@
 
 Player::Player(Atlas& atlas, b2World& world) :
   Entity(atlas.GetTexture(), atlas.GetRects(50000), VertexArray(sf::Quads, 4), world) {
-  Vector2f pos(0,0);
-  vertices_[0].position = Vector2f(pos.x, pos.y);
-  vertices_[1].position = Vector2f(pos.x + .75, pos.y);
-  vertices_[2].position = Vector2f(pos.x + .75, pos.y + 1.5);
-  vertices_[3].position = Vector2f(pos.x, pos.y + 1.5);
+  b2Vec2 pos(0.0,0.0);
+  vertices_[0].position = sf::Vector2f(pos.x, pos.y);
+  vertices_[1].position = sf::Vector2f(pos.x + .75, pos.y);
+  vertices_[2].position = sf::Vector2f(pos.x + .75, pos.y + 1.5);
+  vertices_[3].position = sf::Vector2f(pos.x, pos.y + 1.5);
 
 
   const b2Vec2* verts = vertices_.VerticesAsB2Vec2();

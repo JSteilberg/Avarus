@@ -2,7 +2,7 @@
 
 Game::Game() :
   // Create window with 800x600 resolution
-  window_(sf::VideoMode(800, 600), "Avarus v" + kGameVersion),
+  window_(sf::VideoMode(800, 600), "Avarus v" + consts::kGameVersion),
   id_registry_("./res/cfg/ids.json"),
   game_atlas_("./res/cfg/atlas.json", id_registry_),
   gravity_(0.0f, 0.0f),
