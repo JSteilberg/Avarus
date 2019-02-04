@@ -5,9 +5,9 @@ The aim is to create something along the lines of a space game, complete with pl
 
 ## Inspiration
 Inspiration taken (so far) from: 
-Halo 
-Terraria
-Made in Abyss 
+* Halo 
+* Terraria
+* Made in Abyss 
 
 
 ## TODO: 
