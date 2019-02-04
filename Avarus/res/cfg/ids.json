@@ -1,9 +1,0 @@
-{
-  "ids": {
-    "error": 0,
-    "stone": 1,
-    "dirt": 2,
-    "grass": 3,
-    "player": 50000
-  }
-}
