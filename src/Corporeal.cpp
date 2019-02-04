@@ -6,6 +6,9 @@ Corporeal::Corporeal(const sf::Texture& texture,
   texture_rects_(texture_rects),
   texture_(texture),
   sprite_(texture, texture_rects.at("norm")) {
+  //sprite_.setScale(1,2);
+  sprite_.setScale(width_ * consts::kPixelScale/texture_rects.at("norm").width,
+                   height_ * consts::kPixelScale/texture_rects.at("norm").height);
 
   body_def_.type = b2_dynamicBody;
   body_def_.position.Set(0, 0);

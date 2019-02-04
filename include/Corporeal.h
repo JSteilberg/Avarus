@@ -82,6 +82,11 @@ class Corporeal {
 
   b2FixtureDef fixture_def_;
 
+  float width_ = 1;
+
+  float height_ = 2;
+
+
  private:
 };
 

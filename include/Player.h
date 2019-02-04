@@ -22,7 +22,6 @@ class Player : public Entity {
  protected:
 
  private:
-
    // Corresponds to the player "type"
    const int type_id_ = 50000;
 };
