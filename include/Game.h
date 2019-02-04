@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include <stack>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include "Atlas.h"
@@ -19,6 +20,7 @@
 #include "Player.h"
 
 using boost::property_tree::ptree;
+using namespace std;
 
 // Class to run an instance of the game.
 // All you have to do is declare an instance and run .start()
@@ -71,6 +73,8 @@ class Game {
 
   // Main loop for the game
   MainLoop main_loop_;
+
+  DebugOverlay dbg_overlay_;
 };
 
 #endif // GAME_H

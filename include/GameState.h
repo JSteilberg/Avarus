@@ -14,7 +14,7 @@ class GameState {
     GameState();
 
     // This method should be called during every update in the main Game loop
-    virtual void Update(const sf::Time& deltaTime, const sf::Event& event) = 0;
+    virtual void Update(const sf::Time& deltaTime, sf::Window& window) = 0;
 
     virtual void Draw(sf::RenderWindow& window) = 0;
 
