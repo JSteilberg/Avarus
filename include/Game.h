@@ -13,7 +13,7 @@
 #include "Atlas.h"
 #include "Constants.h"
 #include "Corporeal.h"
-#include "Gamestate.h"
+#include "GameState.h"
 #include "MainLoop.h"
 #include "ObjRegister.h"
 #include "Parser.h"
