@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Avarus" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Avarus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-std=c++0x" />
+					<Add option="-m64" />
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add option="-m64" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Avarus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-Wall" />
+					<Add option="-std=c++0x" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="/home/jack/Projects/Avarus/include" />
+		</Compiler>
+		<Linker>
+			<Add library="sfml-graphics" />
+			<Add library="sfml-window" />
+			<Add library="sfml-system" />
+			<Add library="Box2D" />
+		</Linker>
+		<Unit filename="include/Atlas.h" />
+		<Unit filename="include/Block.h" />
+		<Unit filename="include/Chunk.h" />
+		<Unit filename="include/Constants.h" />
+		<Unit filename="include/Corporeal.h" />
+		<Unit filename="include/DebugOverlay.h" />
+		<Unit filename="include/Defines.h" />
+		<Unit filename="include/Entity.h" />
+		<Unit filename="include/Game.h" />
+		<Unit filename="include/GameState.h" />
+		<Unit filename="include/Generator.h" />
+		<Unit filename="include/IdRegister.h" />
+		<Unit filename="include/Logger.h" />
+		<Unit filename="include/MainLoop.h" />
+		<Unit filename="include/ObjRegister.h" />
+		<Unit filename="include/Parser.h" />
+		<Unit filename="include/Player.h" />
+		<Unit filename="src/Chunk.cpp" />
+		<Unit filename="src/Corporeal.cpp" />
+		<Unit filename="src/DebugOverlay.cpp" />
+		<Unit filename="src/Entity.cpp" />
+		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/IdRegister.cpp" />
+		<Unit filename="src/Logger.cpp" />
+		<Unit filename="src/ObjRegister.cpp" />
+		<Unit filename="src/Player.cpp" />
+		<Unit filename="src/atlas/Atlas.cpp" />
+		<Unit filename="src/gamestate/GameState.cpp" />
+		<Unit filename="src/gamestate/MainLoop.cpp" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/parser/Parser.cpp" />
+		<Unit filename="src/world/Block.cpp" />
+		<Unit filename="src/world/Chunk.cpp" />
+		<Unit filename="src/world/Generator.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
