@@ -22,7 +22,7 @@ const string& IdRegister::IdToName(int id) const {
   try {
     return registry_.at(id);
   } catch(std::out_of_range e) {
-    Logger::Log("Failed to get name for id " + id, MED);
+      Logger::Log("Failed to get name for id " + std::to_string(id), MED);
     return registry_.at(0);
   }
 }

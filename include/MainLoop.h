@@ -22,7 +22,7 @@ public:
   virtual void Update(const sf::Time& deltaTime, sf::Window& window) override;
 
   // This is how the drawing do
-  virtual void Draw(sf::RenderWindow& window);
+  virtual void Draw(sf::RenderWindow& window) override;
 
   virtual ~MainLoop();
 
