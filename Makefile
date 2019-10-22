@@ -1,11 +1,12 @@
 CXX = g++
-CXXFLAGS = -Wall -g
-INC = -I./include/
+CXXFLAGS = -Wall -Wextra -g -std=c++0x -pedantic -Weffc++ -Wstrict-aliasing
+INC = -I./include/ 
+LIB = 
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
 
 main: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 			Atlas.o Corporeal.o GameState.o Logger.o Entity.o
-	$(CXX) $(CXXFLAGS) -o main main.o \
+	$(CXX) $(CXXFLAGS) $(LIB) -o main main.o \
 		Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 		Atlas.o Corporeal.o GameState.o Logger.o Entity.o \
 		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D
