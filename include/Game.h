@@ -12,7 +12,6 @@
 
 #include "Atlas.h"
 #include "Constants.h"
-#include "Corporeal.h"
 #include "GameState.h"
 #include "MainLoop.h"
 #include "ObjRegister.h"

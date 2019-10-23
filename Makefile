@@ -5,10 +5,10 @@ LIB =
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
 
 main: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
-			Atlas.o Corporeal.o GameState.o Logger.o Entity.o
+			Atlas.o GameState.o Logger.o Entity.o
 	$(CXX) $(CXXFLAGS) $(LIB) -o Avarus main.o \
 		Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
-		Atlas.o Corporeal.o GameState.o Logger.o Entity.o \
+		Atlas.o GameState.o Logger.o Entity.o \
 		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D
 
 main.o: src/main.cpp
@@ -34,9 +34,6 @@ Logger.o: src/Logger.cpp
 
 Chunk.o: src/physics/Chunk.cpp
 	$(COMP) src/physics/Chunk.cpp
-
-Corporeal.o: src/physics/Corporeal.cpp
-	$(COMP) src/physics/Corporeal.cpp
 
 DebugOverlay.o:
 	$(COMP) src/DebugOverlay.cpp

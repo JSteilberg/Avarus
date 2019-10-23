@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "Atlas.h"
 #include "Entity.h"
 
 using std::string;

@@ -13,7 +13,7 @@ class Game;
 
 // Class to represent the main loop for the game
 class MainLoop : public GameState {
-public:
+ public:
   // Create an instance of MainLoop with a specified player
   // Important: Does modify player
   MainLoop(Player& player, b2World& world, DebugOverlay& dbg_overlay);
@@ -39,8 +39,8 @@ private:
   // Main game player's texture
   sf::Texture player_texture_;
 
-  // List of Corporeals to update during the update() function
-  std::vector<Corporeal> update_list_;
+  // List of Entitys to update during the update() function
+  std::vector<Entity> update_list_;
 
   // Holds the Box2D world that
   b2World& world_;
