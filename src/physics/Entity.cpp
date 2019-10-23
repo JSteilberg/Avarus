@@ -7,8 +7,8 @@ Entity::Entity(const sf::Texture& texture,
   texture_(texture),
   sprite_(texture, texture_rects.at("norm")) {
   //sprite_.setScale(1,2);
-  sprite_.setScale(width_ * consts::kPixelScale/texture_rects.at("norm").width,
-                   height_ * consts::kPixelScale/texture_rects.at("norm").height);
+  sprite_.setScale(width_  * consts::kPixelScale / texture_rects.at("norm").width,
+                   height_ * consts::kPixelScale / texture_rects.at("norm").height);
 
   body_def_.type = b2_dynamicBody;
   body_def_.position.Set(0, 0);
@@ -23,16 +23,15 @@ void Entity::SetMainTextureRect(const sf::IntRect& rectangle) {
   //vertices_[3].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top);
 }
 
-const sf::Sprite& Entity::GetSprite() const {
+const sf::Sprite& Entity::GetSprite() {
+  sprite_.setPosition(body_->GetPosition().x * consts::kPixelScale,
+                      body_->GetPosition().y * consts::kPixelScale);
+  sprite_.setRotation(body_->GetAngle());
   return sprite_;
 }
 
 void Entity::Update(const sf::Time& deltaTime) {
-  sprite_.setPosition(body_->GetPosition().x * consts::kPixelScale,
-                      body_->GetPosition().y * consts::kPixelScale);
-  sprite_.setRotation(body_->GetAngle());
-
-  //std::cout << body_->GetPosition().x << "/" << body_->GetPosition().y << std::endl;
+  // Do nothing
 }
 
 void Entity::SetShape(const b2Vec2* vertices, int vertex_count) {
@@ -73,6 +72,7 @@ void Entity::ApplyForce(b2Vec2 forceVec) {
 }
 
 Entity::~Entity() {
+    
   //dtor
 }
 

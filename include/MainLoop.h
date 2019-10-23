@@ -10,6 +10,7 @@ class Game;
 #include "GameState.h"
 #include "Player.h"
 #include "DebugOverlay.h"
+#include "Constants.h"
 
 // Class to represent the main loop for the game
 class MainLoop : public GameState {

@@ -10,9 +10,10 @@ MainLoop::MainLoop(Player& player, b2World& world, DebugOverlay& dbg_overlay) :
 }
 
 void MainLoop::Update(const sf::Time& deltaTime, sf::Window& window) {
+  // TODO: Maybe handling key events should be outside update?
   HandleKeyEvents(window);
 
-  world_.Step(deltaTime.asSeconds(), 8, 3);
+  world_.Step(deltaTime.asSeconds(), consts::kVelocityIterations, consts::kPositionIterations);
   player_.Update(deltaTime);
 
   if(dbg_menu_on_) {

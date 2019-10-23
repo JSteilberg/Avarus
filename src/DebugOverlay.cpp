@@ -11,7 +11,7 @@ DebugOverlay::DebugOverlay() :
 
   info_.setPosition(5, 1);
   info_.setCharacterSize(20);
-  info_.setFillColor(sf::Color::White);
+  info_.setFillColor(sf::Color::Black);
   background_.setFillColor(sf::Color(90, 90, 90, 200));
 }
 

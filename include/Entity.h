@@ -54,7 +54,7 @@ class Entity {
   void SetShape(const b2Vec2* vertices, int vertex_count);
 
   // Gets the sprite used to draw this Entity
-  const sf::Sprite& GetSprite() const;
+  const sf::Sprite& GetSprite();
 
   virtual ~Entity();
 
