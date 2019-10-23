@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -g -std=c++0x -pedantic -Weffc++ -Wstrict-aliasing
+CXXFLAGS = -Wall -Wextra -g -std=c++0x -pedantic -Wstrict-aliasing
 INC = -I./include/ 
 LIB = 
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
@@ -35,7 +35,7 @@ Logger.o: src/Logger.cpp
 Chunk.o: src/physics/Chunk.cpp
 	$(COMP) src/physics/Chunk.cpp
 
-DebugOverlay.o:
+DebugOverlay.o: src/DebugOverlay.cpp
 	$(COMP) src/DebugOverlay.cpp
 
 Entity.o: src/physics/Entity.cpp
