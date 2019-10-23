@@ -19,7 +19,7 @@ Game::Game() :
     dbg_overlay_.Set("pos", "0");
 }
 
-void Game::Start() {
+int Game::Start() {
 
   delta_clock_.restart();
   update_clock_.restart();
@@ -52,6 +52,7 @@ void Game::Start() {
       updates = 0;
     }
   }
+  return 0;
 }
 
 // Maybe remove this?

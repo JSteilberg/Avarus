@@ -9,7 +9,7 @@ namespace consts {
   const string kGameVersion = "1.0";
 
   // Target number of game updates per second
-  const float kUpsPerSec = 60.0f;
+  const float kUpsPerSec = 100.0f;
 
   // Number of velocity integration iterations to perform per timestep
   // Recommended 5-8

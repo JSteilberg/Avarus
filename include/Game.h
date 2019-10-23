@@ -28,7 +28,7 @@ class Game {
  public:
   Game();
 
-  void Start();
+  int Start();
 
   void Update(const sf::Event& event);
 

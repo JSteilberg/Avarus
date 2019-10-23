@@ -63,23 +63,23 @@
 		<Unit filename="include/ObjRegister.h" />
 		<Unit filename="include/Parser.h" />
 		<Unit filename="include/Player.h" />
-		<Unit filename="src/Chunk.cpp" />
-		<Unit filename="src/Corporeal.cpp" />
 		<Unit filename="src/DebugOverlay.cpp" />
-		<Unit filename="src/Entity.cpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/IdRegister.cpp" />
 		<Unit filename="src/Logger.cpp" />
 		<Unit filename="src/ObjRegister.cpp" />
-		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/atlas/Atlas.cpp" />
 		<Unit filename="src/gamestate/GameState.cpp" />
 		<Unit filename="src/gamestate/MainLoop.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/parser/Parser.cpp" />
-		<Unit filename="src/world/Block.cpp" />
-		<Unit filename="src/world/Chunk.cpp" />
-		<Unit filename="src/world/Generator.cpp" />
+		<Unit filename="src/physics/Chunk.cpp" />
+		<Unit filename="src/physics/Corporeal.cpp" />
+		<Unit filename="src/physics/Entity.cpp" />
+		<Unit filename="src/physics/Player.cpp" />
+		<Unit filename="src/physics/world/Block.cpp" />
+		<Unit filename="src/physics/world/Chunk.cpp" />
+		<Unit filename="src/physics/world/Generator.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

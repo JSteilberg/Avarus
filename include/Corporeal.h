@@ -13,7 +13,7 @@ using std::string;
 
 // A Corporeal is a Drawable with the ability to collide and return opposite forces
 // As well as move. It has a mass, position, velocity, acceleration, and rotation
-class Corporeal {
+class Corporeal : public sf::Drawable {
  public:
 
   // Set the main bounding rectangle for this Corporeal's sf::Texture

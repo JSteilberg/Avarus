@@ -32,23 +32,23 @@ IdRegister.o: src/IdRegister.cpp
 Logger.o: src/Logger.cpp
 	$(COMP) src/Logger.cpp
 
-Chunk.o: src/Chunk.cpp
-	$(COMP) src/Chunk.cpp
+Chunk.o: src/physics/Chunk.cpp
+	$(COMP) src/physics/Chunk.cpp
 
-Corporeal.o: src/Corporeal.cpp
-	$(COMP) src/Corporeal.cpp
+Corporeal.o: src/physics/Corporeal.cpp
+	$(COMP) src/physics/Corporeal.cpp
 
 DebugOverlay.o:
 	$(COMP) src/DebugOverlay.cpp
 
-Entity.o: src/Entity.cpp
-	$(COMP) src/Entity.cpp
+Entity.o: src/physics/Entity.cpp
+	$(COMP) src/physics/Entity.cpp
 
 ObjRegister.o: src/ObjRegister.cpp
 	$(COMP) src/ObjRegister.cpp
 
-Player.o: src/Player.cpp
-	$(COMP) src/Player.cpp
+Player.o: src/physics/Player.cpp
+	$(COMP) src/physics/Player.cpp
 
 Atlas.o: src/atlas/Atlas.cpp
 	$(COMP) src/atlas/Atlas.cpp
