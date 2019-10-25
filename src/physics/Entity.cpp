@@ -14,6 +14,8 @@ Entity::Entity(const sf::Texture& atlas,
   body_def_.position.Set(0, 0);
 
   body_ = world.CreateBody(&body_def_);
+
+  SetCurrentTexture("norm");
 }
 
 void Entity::SetMainTextureRect(const sf::IntRect& rectangle) {
@@ -38,6 +40,14 @@ void Entity::SetShape(const b2Vec2* vertices, int vertex_count) {
   body_->CreateFixture(&fixture_def_);
 }
 
+void Entity::SetCurrentTexture(std::string key) {
+  current_texture_ = key;
+  sprite_.setTextureRect(texture_map_.at(key));
+}
+
+string Entity::GetCurrentTexture() {
+  return current_texture_;  
+}
 void Entity::SetPos(b2Vec2 pos) {
   body_->SetTransform(body_->GetPosition(), body_->GetAngle());
 }

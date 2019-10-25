@@ -56,6 +56,12 @@ class Entity {
   // Gets the sprite used to draw this Entity
   const sf::Sprite& GetSprite();
 
+  // Set the texture rect to display for the sprite
+  void SetCurrentTexture(string key);
+
+  // Get the current texture rect key being used to draw the sprite
+  string GetCurrentTexture();
+
   virtual ~Entity();
 
  protected:
@@ -77,6 +83,9 @@ class Entity {
 
   // Sprite used to draw this Entity
   sf::Sprite sprite_;
+
+  // Name of current texture
+  string current_texture_;
 
   b2BodyDef body_def_;
 

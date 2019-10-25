@@ -30,27 +30,30 @@ void MainLoop::Draw(sf::RenderWindow& window) {
   }
 }
 
+bool IsKeyPressed(sf::Keyboard::Key key) {
+  return sf::Keyboard::isKeyPressed(key);
+}
+
 void MainLoop::HandleKeyEvents(sf::Window& window) {
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+  if(IsKeyPressed(sf::Keyboard::Up) or IsKeyPressed(sf::Keyboard::W)){
     player_.ApplyForce(b2Vec2(0, -15));
   }
 
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+  if(IsKeyPressed(sf::Keyboard::Down) or IsKeyPressed(sf::Keyboard::S)) {
     player_.ApplyForce(b2Vec2(0, 15));
   }
 
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+  if(IsKeyPressed(sf::Keyboard::Left) or IsKeyPressed(sf::Keyboard::A)) {
     player_.ApplyForce(b2Vec2(-15, 0));
   }
 
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+  if(IsKeyPressed(sf::Keyboard::Right) or IsKeyPressed(sf::Keyboard::D)) {
     player_.ApplyForce(b2Vec2(15, 0));
   }
 
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+  if(IsKeyPressed(sf::Keyboard::R)) {
     player_.SetRot(player_.GetRot() + 1);
   }
-
 
   sf::Event event;
 
@@ -61,6 +64,8 @@ void MainLoop::HandleKeyEvents(sf::Window& window) {
       switch(event.key.code) {
       case sf::Keyboard::Escape:
         window.close();
+        break;
+        
       case sf::Keyboard::F3:
         dbg_menu_on_ = !dbg_menu_on_;
         // Ya know, sometimes people rail on ternary if statements.
@@ -71,13 +76,19 @@ void MainLoop::HandleKeyEvents(sf::Window& window) {
         console_on_ = !console_on_;
         Logger::Log(string("Console turned ") + (console_on_ ? "on" : "off"), INFO);
         break;
+      case sf::Keyboard::T:
+        player_.SetCurrentTexture(player_.GetCurrentTexture() == "norm" ? "hurt" : "norm");
+        Logger::Log("Set player texture to " + player_.GetCurrentTexture(), INFO);
+        break;
 
-        default:
-          break;
+      default:
+        break;
       }
     }
   }
 }
+
+
 
 MainLoop::~MainLoop() {
   //dtor
