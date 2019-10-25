@@ -62,18 +62,18 @@ class Entity {
 
   // Basic constructor that includes the atlas texture and corresponding
   // texture rects
-  Entity(const sf::Texture& texture,
-            const std::map<string, sf::IntRect>& texture_rects,
+  Entity(const sf::Texture& atlas,
+            const std::map<string, sf::IntRect>& texture_map,
             b2World& world);
 
   // Map of texture subsets to be used by this Entity. The first texture will be mapped to "main".
-  const std::map<string, sf::IntRect>& texture_rects_;
+  const std::map<string, sf::IntRect>& texture_map_;
 
   // Array of sf::Vector2f that define the shape of this Entity
   //VertexArray vertices_;
 
   // Reference to the texture to be used
-  const sf::Texture& texture_;
+  const sf::Texture& atlas_;
 
   // Sprite used to draw this Entity
   sf::Sprite sprite_;

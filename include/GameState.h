@@ -9,7 +9,7 @@ class Game;
 // specific mode the Game is currently in.
 class GameState {
   public:
-
+  
     // Creates a GameState with no attributes
     GameState();
 

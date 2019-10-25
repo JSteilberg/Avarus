@@ -1,14 +1,14 @@
 #include "Entity.h"
 
-Entity::Entity(const sf::Texture& texture,
-                     const std::map<string, sf::IntRect>& texture_rects,
+Entity::Entity(const sf::Texture& atlas,
+                     const std::map<string, sf::IntRect>& texture_map,
                      b2World& world) :
-  texture_rects_(texture_rects),
-  texture_(texture),
-  sprite_(texture, texture_rects.at("norm")) {
+  texture_map_(texture_map),
+  atlas_(atlas),
+  sprite_(atlas, texture_map.at("norm")) {
   //sprite_.setScale(1,2);
-  sprite_.setScale(width_  * consts::kPixelScale / texture_rects.at("norm").width,
-                   height_ * consts::kPixelScale / texture_rects.at("norm").height);
+  sprite_.setScale(width_  * consts::kPixelScale / texture_map.at("norm").width,
+                   height_ * consts::kPixelScale / texture_map.at("norm").height);
 
   body_def_.type = b2_dynamicBody;
   body_def_.position.Set(0, 0);
@@ -17,10 +17,6 @@ Entity::Entity(const sf::Texture& texture,
 }
 
 void Entity::SetMainTextureRect(const sf::IntRect& rectangle) {
-  //vertices_[0].texCoords = sf::Vector2f(rectangle.left, rectangle.top);
-  //vertices_[1].texCoords = sf::Vector2f(rectangle.left, rectangle.top + rectangle.height);
-  //vertices_[2].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top + rectangle.height);
-  //vertices_[3].texCoords = sf::Vector2f(rectangle.left + rectangle.width, rectangle.top);
 }
 
 const sf::Sprite& Entity::GetSprite() {
@@ -75,10 +71,3 @@ Entity::~Entity() {
     
   //dtor
 }
-
-/*Entity::Entity(const sf::Texture& texture,
-               const std::map<string, sf::IntRect>& texture_rects,
-               b2World& world) :
-  Entity(texture, texture_rects, world) {}
-*/
-

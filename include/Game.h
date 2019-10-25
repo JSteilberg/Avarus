@@ -19,7 +19,6 @@
 #include "Player.h"
 
 using boost::property_tree::ptree;
-using namespace std;
 
 // Class to run an instance of the game.
 // All you have to do is declare an instance and run .start()
