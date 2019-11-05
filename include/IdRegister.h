@@ -11,37 +11,39 @@
 using std::string;
 using std::map;
 
-// Used to convert Sprite ID's into names
-class IdRegister
-{
-  public:
-    // Create this IdRegister with a given file to use
-    IdRegister(const string& id_file);
+// In Avarus, every Sprite has a name and associated ID. These mappings are
+// specified in some json file, which is then loaded into the ID registry.
+class IdRegister {
+public:
+  // Create this IdRegister with a given file to use
+  IdRegister(const string& id_file);
 
-    // Get a Sprite's name from its id
-    const string& IdToName(int id) const;
+  // Get a Sprite's name from its id
+  const string& IdToName(int id) const;
 
-    // Get a Sprite's id from its name
-    // Note: This is much slower then IdToName and really shouldn't be used
-    int NameToId(const string& name) const;
+  // Get a Sprite's id from its name
+  int NameToId(const string& name) const;
 
-    virtual ~IdRegister();
+  virtual ~IdRegister();
+  
+protected:
 
-  protected:
+private:
 
-  private:
+  // Initializes the registry
+  void InitializeRegistry();
 
-    // Initializes the registry
-    void InitializeRegistry();
+  // Holds the file that this IdRegister pulls ids from
+  string id_file_;
 
-    // Holds the file that this IdRegister pulls ids from
-    string id_file_;
+  // Holds the name corresponding to a given id
+  map<int, string> registry_;
 
-    // Holds the name corresponding to a given id
-    map<int, string> registry_;
+  // Same as above, but reversed
+  map<string, int> inverted_registry_;
 
-    // Used to parse the id file
-    Parser parser_;
+  // Used to parse the id file
+  Parser parser_;
 };
 
 #endif // IDREGISTER_H
