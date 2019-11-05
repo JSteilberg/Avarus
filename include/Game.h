@@ -16,6 +16,7 @@
 #include "ObjRegister.h"
 #include "Parser.h"
 #include "Player.h"
+#include "ConfigLoader.h"
 
 // Class to run an instance of the game.
 // All you have to do is declare an instance and run .start()
@@ -54,6 +55,9 @@ class Game {
 
   // Holds main texture and texture coordinates for all Sprites in the game
   Atlas game_atlas_;
+
+  // Holds config data for the game
+  ConfigLoader game_config_;
 
   // Necessary for creating a Box2D world. Unfortunately, since this is space,
   // Our gravity is a bit more complicated than that and must be handled separately

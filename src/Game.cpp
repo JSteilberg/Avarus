@@ -5,6 +5,7 @@ Game::Game() :
   window_(sf::VideoMode(800, 600), "Avarus v" + consts::kGameVersion),
   id_registry_("./res/cfg/ids.json"),
   game_atlas_("./res/cfg/atlas.json", id_registry_),
+  game_config_("./res/cfg/config.json"),
   gravity_(0.0f, 0.0f),
   world_(gravity_),
   player_(game_atlas_, world_),
@@ -34,7 +35,7 @@ int Game::Start() {
   while(window_.isOpen()) {
     window_.clear();
 
-    if(update_clock_.getElapsedTime().asSeconds() > 1.0/consts::kUpsPerSec) {
+    if(update_clock_.getElapsedTime().asSeconds() >= 1.0/consts::kUpsPerSec) {
       //world_.Step(update_clock_.getElapsedTime().asSeconds(), 6, 2);
       update_clock_.restart();
       state_stack_.top()->Update(delta_clock_.restart(), window_);
@@ -51,6 +52,13 @@ int Game::Start() {
       frames = 0;
       updates = 0;
     }
+  }
+
+  while (!state_stack_.empty()) {
+      GameState* gs = state_stack_.top();
+      Logger::Log(gs->ToString(), INFO);
+      delete gs;
+      state_stack_.pop();
   }
   return 0;
 }
