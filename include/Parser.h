@@ -9,13 +9,17 @@
 #include <stdexcept>
 #include <string>
 
+#include "Logger.h"
+
 using boost::property_tree::ptree;
 using boost::property_tree::read_json;
+using boost::property_tree::json_parser_error;
 using std::string;
 
 class Parser
 {
-  public:
+    public:
+    
     // Initializes the parser with nothing
     Parser();
 
@@ -30,9 +34,10 @@ class Parser
 
     virtual ~Parser();
 
-  protected:
+    protected:
 
-  private:
+    private:
+    
     ptree parse_tree_;
     bool parsed_;
     string file_name_;
