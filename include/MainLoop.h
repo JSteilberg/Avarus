@@ -6,11 +6,14 @@ class Game;
 
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
+#include <string>
 
 #include "GameState.h"
 #include "Player.h"
 #include "DebugOverlay.h"
 #include "Constants.h"
+
+using std::string;
 
 // Class to represent the main loop for the game
 class MainLoop : public GameState {
@@ -24,6 +27,8 @@ class MainLoop : public GameState {
 
   // This is how the drawing do
   virtual void Draw(sf::RenderWindow& window) override;
+
+  virtual const string ToString() const override;
 
   virtual ~MainLoop();
 
@@ -40,7 +45,7 @@ private:
   // Main game player's texture
   sf::Texture player_texture_;
 
-  // List of Entitys to update during the update() function
+  // List of Entity's to update during the update() function
   std::vector<Entity> update_list_;
 
   // Holds the Box2D world that
