@@ -10,7 +10,7 @@ IdRegister::IdRegister(const string& id_file_) : parser_(id_file_.c_str()) {
 
 void IdRegister::InitializeRegistry() {
   // Loop through the different id keys and add them to the registry
-  BOOST_FOREACH(ptree::value_type id_pair, parser_.GetParseTree().get_child("ids")) {
+    for (auto& id_pair : parser_.GetParseTree().get_child("ids")) {
     registry_[id_pair.second.get_value<int>()] = id_pair.first.data();
     inverted_registry_[id_pair.first.data()] = id_pair.second.get_value<int>();
     Logger::RawLog("Registered id " + id_pair.second.data() + " to " + string(id_pair.first.data()), INFO);

@@ -1,7 +1,6 @@
 #ifndef IDREGISTER_H
 #define IDREGISTER_H
 
-#include <boost/foreach.hpp>
 #include <map>
 #include <string>
 

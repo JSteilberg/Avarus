@@ -1,7 +1,6 @@
 #ifndef ATLAS_H
 #define ATLAS_H
 
-#include <boost/foreach.hpp>
 #include <map>
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -14,11 +13,9 @@ using boost::property_tree::ptree;
 using boost::property_tree::read_json;
 using boost::property_tree::ptree_error;
 using boost::property_tree::ptree_bad_path;
-using boost::property_tree::ptree_bad_data;
+using boost::property_tree::ptree_bad_data;
 using std::string;
 using std::map;
-
-class Parser;
 
 // Class to encapsulate a large texture and divide it into smaller indexed rectangles
 // Prevents the game from needing to bind multiple textures to the graphics card

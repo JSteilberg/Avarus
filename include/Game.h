@@ -1,7 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <boost/property_tree/ptree.hpp>
 #include <Box2D/Box2D.h>
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -17,8 +16,6 @@
 #include "ObjRegister.h"
 #include "Parser.h"
 #include "Player.h"
-
-using boost::property_tree::ptree;
 
 // Class to run an instance of the game.
 // All you have to do is declare an instance and run .start()
@@ -53,7 +50,7 @@ class Game {
   IdRegister id_registry_;
 
   // Property trees that correspond to the above parsers
-  ptree tex_parse_tree_, map_parse_tree_;
+  // ptree tex_parse_tree_, map_parse_tree_;
 
   // Holds main texture and texture coordinates for all Sprites in the game
   Atlas game_atlas_;
