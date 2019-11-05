@@ -27,7 +27,7 @@ int Game::Start() {
   sf::Clock sec_counter_clock;
   sec_counter_clock.restart();
 
-  int frames = 0;
+  int frames = 0; 
   int updates = 0;
 
   // Main loop
