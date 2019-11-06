@@ -7,28 +7,26 @@
 #include "Logger.h"
 #include "Parser.h"
 
-using std::string;
 using std::map;
+using std::string;
 
 // In Avarus, every Sprite has a name and associated ID. These mappings are
 // specified in some json file, which is then loaded into the ID registry.
 class IdRegister {
 public:
   // Create this IdRegister with a given file to use
-  IdRegister(const string& id_file);
+  IdRegister(const string &id_file);
 
   // Get a Sprite's name from its id
-  const string& IdToName(int id) const;
+  const string &IdToName(int id) const;
 
   // Get a Sprite's id from its name
-  int NameToId(const string& name) const;
+  int NameToId(const string &name) const;
 
   virtual ~IdRegister();
-  
+
 protected:
-
 private:
-
   // Initializes the registry
   void InitializeRegistry();
 

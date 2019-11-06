@@ -6,13 +6,12 @@
 #include "Block.h"
 
 class Chunk {
- public:
+public:
   Chunk();
   virtual ~Chunk();
 
- protected:
-
- private:
+protected:
+private:
   // ArrayList of Blocks in the chunk
   std::vector<Block> blocks_;
 };

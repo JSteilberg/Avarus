@@ -11,36 +11,34 @@
 
 #include "Logger.h"
 
+using boost::property_tree::json_parser_error;
 using boost::property_tree::ptree;
 using boost::property_tree::read_json;
-using boost::property_tree::json_parser_error;
 using std::string;
 
-class Parser
-{
-    public:
-    
-    // Initializes the parser with nothing
-    Parser();
+class Parser {
+public:
+  // Initializes the parser with nothing
+  Parser();
 
-    // Initializes the parser with the given file name. Does not actually parse the file.
-    Parser(const char file_name[]);
+  // Initializes the parser with the given file name. Does not actually parse
+  // the file.
+  Parser(const char file_name[]);
 
-    // Returns a boost::property_tree::ptree of the parsed file. Throws exception if called before parse();
-    const ptree& GetParseTree() const;
+  // Returns a boost::property_tree::ptree of the parsed file. Throws exception
+  // if called before parse();
+  const ptree &GetParseTree() const;
 
-    // Parses the file being held in state
-    void Parse();
+  // Parses the file being held in state
+  void Parse();
 
-    virtual ~Parser();
+  virtual ~Parser();
 
-    protected:
-
-    private:
-    
-    ptree parse_tree_;
-    bool parsed_;
-    string file_name_;
+protected:
+private:
+  ptree parse_tree_;
+  bool parsed_;
+  string file_name_;
 };
 
 #endif // PARSER_H

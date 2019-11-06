@@ -1,11 +1,9 @@
 #include "ObjRegister.h"
 
-ObjRegister::ObjRegister()
-{
-  //ctor
+ObjRegister::ObjRegister() {
+  // ctor
 }
 
-ObjRegister::~ObjRegister()
-{
-  //dtor
+ObjRegister::~ObjRegister() {
+  // dtor
 }

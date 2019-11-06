@@ -1,16 +1,16 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <iostream>
-#include <map>
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
-#include "Logger.h"
 #include "Constants.h"
+#include "Logger.h"
 
 using std::string;
 
@@ -18,10 +18,9 @@ using std::string;
 // I hope to be an entity someday
 // TODO: Add ability to die
 class Entity {
- public:
-
+public:
   // Set the main bounding rectangle for this Entity's sf::Texture
-  void SetMainTextureRect(const sf::IntRect& rectangle);
+  void SetMainTextureRect(const sf::IntRect &rectangle);
 
   // Set this Entity's position
   void SetPos(b2Vec2 pos);
@@ -45,16 +44,16 @@ class Entity {
   void ApplyForce(b2Vec2 forceVec);
 
   // Update this Entity with a given deltaTime
-  void Update(const sf::Time& deltaTime);
+  void Update(const sf::Time &deltaTime);
 
   // Get the type ID for this Entity
   virtual int GetTypeId() const = 0;
 
   // Sets the shape of this Entity's body
-  void SetShape(const b2Vec2* vertices, int vertex_count);
+  void SetShape(const b2Vec2 *vertices, int vertex_count);
 
   // Gets the sprite used to draw this Entity
-  const sf::Sprite& GetSprite();
+  const sf::Sprite &GetSprite();
 
   // Set the texture rect to display for the sprite
   void SetCurrentTexture(string key);
@@ -64,22 +63,21 @@ class Entity {
 
   virtual ~Entity();
 
- protected:
-
+protected:
   // Basic constructor that includes the atlas texture and corresponding
   // texture rects
-  Entity(const sf::Texture& atlas,
-            const std::map<string, sf::IntRect>& texture_map,
-            b2World& world);
+  Entity(const sf::Texture &atlas,
+         const std::map<string, sf::IntRect> &texture_map, b2World &world);
 
-  // Map of texture subsets to be used by this Entity. The first texture will be mapped to "main".
-  const std::map<string, sf::IntRect>& texture_map_;
+  // Map of texture subsets to be used by this Entity. The first texture will be
+  // mapped to "main".
+  const std::map<string, sf::IntRect> &texture_map_;
 
   // Array of sf::Vector2f that define the shape of this Entity
-  //VertexArray vertices_;
+  // VertexArray vertices_;
 
   // Reference to the texture to be used
-  const sf::Texture& atlas_;
+  const sf::Texture &atlas_;
 
   // Sprite used to draw this Entity
   sf::Sprite sprite_;
@@ -89,7 +87,7 @@ class Entity {
 
   b2BodyDef body_def_;
 
-  b2Body* body_;
+  b2Body *body_;
 
   b2PolygonShape shape_;
 
@@ -99,8 +97,7 @@ class Entity {
 
   float height_ = 2;
 
- private:
-
+private:
 };
 
 #endif // ENTITY_H

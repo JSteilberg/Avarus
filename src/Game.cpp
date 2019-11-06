@@ -19,7 +19,6 @@ Game::Game()
 }
 
 int Game::Start() {
-
   delta_clock_.restart();
   update_clock_.restart();
 

@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "Logger.h"
 #include "Constants.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -19,7 +19,8 @@ public:
   DebugOverlay();
 
   // Inherited from sf::Drawable
-  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  virtual void draw(sf::RenderTarget &target,
+                    sf::RenderStates states) const override;
 
   // Set the display var labeled key to the given value
   void Set(string key, string value);
@@ -28,7 +29,6 @@ public:
   void Update();
 
 private:
-
   vector<string> msg_order_;
 
   // Map of message labels to the actual message
@@ -46,6 +46,5 @@ private:
   // Font to draw the debug overlay with
   sf::Font font_;
 };
-
 
 #endif // DEBUGOVERLAY_H

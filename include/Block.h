@@ -4,13 +4,12 @@
 #include "Corporeal.h"
 
 class Block {
- public:
+public:
   Block();
   virtual ~Block();
 
- protected:
-
- private:
+protected:
+private:
 };
 
 #endif // BLOCK_H

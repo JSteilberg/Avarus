@@ -1,11 +1,12 @@
 #include "Logger.h"
 
 Logger::Logger() {
-  //ctor
+  // ctor
 }
 
-void Logger::Log(const string& msg, SeverityLevel level) {
-  string logmsg = boost::algorithm::replace_all_copy(msg, "\n", "\n                        -> ");
+void Logger::Log(const string &msg, SeverityLevel level) {
+  string logmsg = boost::algorithm::replace_all_copy(
+      msg, "\n", "\n                        -> ");
   if (level == HIGH) {
     std::cerr << TimeStr() << " [High] " << logmsg << std::endl;
   } else if (level == MED) {
@@ -25,9 +26,10 @@ void Logger::Log(int msgNum, SeverityLevel level) {
   Log(boost::lexical_cast<string>(msgNum), level);
 }
 
-void Logger::RawLog(const string& msg, SeverityLevel level) {
+void Logger::RawLog(const string &msg, SeverityLevel level) {
   string logmsg = "                        -> " +
-                  boost::algorithm::replace_all_copy(msg, "\n", "\n                        -> ");
+                  boost::algorithm::replace_all_copy(
+                      msg, "\n", "\n                        -> ");
   if (level == HIGH) {
     std::cerr << logmsg << std::endl;
   } else if (level == MED) {
@@ -45,17 +47,17 @@ void Logger::RawLog(const string& msg, SeverityLevel level) {
 
 string Logger::TimeStr() {
   time_t rawtime;
-  struct tm * timeinfo;
+  struct tm *timeinfo;
   char buffer[80];
 
   time(&rawtime);
   timeinfo = localtime(&rawtime);
 
-  strftime(buffer,sizeof(buffer),"%m-%d-%Y %I:%M:%S", timeinfo);
+  strftime(buffer, sizeof(buffer), "%m-%d-%Y %I:%M:%S", timeinfo);
 
   return string(buffer);
 }
 
 Logger::~Logger() {
-  //dtor
+  // dtor
 }

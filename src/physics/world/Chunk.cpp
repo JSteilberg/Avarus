@@ -1,9 +1,9 @@
 #include "Chunk.h"
 
 Chunk::Chunk() {
-  //ctor
+  // ctor
 }
 
 Chunk::~Chunk() {
-  //dtor
+  // dtor
 }

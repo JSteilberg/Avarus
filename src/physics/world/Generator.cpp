@@ -1,9 +1,9 @@
 #include "Generator.h"
 
 Generator::Generator() {
-  //ctor
+  // ctor
 }
 
 Generator::~Generator() {
-  //dtor
+  // dtor
 }

@@ -1,15 +1,13 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
-
 class Generator {
- public:
+public:
   Generator();
   virtual ~Generator();
 
- protected:
-
- private:
+protected:
+private:
 };
 
 #endif // GENERATOR_H

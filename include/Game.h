@@ -2,32 +2,32 @@
 #define GAME_H
 
 #include <Box2D/Box2D.h>
-#include <iostream>
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <memory>
 #include <stack>
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <memory>
 
 #include "Atlas.h"
+#include "ConfigLoader.h"
 #include "Constants.h"
 #include "GameState.h"
 #include "MainLoop.h"
 #include "ObjRegister.h"
 #include "Parser.h"
 #include "Player.h"
-#include "ConfigLoader.h"
 
 // Class to run an instance of the game.
 // All you have to do is declare an instance and run .start()
 class Game {
- public:
+public:
   Game();
 
   int Start();
 
-  void Update(const sf::Event& event);
+  void Update(const sf::Event &event);
 
   // Used to get the amount of time to draw a frame
   sf::Clock delta_clock_;
@@ -40,8 +40,7 @@ class Game {
 
   virtual ~Game();
 
- private:
-
+private:
   // Parsers for the game's map (will be removed at some point)
   Parser map_parser_;
 
@@ -61,8 +60,8 @@ class Game {
   ConfigLoader game_config_;
 
   // Necessary for creating a Box2D world. Unfortunately, since this is space,
-  // Our gravity is a bit more complicated than that and must be handled separately
-  // Therefore the world is given a 0 vector for gravity
+  // Our gravity is a bit more complicated than that and must be handled
+  // separately Therefore the world is given a 0 vector for gravity
   const b2Vec2 gravity_;
 
   // The Box2D world
