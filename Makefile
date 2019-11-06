@@ -1,4 +1,4 @@
-CXX = clang++
+CXX = g++
 CXXFLAGS = -Wall -Wextra -g -std=c++0x -pedantic -Wstrict-aliasing
 INC = -I./include/ 
 LIB = -L./lib/
@@ -21,7 +21,7 @@ KeyCode.o: src/tools/KeyCode.cpp
 main.o: src/main.cpp
 	$(COMP) src/main.cpp
 
-Game.o: src/Game.cpp
+Game.o: src/Game.cpp include/Game.h
 	$(COMP) src/Game.cpp
 
 MainLoop.o: src/gamestate/MainLoop.cpp include/MainLoop.h
