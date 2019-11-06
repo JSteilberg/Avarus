@@ -17,7 +17,7 @@ class ConfigLoader {
         
     string GetVar(string varname);
 
-    const string& cfg_file_location_;
+  const string cfg_file_location_;
 
  private:
     Parser config_parser_;
