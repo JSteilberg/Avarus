@@ -2,10 +2,12 @@
 
 Game::Game()
     : // Create window with 800x600 resolution
-      window_(sf::VideoMode(800, 600), "Avarus v" + consts::kGameVersion),
+      game_config_("./res/cfg/config.json"),
+      window_(sf::VideoMode(game_config_.GetIntVar("window_width"),
+                            game_config_.GetIntVar("window_height")),
+              "Avarus v" + consts::kGameVersion),
       id_registry_("./res/cfg/ids.json"),
-      game_atlas_("./res/cfg/atlas.json", id_registry_),
-      game_config_("./res/cfg/config.json"), gravity_(0.0f, 0.0f),
+      game_atlas_("./res/cfg/atlas.json", id_registry_), gravity_(0.0f, 0.0f),
       world_(gravity_), player_(game_atlas_, world_) {
   main_loop_ = std::make_shared<MainLoop>(player_, world_, dbg_overlay_);
 

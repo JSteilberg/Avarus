@@ -14,7 +14,13 @@ public:
   // Create the ConfigLoader with a given file
   ConfigLoader(const string &cfg_file_location);
 
-  string GetVar(string varname);
+  string GetVar(const string &varname);
+
+  int GetIntVar(const string &varname);
+
+  float GetFloatVar(const string &varname);
+
+  double GetDoubleVar(const string &varname);
 
   const string cfg_file_location_;
 

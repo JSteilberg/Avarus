@@ -41,6 +41,9 @@ public:
   virtual ~Game();
 
 private:
+  // Holds config data for the game
+  ConfigLoader game_config_;
+
   // Parsers for the game's map (will be removed at some point)
   Parser map_parser_;
 
@@ -55,9 +58,6 @@ private:
 
   // Holds main texture and texture coordinates for all Sprites in the game
   Atlas game_atlas_;
-
-  // Holds config data for the game
-  ConfigLoader game_config_;
 
   // Necessary for creating a Box2D world. Unfortunately, since this is space,
   // Our gravity is a bit more complicated than that and must be handled
