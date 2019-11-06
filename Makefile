@@ -1,14 +1,14 @@
-CXX = g++
+CXX = clang++
 CXXFLAGS = -Wall -Wextra -g -std=c++0x -pedantic -Wstrict-aliasing
 INC = -I./include/ 
-LIB = 
+LIB = -L./lib/
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
 
 main: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
-			Atlas.o GameState.o Logger.o Entity.o
+			Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o
 	$(CXX) $(CXXFLAGS) $(LIB) -o Avarus main.o \
 		Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
-		Atlas.o GameState.o Logger.o Entity.o \
+		Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o \
 		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D
 
 tools: KeyCode.o Logger.o
@@ -56,6 +56,9 @@ Player.o: src/physics/Player.cpp include/Player.h
 
 Atlas.o: src/atlas/Atlas.cpp include/Atlas.h
 	$(COMP) src/atlas/Atlas.cpp
+
+ConfigLoader.o: src/parser/ConfigLoader.cpp include/ConfigLoader.h
+	$(COMP) src/parser/ConfigLoader.cpp
 
 
 clean:

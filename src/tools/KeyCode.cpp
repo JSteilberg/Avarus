@@ -1,12 +1,12 @@
 #include "Logger.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <string>
 
 using std::to_string;
 
 int main() {
   sf::RenderWindow window(sf::VideoMode(100, 100), "Keyboard Printer");
-
   sf::Event event;
 
   while (window.isOpen()) {
