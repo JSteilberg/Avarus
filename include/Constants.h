@@ -1,6 +1,10 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <string>
+
+using std::string;
+
 namespace consts {
 // Number of pixels per meter in game
 const float kPixelScale = 32.0f;

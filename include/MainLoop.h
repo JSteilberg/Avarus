@@ -1,9 +1,6 @@
 #ifndef MAINLOOP_H
 #define MAINLOOP_H
 
-// class GameState;
-class Game;
-
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 #include <string>

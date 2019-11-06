@@ -71,7 +71,7 @@ void MainLoop::HandleKeyEvents(sf::Window &window) {
         Logger::Log(
             string("Debug menu turned ") + (dbg_menu_on_ ? "on" : "off"), INFO);
         break;
-      case sf::Keyboard::Backslash:
+      case sf::Keyboard::Tilde:
         console_on_ = !console_on_;
         Logger::Log(string("Console turned ") + (console_on_ ? "on" : "off"),
                     INFO);
