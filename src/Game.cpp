@@ -8,11 +8,13 @@ Game::Game() :
   game_config_("./res/cfg/config.json"),
   gravity_(0.0f, 0.0f),
   world_(gravity_),
-  player_(game_atlas_, world_),
-  main_loop_(player_, world_, dbg_overlay_) {
+  player_(game_atlas_, world_) {
+  main_loop_ = std::make_shared<MainLoop>(player_, world_, dbg_overlay_);
+  
+
     //window_.setFramerateLimit(60);
     window_.setKeyRepeatEnabled(false);
-    state_stack_.push(&main_loop_);
+    state_stack_.push(main_loop_);
 
 
     dbg_overlay_.Set("ver", string("Avarus v") + consts::kGameVersion);
@@ -53,13 +55,13 @@ int Game::Start() {
       updates = 0;
     }
   }
-
-  while (!state_stack_.empty()) {
+  
+  /*while (!state_stack_.empty()) {
       GameState* gs = state_stack_.top();
-      Logger::Log(gs->ToString(), INFO);
+      Logger::Log("Delete state: " + gs->ToString(), INFO);
       delete gs;
       state_stack_.pop();
-  }
+      }*/
   return 0;
 }
 

@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "Atlas.h"
 #include "Constants.h"
@@ -35,7 +36,7 @@ class Game {
   sf::Clock update_clock_;
 
   // Holds the current state of the game (Used for menus, main loop, etc.)
-  std::stack<GameState*> state_stack_;
+  std::stack<std::shared_ptr<GameState>> state_stack_;
 
   virtual ~Game();
 
@@ -71,7 +72,7 @@ class Game {
   Player player_;
 
   // Main loop for the game
-  MainLoop main_loop_;
+  std::shared_ptr<MainLoop> main_loop_;
 
   DebugOverlay dbg_overlay_;
 };
