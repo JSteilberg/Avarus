@@ -18,16 +18,36 @@ ConfigLoader::ConfigLoader(const string &cfg_file_location)
 }
 
 int ConfigLoader::GetIntVar(const string &varname) {
-  return std::stoi(config_.at(varname));
+  if (config_.count(varname)) {
+    return std::stoi(config_.at(varname));
+  } else {
+    Logger::Log("Failed to find element " + varname, MED);
+    return -1;
+  }
 }
 
 float ConfigLoader::GetFloatVar(const string &varname) {
-  return std::stof(config_.at(varname));
+  if (config_.count(varname)) {
+    return std::stof(config_.at(varname));
+  } else {
+    Logger::Log("Failed to find element " + varname, MED);
+    return -1.0f;
+  }
 }
 double ConfigLoader::GetDoubleVar(const string &varname) {
-  return std::stod(config_.at(varname));
+  if (config_.count(varname)) {
+    return std::stod(config_.at(varname));
+  } else {
+    Logger::Log("Failed to find element " + varname, MED);
+    return -1.0;
+  }
 }
 
 string ConfigLoader::GetVar(const string &varname) {
-  return config_.at(varname);
+  if (config_.count(varname)) {
+    return config_.at(varname);
+  } else {
+    Logger::Log("Failed to find element " + varname, MED);
+    return "ERR";
+  }
 }
