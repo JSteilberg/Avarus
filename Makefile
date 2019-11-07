@@ -6,13 +6,13 @@ COMP = $(CXX) $(CXXFLAGS) $(INC) -c
 
 main: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 			Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o ConsoleLoop.o
-	$(CXX) $(CXXFLAGS) $(LIB) -o Avarus main.o \
+	$(CXX) $(CXXFLAGS) $(LIB) -o Avarus.out main.o \
 		Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 		Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o ConsoleLoop.o \
 		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D
 
 tools: KeyCode.o Logger.o
-	$(CXX) $(CXXFLAGS) $(LIB) -o KeyCode KeyCode.o Logger.o \
+	$(CXX) $(CXXFLAGS) $(LIB) -o KeyCode.out KeyCode.o Logger.o \
 	-lsfml-graphics -lsfml-window -lsfml-system
 
 KeyCode.o: src/tools/KeyCode.cpp

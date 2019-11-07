@@ -1,11 +1,10 @@
-<<<<<<< HEAD
 obj/
 bin/
 *.layout
 *.depend
 *.cbp
 *.dll
-=======
+
 # Compiled Object files
 *.slo
 *.lo
@@ -35,4 +34,15 @@ bin/
 *.exe
 *.out
 *.app
->>>>>>> 2ef95c348a6e3ceccff3777c606bc9e80c450874
+
+# Mac specific
+*.DS_Store
+*.xcodeproj
+
+# temps
+*~
+\#*\#
+
+# Libs
+include/Box2d/
+include/SFML/
