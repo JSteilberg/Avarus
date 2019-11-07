@@ -3,43 +3,56 @@
 
 #include <SFML/Graphics.hpp>
 #include <map>
+#include <queue>
 #include <string>
 #include <vector>
-#include <queue>
-#include <map>
 
 #include "Logger.h"
 
-using std::string;
 using std::map;
+using std::queue;
+using std::string;
 
 class Console : public sf::Drawable {
- public:
-    Console();
+public:
+  // Creates a console at the specified location
+  Console(int x_pos, int y_pos, int width, int height);
 
-    virtual void draw(sf::RenderTarget &target,
-                      sf::RenderStates states) const override;
+  virtual void draw(sf::RenderTarget &target,
+                    sf::RenderStates states) const override;
 
-    void clear();
+  void clear();
 
-    void Update();
+  void Update();
 
-    
-    
- private:
-    //std::queue<string> history;
+  void SetPosition(int x_pos, int y_pos);
 
-    // Translucent background to make info stand out
-    sf::RectangleShape background_;
+private:
+  const int hratio_ = 20;
 
-    // Text object that is used to draw the console to screen
-    sf::Text info_;
+  // Holds the command history
+  queue<string> history_;
 
-    // Font to draw the debug overlay with
-    sf::Font font_;
+  int x_pos_;
+  int y_pos_;
 
-    string msg_;
+  int width_;
+  int height_;
+
+  bool has_update_;
+
+  // Translucent background to make info stand out
+  sf::RectangleShape history_background_;
+
+  sf::RectangleShape edit_background_;
+
+  // Text object that is used to draw the console to screen
+  sf::Text history_text_;
+
+  // Font to draw the debug overlay with
+  sf::Font font_;
+
+  string edit_text_;
 };
-
 
 #endif // CONSOLE_H
