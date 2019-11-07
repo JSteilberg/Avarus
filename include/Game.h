@@ -4,21 +4,28 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <list>
 #include <memory>
-#include <stack>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
 #include "Atlas.h"
 #include "ConfigLoader.h"
+#include "Console.h"
+#include "ConsoleLoop.h"
 #include "Constants.h"
 #include "GameState.h"
 #include "MainLoop.h"
 #include "ObjRegister.h"
 #include "Parser.h"
 #include "Player.h"
-#include "Console.h"
+
+using std::list;
+using std::shared_ptr;
+
+class MainLoop;
+class ConsoleLoop;
 
 // Class to run an instance of the game.
 // All you have to do is declare an instance and run .start()
@@ -30,6 +37,8 @@ public:
 
   void Update(const sf::Event &event);
 
+  void AddState(shared_ptr<GameState> new_state);
+
   // Used to get the amount of time to draw a frame
   sf::Clock delta_clock_;
 
@@ -37,13 +46,20 @@ public:
   sf::Clock update_clock_;
 
   // Holds the current state of the game (Used for menus, main loop, etc.)
-  std::stack<std::shared_ptr<GameState>> state_stack_;
+  list<shared_ptr<GameState>> state_list_;
+
+  // Holds the new states that will be added after next update
+  list<shared_ptr<GameState>> new_states_;
 
   virtual ~Game();
 
-private:
+  // private:
   // Holds config data for the game
   ConfigLoader game_config_;
+
+  int window_width_;
+
+  int window_height_;
 
   // Parsers for the game's map (will be removed at some point)
   Parser map_parser_;
@@ -72,7 +88,10 @@ private:
   Player player_;
 
   // Main loop for the game
-  std::shared_ptr<MainLoop> main_loop_;
+  shared_ptr<MainLoop> main_loop_;
+
+  // Loop for displaying console
+  shared_ptr<ConsoleLoop> console_loop_;
 
   DebugOverlay dbg_overlay_;
 
