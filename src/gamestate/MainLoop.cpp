@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -99,6 +99,7 @@ void MainLoop::HandleKeyEvents(sf::Window &window) {
                     INFO);
         break;
       case sf::Keyboard::BackSlash:
+        game_->window_.setKeyRepeatEnabled(true);
         game_->AddState(game_->console_loop_);
         break;
       case sf::Keyboard::T:

@@ -70,13 +70,17 @@ void Console::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 }
 
 void Console::SetPosition(int x_pos, int y_pos) {
-  history_text_.setPosition(5, y_pos - height_);
-  history_background_.setPosition(0, y_pos - height_);
-  edit_background_.setPosition(0, y_pos - (height_ / hratio_));
+  history_text_.setPosition(10, y_pos - height_ - 5);
+  history_background_.setPosition(5, y_pos - height_ - 5);
+  edit_background_.setPosition(5, y_pos - (height_ / hratio_) - 5);
   has_update_ = true;
 }
 
 void Console::UpdateBuffer(sf::Uint32 unicode) {
-  edit_text_ += sf::String(unicode);
+  if (unicode == sf::String("\b")[0]) {
+    edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1);
+  } else {
+    edit_text_ += sf::String(unicode);
+  }
   has_update_ = true;
 }
