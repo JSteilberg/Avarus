@@ -11,8 +11,8 @@ Game::Game()
       world_(gravity_), player_(game_atlas_, world_), dbg_overlay_(),
       console_overlay_(window_width_, window_height_, 500, 300) {
 
-  main_loop_ = std::make_shared<MainLoop>(shared_ptr<Game>(this));
-  //        player_, world_, dbg_overlay_, console_overlay_);
+  main_loop_ = std::make_shared<MainLoop>(this);
+  console_loop_ = std::make_shared<ConsoleLoop>(this);
 
   // window_.setFramerateLimit(60);
   window_.setKeyRepeatEnabled(false);
@@ -40,7 +40,7 @@ int Game::Start() {
         1.0 / consts::kUpsPerSec) {
       // world_.Step(update_clock_.getElapsedTime().asSeconds(), 6, 2);
       update_clock_.restart();
-      state_list_.front()->Update(delta_clock_.restart(), window_);
+      state_list_.back()->Update(delta_clock_.restart(), window_);
       updates = updates + 1;
     }
 
@@ -58,10 +58,18 @@ int Game::Start() {
       frames = 0;
       updates = 0;
     }
-  }
 
-  for (auto &new_state : new_states_) {
-    state_list_.push_front(new_state);
+    for (auto &new_state : new_states_) {
+      Logger::Log("Added new state " + new_state->ToString(), INFO);
+      state_list_.push_back(new_state);
+    }
+    new_states_.clear();
+
+    for (auto &remove_state : remove_states_) {
+      Logger::Log("Removed state " + remove_state->ToString(), INFO);
+      state_list_.remove(remove_state);
+    }
+    remove_states_.clear();
   }
 
   /*while (!state_stack_.empty()) {
@@ -70,6 +78,7 @@ int Game::Start() {
       delete gs;
       state_stack_.pop();
       }*/
+
   return 0;
 }
 
@@ -77,7 +86,16 @@ int Game::Start() {
 void Game::Update(const sf::Event &event) {}
 
 void Game::AddState(shared_ptr<GameState> new_state) {
-  new_states_.push_front(new_state);
+  new_states_.push_back(new_state);
+}
+
+void Game::RemoveState(shared_ptr<GameState> remove_state) {
+  /*for (auto &state : state_list_) {
+  if (state.ToString() == state_name) {
+
+  }
+  }*/
+  remove_states_.push_front(remove_state);
 }
 
 Game::~Game() {

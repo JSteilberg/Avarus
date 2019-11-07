@@ -3,7 +3,6 @@
 
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
-#include <memory>
 #include <string>
 
 #include "Console.h"
@@ -13,7 +12,6 @@
 #include "GameState.h"
 #include "Player.h"
 
-using std::shared_ptr;
 using std::string;
 
 // Class to represent the main loop for the game
@@ -23,7 +21,7 @@ public:
   // Important: Does modify player
   // MainLoop(Player &player, b2World &world, DebugOverlay &dbg_overlay,
   //         Console &console_overlay);
-  MainLoop(shared_ptr<Game> game);
+  MainLoop(Game *game);
 
   // This is how the main loop do
   virtual void Update(const sf::Time &deltaTime, sf::Window &window) override;
@@ -58,7 +56,7 @@ private:
   // DebugOverlay &dbg_overlay_;
 
   // Console &console_overlay_;
-  shared_ptr<Game> game_;
+  Game *game_;
 };
 
 #endif // MAINLOOP_H

@@ -7,7 +7,7 @@
 
   console_on_ = false;
   }*/
-MainLoop::MainLoop(shared_ptr<Game> game) : game_(game) { console_on_ = false; }
+MainLoop::MainLoop(Game *game) : game_(game) { console_on_ = false; }
 
 void MainLoop::Update(const sf::Time &deltaTime, sf::Window &window) {
   // TODO: Maybe handling key events should be outside update?
@@ -20,10 +20,6 @@ void MainLoop::Update(const sf::Time &deltaTime, sf::Window &window) {
   if (game_->dbg_overlay_.IsActive()) {
     game_->dbg_overlay_.Update();
   }
-
-  if (console_on_) {
-    game_->console_overlay_.Update();
-  }
 }
 
 void MainLoop::Draw(sf::RenderWindow &window) {
@@ -31,10 +27,6 @@ void MainLoop::Draw(sf::RenderWindow &window) {
 
   if (game_->dbg_overlay_.IsActive()) {
     window.draw(game_->dbg_overlay_);
-  }
-
-  if (console_on_) {
-    window.draw(game_->console_overlay_);
   }
 }
 
@@ -84,9 +76,7 @@ void MainLoop::HandleKeyEvents(sf::Window &window) {
                     INFO);
         break;
       case sf::Keyboard::BackSlash:
-        console_on_ = !console_on_;
-        Logger::Log(string("Console turned ") + (console_on_ ? "on" : "off"),
-                    INFO);
+        game_->AddState(game_->console_loop_);
         break;
       case sf::Keyboard::T:
         game_->player_.SetCurrentTexture(

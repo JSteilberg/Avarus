@@ -1,13 +1,15 @@
 #ifndef CONSOLELOOP_H
 #define CONSOLELOOP_H
 
-//#include "DebugOverlay.h"
+#include "Game.h"
 #include "GameState.h"
+#include "Logger.h"
 
 class DebugOverlay;
 
 class ConsoleLoop : public GameState {
-  ConsoleLoop(Game &game);
+public:
+  ConsoleLoop(Game *game);
 
   // This is how the main loop do
   virtual void Update(const sf::Time &deltaTime, sf::Window &window) override;
@@ -17,7 +19,12 @@ class ConsoleLoop : public GameState {
 
   virtual const string ToString() const override;
 
+  void HandleKeyEvents(sf::Window &window);
+
   virtual ~ConsoleLoop();
+
+private:
+  Game *game_;
 };
 
 #endif // CONSOLELOOP_H

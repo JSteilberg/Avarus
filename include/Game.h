@@ -39,6 +39,8 @@ public:
 
   void AddState(shared_ptr<GameState> new_state);
 
+  void RemoveState(shared_ptr<GameState> remove_state);
+
   // Used to get the amount of time to draw a frame
   sf::Clock delta_clock_;
 
@@ -48,8 +50,11 @@ public:
   // Holds the current state of the game (Used for menus, main loop, etc.)
   list<shared_ptr<GameState>> state_list_;
 
-  // Holds the new states that will be added after next update
+  // Holds the new states that will be added after current update
   list<shared_ptr<GameState>> new_states_;
+
+  // Holds the states that will be removed after current update
+  list<shared_ptr<GameState>> remove_states_;
 
   virtual ~Game();
 

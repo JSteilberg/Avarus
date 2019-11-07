@@ -5,10 +5,10 @@ LIB = -L./lib/
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
 
 main: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
-			Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o
+			Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o ConsoleLoop.o
 	$(CXX) $(CXXFLAGS) $(LIB) -o Avarus main.o \
 		Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
-		Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \
+		Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o ConsoleLoop.o \
 		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D
 
 tools: KeyCode.o Logger.o
@@ -62,6 +62,9 @@ ConfigLoader.o: src/parser/ConfigLoader.cpp include/ConfigLoader.h
 
 Console.o: src/Console.cpp include/Console.h
 	$(COMP) src/Console.cpp
+
+ConsoleLoop.o: src/gamestate/ConsoleLoop.cpp include/ConsoleLoop.h
+	$(COMP) src/gamestate/ConsoleLoop.cpp
 
 clean:
 	rm -rf *.o
