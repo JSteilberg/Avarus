@@ -39,3 +39,15 @@ void DebugOverlay::draw(sf::RenderTarget &target,
   target.draw(background_, states);
   target.draw(info_, states);
 }
+
+// Flips the active state of the overlay text
+void DebugOverlay::Toggle() {
+  is_active_ = is_active_ ? false : true;
+  Logger::Log(is_active_, INFO);
+}
+
+// Returns true if the debug overlay is active; false otherwise
+bool DebugOverlay::IsActive() { return is_active_; }
+
+// Set whether the debug overlay is active
+void DebugOverlay::SetActive(bool active) { is_active_ = active; }

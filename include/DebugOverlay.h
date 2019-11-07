@@ -28,6 +28,15 @@ public:
   // Update the displayed overlay text
   void Update();
 
+  // Flips the active state of the overlay text
+  void Toggle();
+
+  // Returns true if the debug overlay is active; false otherwise
+  bool IsActive();
+
+  // Set whether the debug overlay is active
+  void SetActive(bool active);
+
 private:
   vector<string> msg_order_;
 
@@ -45,6 +54,8 @@ private:
 
   // Font to draw the debug overlay with
   sf::Font font_;
+
+  bool is_active_ = false;
 };
 
 #endif // DEBUGOVERLAY_H
