@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -69,6 +69,9 @@ void ConsoleLoop::HandleKeyEvents(sf::Window &window) {
       default:
         break;
       }
+    }
+    if (event.type == sf::Event::TextEntered) {
+      game_->console_overlay_.UpdateBuffer(event.text.unicode);
     }
   }
 }

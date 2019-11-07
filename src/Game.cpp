@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -24,16 +24,16 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "Game.h"
 
 Game::Game()
-    : game_config_("./res/cfg/config.json"),
+    : game_config_(consts::kConfigLocation),
       window_width_(game_config_.GetIntVar("window_width")),
       window_height_(game_config_.GetIntVar("window_height")),
       window_(sf::VideoMode(window_width_, window_height_),
               "Avarus v" + consts::kGameVersion),
-      id_registry_("./res/cfg/ids.json"),
-      game_atlas_("./res/cfg/atlas.json", id_registry_), gravity_(0.0f, 0.0f),
-      world_(gravity_), player_(game_atlas_, world_), dbg_overlay_(),
+      id_registry_(game_config_.GetVar("id_registry")),
+      game_atlas_(game_config_.GetVar("game_atlas"), id_registry_),
+      gravity_(0.0f, 0.0f), world_(gravity_), player_(game_atlas_, world_),
+      dbg_overlay_(),
       console_overlay_(window_width_, window_height_, 500, 300) {
-
   main_loop_ = std::make_shared<MainLoop>(this);
   console_loop_ = std::make_shared<ConsoleLoop>(this);
 
@@ -43,7 +43,7 @@ Game::Game()
 
   dbg_overlay_.Set("ver", string("Avarus v") + consts::kGameVersion);
   dbg_overlay_.Set("thingsps", "0");
-  dbg_overlay_.Set("pos", "0");
+  dbg_overlay_.Set("pos", "player pos: 0,0");
 }
 
 int Game::Start() {
@@ -61,7 +61,7 @@ int Game::Start() {
     window_.clear();
     if (update_clock_.getElapsedTime().asSeconds() >=
         1.0 / consts::kUpsPerSec) {
-      // world_.Step(update_clock_.getElapsedTime().asSeconds(), 6, 2);
+
       update_clock_.restart();
       state_list_.back()->Update(delta_clock_.restart(), window_);
       updates = updates + 1;

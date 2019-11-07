@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -73,5 +73,10 @@ void Console::SetPosition(int x_pos, int y_pos) {
   history_text_.setPosition(5, y_pos - height_);
   history_background_.setPosition(0, y_pos - height_);
   edit_background_.setPosition(0, y_pos - (height_ / hratio_));
+  has_update_ = true;
+}
+
+void Console::UpdateBuffer(sf::Uint32 unicode) {
+  edit_text_ += sf::String(unicode);
   has_update_ = true;
 }

@@ -50,6 +50,8 @@ public:
 
   void SetPosition(int x_pos, int y_pos);
 
+  void UpdateBuffer(sf::Uint32 unicode);
+
 private:
   const int hratio_ = 20;
 
@@ -75,7 +77,7 @@ private:
   // Font to draw the debug overlay with
   sf::Font font_;
 
-  string edit_text_;
+  sf::String edit_text_;
 };
 
 #endif // CONSOLE_H

@@ -1,4 +1,6 @@
 {
-    "window_width" : "800",
-    "window_height": "600"
+    "window_width" : "1600",
+    "window_height": "1400",
+    "id_registry": "./res/cfg/ids.json",
+    "game_atlas": "./res/cfg/atlas.json"
 }

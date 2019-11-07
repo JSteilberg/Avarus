@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -45,6 +45,10 @@ const int kVelocityIterations = 6;
 // Number of position integration iterations to perform per timestep
 // Recommended 2-4
 const int kPositionIterations = 2;
+
+// Location of configuration file containing things like graphics params
+const string kConfigLocation = "./res/cfg/config.json";
+
 } // namespace consts
 
 #endif // CONSTANTS_H
