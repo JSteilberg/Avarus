@@ -9,6 +9,7 @@
 #include "DebugOverlay.h"
 #include "GameState.h"
 #include "Player.h"
+#include "Console.h"
 
 using std::string;
 
@@ -17,7 +18,7 @@ class MainLoop : public GameState {
 public:
   // Create an instance of MainLoop with a specified player
   // Important: Does modify player
-  MainLoop(Player &player, b2World &world, DebugOverlay &dbg_overlay);
+  MainLoop(Player &player, b2World &world, DebugOverlay &dbg_overlay, Console &console_overlay);
 
   // This is how the main loop do
   virtual void Update(const sf::Time &deltaTime, sf::Window &window) override;
@@ -53,6 +54,8 @@ private:
   bool console_on_;
 
   DebugOverlay &dbg_overlay_;
+
+  Console &console_overlay_;
 };
 
 #endif // MAINLOOP_H

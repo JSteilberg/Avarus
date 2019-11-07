@@ -18,6 +18,7 @@
 #include "ObjRegister.h"
 #include "Parser.h"
 #include "Player.h"
+#include "Console.h"
 
 // Class to run an instance of the game.
 // All you have to do is declare an instance and run .start()
@@ -74,6 +75,8 @@ private:
   std::shared_ptr<MainLoop> main_loop_;
 
   DebugOverlay dbg_overlay_;
+
+  Console console_overlay_;
 };
 
 #endif // GAME_H

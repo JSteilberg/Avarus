@@ -1,15 +1,17 @@
 #include "Game.h"
 
 Game::Game()
-    : // Create window with 800x600 resolution
-      game_config_("./res/cfg/config.json"),
+    : game_config_("./res/cfg/config.json"),
       window_(sf::VideoMode(game_config_.GetIntVar("window_width"),
                             game_config_.GetIntVar("window_height")),
               "Avarus v" + consts::kGameVersion),
       id_registry_("./res/cfg/ids.json"),
       game_atlas_("./res/cfg/atlas.json", id_registry_), gravity_(0.0f, 0.0f),
-      world_(gravity_), player_(game_atlas_, world_) {
-  main_loop_ = std::make_shared<MainLoop>(player_, world_, dbg_overlay_);
+      world_(gravity_), player_(game_atlas_, world_),
+      dbg_overlay_(), 
+      console_overlay_() {
+    
+  main_loop_ = std::make_shared<MainLoop>(player_, world_, dbg_overlay_, console_overlay_);
 
   // window_.setFramerateLimit(60);
   window_.setKeyRepeatEnabled(false);

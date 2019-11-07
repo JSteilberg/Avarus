@@ -1,9 +1,9 @@
 #include "MainLoop.h"
 
-MainLoop::MainLoop(Player &player, b2World &world, DebugOverlay &dbg_overlay)
-    : player_(player), world_(world), dbg_overlay_(dbg_overlay) {
+MainLoop::MainLoop(Player &player, b2World &world, DebugOverlay &dbg_overlay, Console &console_overlay)
+    : player_(player), world_(world), dbg_overlay_(dbg_overlay), console_overlay_(console_overlay) {
 
-  dbg_menu_on_ = false;
+  dbg_menu_on_ = true;
   console_on_ = false;
 }
 
@@ -18,6 +18,10 @@ void MainLoop::Update(const sf::Time &deltaTime, sf::Window &window) {
   if (dbg_menu_on_) {
     dbg_overlay_.Update();
   }
+
+  if (console_on_) {
+    console_overlay_.Update();
+  }
 }
 
 void MainLoop::Draw(sf::RenderWindow &window) {
@@ -25,6 +29,10 @@ void MainLoop::Draw(sf::RenderWindow &window) {
 
   if (dbg_menu_on_) {
     window.draw(dbg_overlay_);
+  }
+
+  if (console_on_) {
+      window.draw(console_overlay_);
   }
 }
 
@@ -71,7 +79,7 @@ void MainLoop::HandleKeyEvents(sf::Window &window) {
         Logger::Log(
             string("Debug menu turned ") + (dbg_menu_on_ ? "on" : "off"), INFO);
         break;
-      case sf::Keyboard::Tilde:
+      case sf::Keyboard::BackSlash:
         console_on_ = !console_on_;
         Logger::Log(string("Console turned ") + (console_on_ ? "on" : "off"),
                     INFO);
