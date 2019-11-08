@@ -21,10 +21,20 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "Constants.h"
 #include "Game.h"
+#include <iostream>
 
 // Simple entry point
 int main() {
+  std::cout << "          ___\n"
+            << "         / | |_   _ ___ _ __ __  __ _____\n"
+            << "        / /| | | / /   |  __/ / / /_____/\n"
+            << "       / / | | |/ / /| | | / /_/ /__\\ \\\n"
+            << "      /_/  |_|___/_/ |_|_| \\____/_____/   v"
+            << consts::kGameVersion << "\n"
+            << std::endl;
+
   Game game;
   return game.Start();
 }
