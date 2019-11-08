@@ -35,7 +35,6 @@ Console::Console(float x_pos, float y_pos, int width, int num_lines)
   }
   line_height_ = font_.getLineSpacing(font_size_);
 
-  //  edit_text_ = "_";
   cursor_clock_.restart();
 
   history_text_.setCharacterSize(font_size_);
