@@ -100,9 +100,11 @@ void Console::SetPosition(int x_pos, int y_pos) {
 void Console::UpdateBuffer(sf::Uint32 unicode) {
   // Logger::Log(std::string(sf::String(unicode)), INFO);
   if (unicode == sf::String("\b")) {
-    if (edit_text_.substring(edit_text_.getSize() - 3) == "\n> ") {
+    if (edit_text_.getSize() > 3 and
+        edit_text_.substring(edit_text_.getSize() - 3) == "\n> ") {
       edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 3);
-    } else if (edit_text_.substring(edit_text_.getSize() - 4, 3) == "\n> ") {
+    } else if (edit_text_.getSize() > 4 and
+               edit_text_.substring(edit_text_.getSize() - 4, 3) == "\n> ") {
       edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 4);
     } else {
       edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1);
@@ -115,7 +117,7 @@ void Console::UpdateBuffer(sf::Uint32 unicode) {
     //            INFO);
     edit_text_ += sf::String(unicode);
 
-    if (history_text_.findCharacterPos(999999).x >= (width_ - 10) + x_pos_) {
+    if (history_text_.findCharacterPos(999999).x >= (width_ - 20.1) + x_pos_) {
       edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1) + "\n> " +
                    edit_text_[edit_text_.getSize() - 1];
     }
