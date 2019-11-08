@@ -21,35 +21,22 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef CONFIGLOADER_H
-#define CONFIGLOADER_H
+#ifndef CHUNK_H
+#define CHUNK_H
 
-#include <map>
-#include <string>
+#include <vector>
 
-#include "Parser.h"
+#include "Block.hpp"
 
-using std::map;
-using std::string;
-
-class ConfigLoader {
+class Chunk {
 public:
-  // Create the ConfigLoader with a given file
-  ConfigLoader(const string &cfg_file_location);
+  Chunk();
+  virtual ~Chunk();
 
-  string GetVar(const string &varname);
-
-  int GetIntVar(const string &varname);
-
-  float GetFloatVar(const string &varname);
-
-  double GetDoubleVar(const string &varname);
-
-  const string cfg_file_location_;
-
+protected:
 private:
-  Parser config_parser_;
-  map<string, string> config_;
+  // ArrayList of Blocks in the chunk
+  std::vector<Block> blocks_;
 };
 
-#endif // CONFIGLOADER_H
+#endif // CHUNK_H

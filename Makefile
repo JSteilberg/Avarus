@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -g -std=c++0x -pedantic -Wstrict-aliasing
+CXXFLAGS = -Wall -Wextra -g -std=c++0x -pedantic -Wstrict-aliasing -Weffc++
 INC = -I./include/ 
 LIB = -L./lib/
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
@@ -21,49 +21,49 @@ KeyCode.o: src/tools/KeyCode.cpp
 main.o: src/main.cpp
 	$(COMP) src/main.cpp
 
-Game.o: src/Game.cpp include/Game.h
+Game.o: src/Game.cpp include/Game.hpp
 	$(COMP) src/Game.cpp
 
-MainLoop.o: src/gamestate/MainLoop.cpp include/MainLoop.h
+MainLoop.o: src/gamestate/MainLoop.cpp include/MainLoop.hpp
 	$(COMP) src/gamestate/MainLoop.cpp
 
-GameState.o: src/gamestate/GameState.cpp include/GameState.h
+GameState.o: src/gamestate/GameState.cpp include/GameState.hpp
 	$(COMP) src/gamestate/GameState.cpp
 
-Parser.o:	src/parser/Parser.cpp include/Parser.h
+Parser.o:	src/parser/Parser.cpp include/Parser.hpp
 	$(COMP) src/parser/Parser.cpp
 
-IdRegister.o: src/IdRegister.cpp include/IdRegister.h
+IdRegister.o: src/IdRegister.cpp include/IdRegister.hpp
 	$(COMP) src/IdRegister.cpp
 
-Logger.o: src/Logger.cpp include/Logger.h
+Logger.o: src/Logger.cpp include/Logger.hpp
 	$(COMP) src/Logger.cpp
 
-Chunk.o: src/physics/Chunk.cpp include/Chunk.h
+Chunk.o: src/physics/Chunk.cpp include/Chunk.hpp
 	$(COMP) src/physics/Chunk.cpp
 
-DebugOverlay.o: src/DebugOverlay.cpp include/DebugOverlay.h
+DebugOverlay.o: src/DebugOverlay.cpp include/DebugOverlay.hpp
 	$(COMP) src/DebugOverlay.cpp
 
-Entity.o: src/physics/Entity.cpp include/Entity.h
+Entity.o: src/physics/Entity.cpp include/Entity.hpp
 	$(COMP) src/physics/Entity.cpp
 
-ObjRegister.o: src/ObjRegister.cpp include/ObjRegister.h
+ObjRegister.o: src/ObjRegister.cpp include/ObjRegister.hpp
 	$(COMP) src/ObjRegister.cpp
 
-Player.o: src/physics/Player.cpp include/Player.h
+Player.o: src/physics/Player.cpp include/Player.hpp
 	$(COMP) src/physics/Player.cpp
 
-Atlas.o: src/atlas/Atlas.cpp include/Atlas.h
+Atlas.o: src/atlas/Atlas.cpp include/Atlas.hpp
 	$(COMP) src/atlas/Atlas.cpp
 
-ConfigLoader.o: src/parser/ConfigLoader.cpp include/ConfigLoader.h
+ConfigLoader.o: src/parser/ConfigLoader.cpp include/ConfigLoader.hpp
 	$(COMP) src/parser/ConfigLoader.cpp
 
-Console.o: src/Console.cpp include/Console.h
+Console.o: src/Console.cpp include/Console.hpp
 	$(COMP) src/Console.cpp
 
-ConsoleLoop.o: src/gamestate/ConsoleLoop.cpp include/ConsoleLoop.h
+ConsoleLoop.o: src/gamestate/ConsoleLoop.cpp include/ConsoleLoop.hpp
 	$(COMP) src/gamestate/ConsoleLoop.cpp
 
 clean:

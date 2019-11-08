@@ -33,16 +33,16 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <string>
 #include <vector>
 
-#include "Atlas.h"
-#include "ConfigLoader.h"
-#include "Console.h"
-#include "ConsoleLoop.h"
-#include "Constants.h"
-#include "GameState.h"
-#include "MainLoop.h"
-#include "ObjRegister.h"
-#include "Parser.h"
-#include "Player.h"
+#include "Atlas.hpp"
+#include "ConfigLoader.hpp"
+#include "Console.hpp"
+#include "ConsoleLoop.hpp"
+#include "Constants.hpp"
+#include "GameState.hpp"
+#include "MainLoop.hpp"
+#include "ObjRegister.hpp"
+#include "Parser.hpp"
+#include "Player.hpp"
 
 using std::list;
 using std::shared_ptr;

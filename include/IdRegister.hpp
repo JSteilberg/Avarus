@@ -27,8 +27,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <map>
 #include <string>
 
-#include "Logger.h"
-#include "Parser.h"
+#include "Logger.hpp"
+#include "Parser.hpp"
 
 using std::map;
 using std::string;

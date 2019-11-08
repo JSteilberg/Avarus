@@ -28,9 +28,9 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <map>
 #include <string>
 
-#include "IdRegister.h"
-#include "Logger.h"
-#include "Parser.h"
+#include "IdRegister.hpp"
+#include "Logger.hpp"
+#include "Parser.hpp"
 
 using boost::property_tree::ptree;
 using boost::property_tree::ptree_bad_data;

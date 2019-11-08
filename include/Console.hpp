@@ -29,7 +29,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <string>
 #include <vector>
 
-#include "Logger.h"
+#include "Logger.hpp"
 
 using std::list;
 using std::string;

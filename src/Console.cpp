@@ -21,7 +21,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Console.h"
+#include "Console.hpp"
 
 Console::Console(float x_pos, float y_pos, int width, int num_lines)
     : x_pos_(x_pos), y_pos_(y_pos), width_(width), num_lines_(num_lines),

@@ -21,33 +21,35 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef CONFIGLOADER_H
+#define CONFIGLOADER_H
 
+#include <map>
 #include <string>
-#include <vector>
 
-#include "Atlas.h"
-#include "Entity.h"
+#include "Parser.hpp"
 
+using std::map;
 using std::string;
 
-// Class to represent the player
-class Player : public Entity {
+class ConfigLoader {
 public:
-  // Create a Player with an initial Atlas
-  Player(Atlas &atlas, b2World &world);
+  // Create the ConfigLoader with a given file
+  ConfigLoader(const string &cfg_file_location);
 
-  virtual ~Player();
+  string GetVar(const string &varname);
 
-  void Update(const sf::Time &delta_time) override;
+  int GetIntVar(const string &varname);
 
-  virtual int GetTypeId() const override;
+  float GetFloatVar(const string &varname);
 
-protected:
+  double GetDoubleVar(const string &varname);
+
+  const string cfg_file_location_;
+
 private:
-  // Corresponds to the player "type"
-  const int type_id_ = 50000;
+  Parser config_parser_;
+  map<string, string> config_;
 };
 
-#endif // PLAYER_H
+#endif // CONFIGLOADER_H

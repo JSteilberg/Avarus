@@ -21,8 +21,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Atlas.h"
-#include <iostream>
+#include "Atlas.hpp"
 
 Atlas::Atlas(const string &file_location, const IdRegister &registry)
     : registry_(registry), atlas_coords_parser_(file_location.c_str()) {

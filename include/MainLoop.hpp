@@ -28,12 +28,12 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <SFML/Graphics.hpp>
 #include <string>
 
-#include "Console.h"
-#include "Constants.h"
-#include "DebugOverlay.h"
-#include "Game.h"
-#include "GameState.h"
-#include "Player.h"
+#include "Console.hpp"
+#include "Constants.hpp"
+#include "DebugOverlay.hpp"
+#include "Game.hpp"
+#include "GameState.hpp"
+#include "Player.hpp"
 
 using std::string;
 

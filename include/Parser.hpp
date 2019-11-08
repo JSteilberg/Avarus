@@ -21,33 +21,47 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef CONSOLELOOP_H
-#define CONSOLELOOP_H
+#ifndef PARSER_H
+#define PARSER_H
 
-#include "Game.h"
-#include "GameState.h"
-#include "Logger.h"
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <fstream>
+#include <map>
+#include <sstream>
+#include <stdexcept>
+#include <string>
 
-class DebugOverlay;
+#include "Logger.hpp"
 
-class ConsoleLoop : public GameState {
+using boost::property_tree::json_parser_error;
+using boost::property_tree::ptree;
+using boost::property_tree::read_json;
+using std::string;
+
+class Parser {
 public:
-  ConsoleLoop(Game *game);
+  // Initializes the parser with nothing
+  Parser();
 
-  // This is how the main loop do
-  virtual void Update(const sf::Time &deltaTime, sf::Window &window) override;
+  // Initializes the parser with the given file name. Does not actually parse
+  // the file.
+  Parser(const char file_name[]);
 
-  // This is how the drawing do
-  virtual void Draw(sf::RenderWindow &window) override;
+  // Returns a boost::property_tree::ptree of the parsed file. Throws exception
+  // if called before parse();
+  const ptree &GetParseTree() const;
 
-  virtual const string ToString() const override;
+  // Parses the file being held in state
+  void Parse();
 
-  void HandleKeyEvents(sf::Window &window);
+  virtual ~Parser();
 
-  virtual ~ConsoleLoop();
-
+protected:
 private:
-  Game *game_;
+  ptree parse_tree_;
+  bool parsed_;
+  string file_name_;
 };
 
-#endif // CONSOLELOOP_H
+#endif // PARSER_H

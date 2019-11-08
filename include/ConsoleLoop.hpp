@@ -21,22 +21,33 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef CHUNK_H
-#define CHUNK_H
+#ifndef CONSOLELOOP_H
+#define CONSOLELOOP_H
 
-#include <vector>
+#include "Game.hpp"
+#include "GameState.hpp"
+#include "Logger.hpp"
 
-#include "Block.h"
+class DebugOverlay;
 
-class Chunk {
+class ConsoleLoop : public GameState {
 public:
-  Chunk();
-  virtual ~Chunk();
+  ConsoleLoop(Game *game);
 
-protected:
+  // This is how the main loop do
+  virtual void Update(const sf::Time &deltaTime, sf::Window &window) override;
+
+  // This is how the drawing do
+  virtual void Draw(sf::RenderWindow &window) override;
+
+  virtual const string ToString() const override;
+
+  void HandleKeyEvents(sf::Window &window);
+
+  virtual ~ConsoleLoop();
+
 private:
-  // ArrayList of Blocks in the chunk
-  std::vector<Block> blocks_;
+  Game *game_;
 };
 
-#endif // CHUNK_H
+#endif // CONSOLELOOP_H

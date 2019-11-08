@@ -21,7 +21,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Entity.h"
+#include "Entity.hpp"
 
 Entity::Entity(const sf::Texture &atlas,
                const std::map<string, sf::IntRect> &texture_map, b2World &world)

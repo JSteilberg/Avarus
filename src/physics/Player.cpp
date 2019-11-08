@@ -21,7 +21,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Player.h"
+#include "Player.hpp"
 
 Player::Player(Atlas &atlas, b2World &world)
     : Entity(atlas.GetTexture(), atlas.GetRects(50000), world) {

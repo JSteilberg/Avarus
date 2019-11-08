@@ -21,7 +21,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "MainLoop.h"
+#include "MainLoop.hpp"
 
 /*MainLoop::MainLoop(Player &player, b2World &world, DebugOverlay &dbg_overlay,
                    Console &console_overlay)

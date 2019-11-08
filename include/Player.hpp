@@ -21,47 +21,33 @@ this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <fstream>
-#include <map>
-#include <sstream>
-#include <stdexcept>
 #include <string>
+#include <vector>
 
-#include "Logger.h"
+#include "Atlas.hpp"
+#include "Entity.hpp"
 
-using boost::property_tree::json_parser_error;
-using boost::property_tree::ptree;
-using boost::property_tree::read_json;
 using std::string;
 
-class Parser {
+// Class to represent the player
+class Player : public Entity {
 public:
-  // Initializes the parser with nothing
-  Parser();
+  // Create a Player with an initial Atlas
+  Player(Atlas &atlas, b2World &world);
 
-  // Initializes the parser with the given file name. Does not actually parse
-  // the file.
-  Parser(const char file_name[]);
+  virtual ~Player();
 
-  // Returns a boost::property_tree::ptree of the parsed file. Throws exception
-  // if called before parse();
-  const ptree &GetParseTree() const;
+  void Update(const sf::Time &delta_time) override;
 
-  // Parses the file being held in state
-  void Parse();
-
-  virtual ~Parser();
+  virtual int GetTypeId() const override;
 
 protected:
 private:
-  ptree parse_tree_;
-  bool parsed_;
-  string file_name_;
+  // Corresponds to the player "type"
+  const int type_id_ = 50000;
 };
 
-#endif // PARSER_H
+#endif // PLAYER_H

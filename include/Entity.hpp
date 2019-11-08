@@ -32,8 +32,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <string>
 #include <vector>
 
-#include "Constants.h"
-#include "Logger.h"
+#include "Constants.hpp"
+#include "Logger.hpp"
 
 using std::string;
 
