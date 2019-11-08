@@ -71,7 +71,7 @@ void Console::Update() {
   if (blink_on_) {
     history_text_.setString(edit_text_ + "_");
   } else {
-    history_text_.setString(edit_text_);
+    history_text_.setString(edit_text_ + " ");
   }
 
   if (has_update_) {
@@ -117,15 +117,16 @@ void Console::UpdateBuffer(sf::Uint32 unicode) {
     //            INFO);
     edit_text_ += sf::String(unicode);
 
-    if (history_text_.findCharacterPos(999999).x >= (width_ - 20.1) + x_pos_) {
+    if (history_text_.findCharacterPos(999999).x >= (width_ - 10.1) + x_pos_) {
       edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1) + "\n> " +
                    edit_text_[edit_text_.getSize() - 1];
     }
   }
+
   if (blink_on_) {
     history_text_.setString(edit_text_ + "_");
   } else {
-    history_text_.setString(edit_text_);
+    history_text_.setString(edit_text_ + " ");
   }
 
   has_update_ = true;

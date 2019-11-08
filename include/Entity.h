@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -42,9 +42,6 @@ using std::string;
 // TODO: Add ability to die
 class Entity {
 public:
-  // Set the main bounding rectangle for this Entity's sf::Texture
-  void SetMainTextureRect(const sf::IntRect &rectangle);
-
   // Set this Entity's position
   void SetPos(b2Vec2 pos);
 
@@ -67,7 +64,7 @@ public:
   void ApplyForce(b2Vec2 forceVec);
 
   // Update this Entity with a given deltaTime
-  void Update(const sf::Time &deltaTime);
+  virtual void Update(const sf::Time &delta_time) = 0;
 
   // Get the type ID for this Entity
   virtual int GetTypeId() const = 0;

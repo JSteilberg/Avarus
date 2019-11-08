@@ -49,49 +49,32 @@ int Game::Start() {
   delta_clock_.restart();
   update_clock_.restart();
 
-  sf::Clock sec_counter_clock;
-  sec_counter_clock.restart();
-
+  thingsps_counter_clock_.restart();
   int frames = 0;
   int updates = 0;
 
   // Main loop
   while (window_.isOpen()) {
-    window_.clear();
     if (update_clock_.getElapsedTime().asSeconds() >=
         1.0 / consts::kUpsPerSec) {
-
-      update_clock_.restart();
-      state_list_.back()->Update(delta_clock_.restart(), window_);
+      Update();
       updates = updates + 1;
     }
 
-    for (auto &state : state_list_) {
-      state->Draw(window_);
-    }
-    window_.display();
-
-    frames = frames + 1;
-
-    if (sec_counter_clock.getElapsedTime().asSeconds() >= 1) {
-      sec_counter_clock.restart();
+    if (thingsps_counter_clock_.getElapsedTime().asSeconds() >= 1) {
+      thingsps_counter_clock_.restart();
       dbg_overlay_.Set("thingsps", to_string(frames) + " fps, " +
                                        to_string(updates) + " ups");
       frames = 0;
       updates = 0;
     }
 
-    for (auto &new_state : new_states_) {
-      Logger::Log("Added new state " + new_state->ToString(), INFO);
-      state_list_.push_back(new_state);
+    window_.clear();
+    for (auto &state : state_list_) {
+      state->Draw(window_);
     }
-    new_states_.clear();
-
-    for (auto &remove_state : remove_states_) {
-      Logger::Log("Removed state " + remove_state->ToString(), INFO);
-      state_list_.remove(remove_state);
-    }
-    remove_states_.clear();
+    window_.display();
+    frames = frames + 1;
   }
 
   /*while (!state_stack_.empty()) {
@@ -104,8 +87,23 @@ int Game::Start() {
   return 0;
 }
 
-// Maybe remove this?
-void Game::Update(const sf::Event &event) {}
+void Game::Update() {
+
+  update_clock_.restart();
+  state_list_.back()->Update(delta_clock_.restart(), window_);
+
+  for (auto &new_state : new_states_) {
+    Logger::Log("Added new state " + new_state->ToString(), INFO);
+    state_list_.push_back(new_state);
+  }
+  new_states_.clear();
+
+  for (auto &remove_state : remove_states_) {
+    Logger::Log("Removed state " + remove_state->ToString(), INFO);
+    state_list_.remove(remove_state);
+  }
+  remove_states_.clear();
+}
 
 void Game::AddState(shared_ptr<GameState> new_state) {
   new_states_.push_back(new_state);

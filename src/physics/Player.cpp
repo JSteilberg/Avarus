@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -38,6 +38,8 @@ Player::Player(Atlas &atlas, b2World &world)
 
   SetShape(vertices, 4);
 }
+
+void Player::Update(const sf::Time &delta_time) {}
 
 int Player::GetTypeId() const { return type_id_; }
 

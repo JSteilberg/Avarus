@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -39,6 +39,8 @@ public:
   Player(Atlas &atlas, b2World &world);
 
   virtual ~Player();
+
+  void Update(const sf::Time &delta_time) override;
 
   virtual int GetTypeId() const override;
 

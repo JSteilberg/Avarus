@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -58,7 +58,7 @@ public:
 
   int Start();
 
-  void Update(const sf::Event &event);
+  void Update();
 
   void AddState(shared_ptr<GameState> new_state);
 
@@ -124,6 +124,8 @@ public:
   DebugOverlay dbg_overlay_;
 
   Console console_overlay_;
+
+  sf::Clock thingsps_counter_clock_;
 };
 
 #endif // GAME_H

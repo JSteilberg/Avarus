@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -40,17 +40,11 @@ Entity::Entity(const sf::Texture &atlas,
   SetCurrentTexture("norm");
 }
 
-void Entity::SetMainTextureRect(const sf::IntRect &rectangle) {}
-
 const sf::Sprite &Entity::GetSprite() {
   sprite_.setPosition(body_->GetPosition().x * consts::kPixelScale,
                       body_->GetPosition().y * consts::kPixelScale);
   sprite_.setRotation(body_->GetAngle());
   return sprite_;
-}
-
-void Entity::Update(const sf::Time &deltaTime) {
-  // Do nothing
 }
 
 void Entity::SetShape(const b2Vec2 *vertices, int vertex_count) {
@@ -67,8 +61,9 @@ void Entity::SetCurrentTexture(std::string key) {
 }
 
 string Entity::GetCurrentTexture() { return current_texture_; }
+
 void Entity::SetPos(b2Vec2 pos) {
-  body_->SetTransform(body_->GetPosition(), body_->GetAngle());
+  body_->SetTransform(body_->GetPosition() + pos, body_->GetAngle());
 }
 
 b2Vec2 Entity::GetPos() { return body_->GetPosition(); }
