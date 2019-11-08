@@ -23,27 +23,32 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Console.h"
 
-Console::Console(int x_pos, int y_pos, int width, int height)
-    : x_pos_(x_pos), y_pos_(y_pos), width_(width), height_(height),
-      has_update_(false), history_background_(sf::Vector2f(width, height)),
-      edit_background_(sf::Vector2f(width_, height_ / hratio_)) {
+Console::Console(int x_pos, int y_pos, int width, int num_lines)
+    : x_pos_(x_pos), y_pos_(y_pos), width_(width), num_lines_(num_lines),
+      has_update_(false), history_background_(sf::Vector2f(width, 0)),
+      edit_background_(sf::Vector2f(width_, 0)) {
 
   if (!font_.loadFromFile("./res/fonts/Inconsolata.otf")) {
     Logger::Log("Failed to load font", MED);
   } else {
     history_text_.setFont(font_);
   }
+  line_height_ = font_.getLineSpacing(font_size_);
 
-  edit_text_ = "abcdefg";
+  //  edit_text_ = "_";
+  cursor_clock_.restart();
 
-  SetPosition(x_pos, y_pos);
-  history_text_.setCharacterSize(20);
-  // font_.setCharacterSize(20);
+  history_text_.setCharacterSize(font_size_);
   history_text_.setFillColor(sf::Color::Black);
-  // font_.setFillColor(sf::Color::Black);
-  // background_.setPosition(200, 200);
+  history_text_.setString("_");
+
+  history_background_.setSize(sf::Vector2f(width, num_lines_ * line_height_));
+  edit_background_.setSize(sf::Vector2f(width, 1 * line_height_));
+
   history_background_.setFillColor(sf::Color(90, 90, 90, 200));
   edit_background_.setFillColor(sf::Color(90, 90, 90, 200));
+
+  SetPosition(x_pos, y_pos);
 }
 
 void Console::Update() {
@@ -54,9 +59,22 @@ void Console::Update() {
     msg_ = msg_ + msg_map_[msg_order_[i]] + "\n";
   }*/
 
-  if (has_update_) {
-    history_text_.setString(edit_text_);
+  if (cursor_clock_.getElapsedTime().asSeconds() < .5f) {
+    blink_on_ = false;
+  } else if (cursor_clock_.getElapsedTime().asSeconds() > .5f) {
+    blink_on_ = true;
+  }
+  if (cursor_clock_.getElapsedTime().asSeconds() > 1.0f) {
+    cursor_clock_.restart();
+  }
 
+  if (blink_on_) {
+    history_text_.setString(edit_text_ + "_");
+  } else {
+    history_text_.setString(edit_text_);
+  }
+
+  if (has_update_) {
     has_update_ = false;
   }
 }
@@ -70,17 +88,43 @@ void Console::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 }
 
 void Console::SetPosition(int x_pos, int y_pos) {
-  history_text_.setPosition(10, y_pos - height_ - 5);
-  history_background_.setPosition(5, y_pos - height_ - 5);
-  edit_background_.setPosition(5, y_pos - (height_ / hratio_) - 5);
+  history_text_.setPosition(x_pos + 5, y_pos - (num_lines_ * line_height_) - 5);
+  history_background_.setPosition(x_pos,
+                                  y_pos - (num_lines_ * line_height_) - 5);
+  edit_background_.setPosition(x_pos, y_pos - line_height_ - 5);
+  x_pos_ = x_pos;
+  y_pos_ = y_pos;
   has_update_ = true;
 }
 
 void Console::UpdateBuffer(sf::Uint32 unicode) {
-  if (unicode == sf::String("\b")[0]) {
-    edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1);
+  // Logger::Log(std::string(sf::String(unicode)), INFO);
+  if (unicode == sf::String("\b")) {
+    if (edit_text_.substring(edit_text_.getSize() - 3) == "\n> ") {
+      edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 3);
+    } else if (edit_text_.substring(edit_text_.getSize() - 4, 3) == "\n> ") {
+      edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 4);
+    } else {
+      edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1);
+    }
+  } else if (unicode == sf::String("\r")) {
+    edit_text_ += "\n";
   } else {
+    // Logger::Log("x: " + to_string(history_text_.findCharacterPos(9999).x) +
+    //                "y: " + to_string(history_text_.findCharacterPos(9999).y),
+    //            INFO);
     edit_text_ += sf::String(unicode);
+
+    if (history_text_.findCharacterPos(999999).x >= (width_ - 10) + x_pos_) {
+      edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1) + "\n> " +
+                   edit_text_[edit_text_.getSize() - 1];
+    }
   }
+  if (blink_on_) {
+    history_text_.setString(edit_text_ + "_");
+  } else {
+    history_text_.setString(edit_text_);
+  }
+
   has_update_ = true;
 }

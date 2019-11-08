@@ -32,8 +32,7 @@ Game::Game()
       id_registry_(game_config_.GetVar("id_registry")),
       game_atlas_(game_config_.GetVar("game_atlas"), id_registry_),
       gravity_(0.0f, 0.0f), world_(gravity_), player_(game_atlas_, world_),
-      dbg_overlay_(),
-      console_overlay_(window_width_, window_height_, 500, 300) {
+      dbg_overlay_(), console_overlay_(5, window_height_, 500, 20) {
   main_loop_ = std::make_shared<MainLoop>(this);
   console_loop_ = std::make_shared<ConsoleLoop>(this);
 

@@ -24,6 +24,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef LOGGER_H
 #define LOGGER_H
 
+#include <SFML/Graphics.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/lexical_cast.hpp>
 #include <ctime>
@@ -77,6 +78,10 @@ public:
       std::cout << TimeStr() << " [Info] " << logmsg << std::endl;
 #endif
     }
+  }
+
+  static void Log(const sf::String &msg, SeverityLevel level) {
+    Log(string(msg), level);
   }
 
   // Logs (or doesn't) the given information without any severity level or

@@ -1,8 +1,8 @@
 /*             ___
-              / | |_   _ ___ _ __ __  __ ____
-             / /| | | / /   | `__/ / / /____/
+              / | |_   _ ___ _ __ __  __ _____
+             / /| | | / /   |  __/ / / /_____/
             / / | | |/ / /| | | / /_/ /__\ \
-           /_/  |_|___/_/ |_|_| \__,_/_____/
+           /_/  |_|___/_/ |_|_| \____/_____/
 
 Copyright (C) 2019 Jack Steilberg <jsteil123@gmail.com>
 
@@ -25,16 +25,15 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define CONSOLE_H
 
 #include <SFML/Graphics.hpp>
-#include <map>
 #include <queue>
 #include <string>
 #include <vector>
 
 #include "Logger.h"
 
-using std::map;
 using std::queue;
 using std::string;
+using std::to_string;
 
 class Console : public sf::Drawable {
 public:
@@ -53,7 +52,8 @@ public:
   void UpdateBuffer(sf::Uint32 unicode);
 
 private:
-  const int hratio_ = 20;
+  const int text_height_ = 20;
+  const int font_size_ = 20;
 
   // Holds the command history
   queue<string> history_;
@@ -62,7 +62,8 @@ private:
   int y_pos_;
 
   int width_;
-  int height_;
+  float line_height_;
+  int num_lines_;
 
   bool has_update_;
 
@@ -78,6 +79,10 @@ private:
   sf::Font font_;
 
   sf::String edit_text_;
+
+  sf::Clock cursor_clock_;
+
+  bool blink_on_ = false;
 };
 
 #endif // CONSOLE_H

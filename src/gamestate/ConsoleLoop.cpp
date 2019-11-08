@@ -60,17 +60,17 @@ void ConsoleLoop::HandleKeyEvents(sf::Window &window) {
         break;
 
       case sf::Keyboard::Escape:
-      case sf::Keyboard::BackSlash:
+        //      case sf::Keyboard::BackSlash:
         // Logger::Log(string("Console turned off"), INFO);
         game_->window_.setKeyRepeatEnabled(false);
         game_->RemoveState(game_->console_loop_);
+        return;
         break;
 
       default:
         break;
       }
-    }
-    if (event.type == sf::Event::TextEntered) {
+    } else if (event.type == sf::Event::TextEntered) {
       game_->console_overlay_.UpdateBuffer(event.text.unicode);
     }
   }
