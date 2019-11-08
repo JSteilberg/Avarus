@@ -23,12 +23,12 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Console.h"
 
-Console::Console(int x_pos, int y_pos, int width, int num_lines)
+Console::Console(float x_pos, float y_pos, int width, int num_lines)
     : x_pos_(x_pos), y_pos_(y_pos), width_(width), num_lines_(num_lines),
       has_update_(false), history_background_(sf::Vector2f(width, 0)),
       edit_background_(sf::Vector2f(width_, 0)) {
 
-  if (!font_.loadFromFile("./res/fonts/Inconsolata.otf")) {
+  if (!font_.loadFromFile("./res/fonts/Hack/Hack.ttf")) {
     Logger::Log("Failed to load font", MED);
   } else {
     history_text_.setFont(font_);
@@ -69,9 +69,9 @@ void Console::Update() {
   }
 
   if (blink_on_) {
-    history_text_.setString(edit_text_ + "_");
+    history_text_.setString(edit_text_ + L"_");
   } else {
-    history_text_.setString(edit_text_ + " ");
+    history_text_.setString(edit_text_ + L" ");
   }
 
   if (has_update_) {
@@ -87,7 +87,7 @@ void Console::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   // target.draw(font_, states);
 }
 
-void Console::SetPosition(int x_pos, int y_pos) {
+void Console::SetPosition(float x_pos, float y_pos) {
   history_text_.setPosition(x_pos + 5, y_pos - (num_lines_ * line_height_) - 5);
   history_background_.setPosition(x_pos,
                                   y_pos - (num_lines_ * line_height_) - 5);
@@ -97,7 +97,7 @@ void Console::SetPosition(int x_pos, int y_pos) {
   has_update_ = true;
 }
 
-void Console::UpdateBuffer(sf::Uint32 unicode) {
+void Console::WriteCharacter(sf::Uint32 unicode) {
   // Logger::Log(std::string(sf::String(unicode)), INFO);
   if (unicode == sf::String("\b")) {
     if (edit_text_.getSize() > 3 and
@@ -124,9 +124,9 @@ void Console::UpdateBuffer(sf::Uint32 unicode) {
   }
 
   if (blink_on_) {
-    history_text_.setString(edit_text_ + "_");
+    history_text_.setString(edit_text_ + L"_");
   } else {
-    history_text_.setString(edit_text_ + " ");
+    history_text_.setString(edit_text_ + L" ");
   }
 
   has_update_ = true;

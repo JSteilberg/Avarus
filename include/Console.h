@@ -25,38 +25,69 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define CONSOLE_H
 
 #include <SFML/Graphics.hpp>
-#include <queue>
+#include <list>
 #include <string>
 #include <vector>
 
 #include "Logger.h"
 
-using std::queue;
+using std::list;
 using std::string;
 using std::to_string;
 
+/**
+ * A Console is a graphical interface in which a user can enter commands.
+ *
+ * A Console has an edit buffer, where the user can actually type; it can
+ * be multiple lines, and is completed when the user hits Return without
+ * holding shift.
+ *
+ * A Console also has a history buffer, which displays previously completed
+ * edits, as well as output from executed commands.
+ *
+ * TODO: Add ability to prevent edit buffer completion if the user has
+ * opened some sort of closure e.g. '{' until they close the closure
+ */
 class Console : public sf::Drawable {
 public:
   // Creates a console at the specified location
-  Console(int x_pos, int y_pos, int width, int height);
+  // Positioning starts from the bottom left corner.
+  Console(float x_pos, float y_pos, int width, int num_lines);
+
+  // Empty the edit buffer without completing it
+  void ClearEditBuffer();
+
+  // Completes the edit, returning its text as a string, moving the
+  // content to the history buffer, and clearing the edit buffer
+  string CompleteEdit();
+
+  // Clears the history buffer
+  void ClearHistoryBuffer();
+
+  // Scrolls the history buffer by num_lines lines
+  // Positive scrolls up, negative scrolls down
+  void ScrollHistoryBuffer(float num_lines);
+
+  // Allow any changes to the buffer from above functions to take effect
+  void Update();
+
+  // Sets the position of the bottom-left corner of the buffer
+  void SetPosition(float x_pos, float y_pos);
+
+  // Resize the console to be of new width and new number of lines
+  void Resize(int new_width, int new_num_lines);
+
+  void WriteCharacter(sf::Uint32 unicode);
 
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
 
-  void clear();
-
-  void Update();
-
-  void SetPosition(int x_pos, int y_pos);
-
-  void UpdateBuffer(sf::Uint32 unicode);
-
 private:
-  const int text_height_ = 20;
-  const int font_size_ = 20;
+  int text_height_ = 20;
+  int font_size_ = 20;
 
   // Holds the command history
-  queue<string> history_;
+  list<string> history_;
 
   int x_pos_;
   int y_pos_;
