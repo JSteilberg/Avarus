@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -30,8 +30,7 @@ void Parser::Parse() {
   try {
     read_json(file_name_, parse_tree_);
   } catch (const json_parser_error &err) {
-    // Logger::Log("Failed to parse " + file_name_ + ".", HIGH);
-    Logger::Log(err.what(), HIGH);
+    Logger::Log("Parser: " + string(err.what()), HIGH);
     parsed_ = false;
     throw err;
   }
@@ -40,8 +39,7 @@ void Parser::Parse() {
 
 const ptree &Parser::GetParseTree() const {
   if (!parsed_) {
-    throw new std::runtime_error(
-        "Called GetParseTree() before calling Parse()");
+    throw std::runtime_error("Called GetParseTree() before calling Parse()");
   }
   return parse_tree_;
 }

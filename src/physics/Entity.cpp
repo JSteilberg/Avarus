@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -35,7 +35,6 @@ Entity::Entity(const sf::Texture &atlas,
       fixture_def_(),
       width_(1),
       height_(2) {
-  // sprite_.setScale(1,2);
   sprite_.setScale(
       width_ * consts::kPixelScale / texture_map.at("norm").width,
       height_ * consts::kPixelScale / texture_map.at("norm").height);
@@ -64,8 +63,13 @@ void Entity::SetShape(const b2Vec2 *vertices, int vertex_count) {
 }
 
 void Entity::SetCurrentTexture(std::string key) {
-  current_texture_ = key;
-  sprite_.setTextureRect(texture_map_.at(key));
+  try {
+    sprite_.setTextureRect(texture_map_.at(key));
+    current_texture_ = key;
+  } catch (const std::out_of_range &ex) {
+    sprite_.setTextureRect(texture_map_.at("norm"));
+    current_texture_ = "norm";
+  }
 }
 
 string Entity::GetCurrentTexture() { return current_texture_; }

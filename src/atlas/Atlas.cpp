@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -25,23 +25,36 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 Atlas::Atlas(string file_location, const IdRegister &registry)
     : atlas_file_location_(file_location),
+      atlas_coords_parser_(atlas_file_location_),
       registry_(registry),
-      atlas_coords_parser_(file_location),
       atlas_texture_(),
-      atlas_rects_map_() {
-  Logger::Log("Parsing atlas file '" + file_location + "'", INFO);
-  atlas_coords_parser_.Parse();
-  atlas_file_location_ = file_location;
-  if (!atlas_texture_.loadFromFile(
-          atlas_coords_parser_.GetParseTree().get<string>("atlas.file"))) {
-    throw new std::runtime_error(
-        "Failed to load atlas " + file_location + " texture from " +
-        atlas_coords_parser_.GetParseTree().get<string>("atlas.file"));
+      atlas_rects_map_(),
+      err_tex_() {
+  // Attempt to parse the atlas file. If it isn't found then create an
+  // error texture so that we don't have to crash
+  Logger::Log("Parsing atlas file '" + atlas_file_location_ + "'", INFO);
+  string atlas_texture_file = "";
+  try {
+    atlas_coords_parser_.Parse();
+    atlas_texture_file =
+        atlas_coords_parser_.GetParseTree().get<string>("atlas.file");
+
+    // If we got here, we loaded the atlas coordinate file successfully, so go
+    // ahead and load the texture rects
+    Logger::Log("Loading texture rects", INFO);
+    LoadTextureRects();
+
+    if (!atlas_texture_.loadFromFile(atlas_texture_file)) {
+      Logger::Log("Failed to load atlas " + atlas_file_location_ +
+                      " texture from " + atlas_texture_file,
+                  HIGH);
+      atlas_texture_ = CreateErrorTexture();
+    }
+  } catch (const json_parser_error &ex) {
+    Logger::Log("Creating default atlas coordinate map", INFO);
+    atlas_rects_map_["error"]["norm"] = sf::IntRect(0, 0, 1, 1);
+    atlas_texture_ = CreateErrorTexture();
   }
-
-  Logger::Log("Loading texture rects", INFO);
-
-  LoadTextureRects();
 }
 
 const Parser &Atlas::GetParser() const { return atlas_coords_parser_; }
@@ -118,6 +131,24 @@ void Atlas::LoadTextureRects() {
 
   rects = ReadRectsByKey("atlas.other");
   atlas_rects_map_.insert(rects.begin(), rects.end());
+
+  try {
+    auto a = atlas_rects_map_.at("error");
+  } catch (std::out_of_range e) {
+    Logger::Log("Failed to find error texture", HIGH);
+    throw e;
+  }
+}
+
+const sf::Texture Atlas::CreateErrorTexture() {
+  if (!err_tex_.create(1, 1)) {
+    string err_msg = "Failed to create backup error texture";
+    Logger::Log(err_msg, HIGH);
+    throw std::runtime_error(err_msg);
+  } else {
+    err_tex_.clear(sf::Color::Cyan);
+  }
+  return err_tex_.getTexture();
 }
 
 Atlas::~Atlas() {

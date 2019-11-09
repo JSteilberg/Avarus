@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -37,6 +37,7 @@ using boost::property_tree::ptree_bad_data;
 using boost::property_tree::ptree_bad_path;
 using boost::property_tree::ptree_error;
 using boost::property_tree::read_json;
+using boost::property_tree::json_parser::json_parser_error;
 using std::map;
 using std::string;
 
@@ -71,17 +72,21 @@ class Atlas {
   // Loads all the texture rects into the atlas_rects_map_ var
   void LoadTextureRects();
 
+  // Reads all the texture rects found in the element specified by key
   const map<string, map<string, sf::IntRect>> ReadRectsByKey(
       string element_key) const;
 
-  // String for that atlas' file location
-  string atlas_file_location_;
+  // Creates a 1x1 cyan texture
+  const sf::Texture CreateErrorTexture();
 
-  // Used for converting int IDs to their corresponding names
-  const IdRegister &registry_;
+  // String for that atlas' file location
+  const string atlas_file_location_;
 
   // Parser to be used for indexing the various parts of the atlas texture
   Parser atlas_coords_parser_;
+
+  // Used for converting int IDs to their corresponding names
+  const IdRegister &registry_;
 
   // Atlas texture usually obtained based on the config file from the parser
   sf::Texture atlas_texture_;
@@ -91,6 +96,9 @@ class Atlas {
   // sf::IntRect subsection of the atlas for a specific texture for a given
   // object (i.e. "norm", "step4", etc.)
   map<string, map<string, sf::IntRect>> atlas_rects_map_;
+
+  // 1x1 cyan texture
+  sf::RenderTexture err_tex_;
 };
 
 #endif  // ATLAS_H
