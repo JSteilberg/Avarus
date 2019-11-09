@@ -23,7 +23,14 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "DebugOverlay.hpp"
 
-DebugOverlay::DebugOverlay() : background_(sf::Vector2f(512, 256)) {
+DebugOverlay::DebugOverlay()
+    : msg_order_(),
+      msg_map_(),
+      msg_(),
+      background_(sf::Vector2f(512, 256)),
+      info_(),
+      font_(),
+      is_active_(false) {
   if (!font_.loadFromFile("./res/fonts/Inconsolata/Inconsolata.otf")) {
     Logger::Log("Failed to load font", MED);
   } else {

@@ -37,7 +37,7 @@ using namespace std;
 // Represents a collection of useful, constantly updated debug information
 // that the game may wish to write to the screen
 class DebugOverlay : public sf::Drawable {
-public:
+ public:
   // Construct a DebugOverlay
   DebugOverlay();
 
@@ -60,7 +60,8 @@ public:
   // Set whether the debug overlay is active
   void SetActive(bool active);
 
-private:
+ private:
+  // Holds the ordering of the messages to be drawn
   vector<string> msg_order_;
 
   // Map of message labels to the actual message
@@ -78,7 +79,7 @@ private:
   // Font to draw the debug overlay with
   sf::Font font_;
 
-  bool is_active_ = false;
+  bool is_active_;
 };
 
-#endif // DEBUGOVERLAY_H
+#endif  // DEBUGOVERLAY_H

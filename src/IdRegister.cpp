@@ -23,8 +23,9 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "IdRegister.hpp"
 
-IdRegister::IdRegister(const string &id_file_) : parser_(id_file_.c_str()) {
-  Logger::Log("Parsing ID file", INFO);
+IdRegister::IdRegister(const string id_file)
+    : id_file_(id_file), registry_(), inverted_registry_(), parser_(id_file_) {
+  Logger::Log("Parsing ID file '" + id_file + "'", INFO);
   parser_.Parse();
 
   Logger::Log("Registering IDs", INFO);

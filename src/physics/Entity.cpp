@@ -25,19 +25,27 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 Entity::Entity(const sf::Texture &atlas,
                const std::map<string, sf::IntRect> &texture_map, b2World &world)
-    : texture_map_(texture_map), atlas_(atlas),
-      sprite_(atlas, texture_map.at("norm")) {
+    : texture_map_(texture_map),
+      atlas_(atlas),
+      sprite_(atlas, texture_map.at("norm")),
+      current_texture_("norm"),
+      body_def_(),
+      body_(),
+      shape_(),
+      fixture_def_(),
+      width_(1),
+      height_(2) {
   // sprite_.setScale(1,2);
-  sprite_.setScale(width_ * consts::kPixelScale / texture_map.at("norm").width,
-                   height_ * consts::kPixelScale /
-                       texture_map.at("norm").height);
+  sprite_.setScale(
+      width_ * consts::kPixelScale / texture_map.at("norm").width,
+      height_ * consts::kPixelScale / texture_map.at("norm").height);
 
   body_def_.type = b2_dynamicBody;
   body_def_.position.Set(0, 0);
 
   body_ = world.CreateBody(&body_def_);
 
-  SetCurrentTexture("norm");
+  SetCurrentTexture(current_texture_);
 }
 
 const sf::Sprite &Entity::GetSprite() {
@@ -83,7 +91,12 @@ void Entity::ApplyForce(b2Vec2 forceVec) {
   body_->ApplyForce(forceVec, body_->GetWorldCenter(), true);
 }
 
-Entity::~Entity() {
+// Get the type ID for this Entity
+int Entity::GetTypeId() const { return -1; }
 
-  // dtor
+// Update this Entity with a given deltaTime
+void Entity::Update(const sf::Time &delta_time) {}
+
+Entity::~Entity() {
+  // destructor
 }

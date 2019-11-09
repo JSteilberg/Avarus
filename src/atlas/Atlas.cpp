@@ -23,10 +23,13 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Atlas.hpp"
 
-Atlas::Atlas(const string &file_location, const IdRegister &registry)
-    : registry_(registry), atlas_coords_parser_(file_location.c_str()) {
-
-  Logger::Log("Parsing atlas file", INFO);
+Atlas::Atlas(string file_location, const IdRegister &registry)
+    : atlas_file_location_(file_location),
+      registry_(registry),
+      atlas_coords_parser_(file_location),
+      atlas_texture_(),
+      atlas_rects_map_() {
+  Logger::Log("Parsing atlas file '" + file_location + "'", INFO);
   atlas_coords_parser_.Parse();
   atlas_file_location_ = file_location;
   if (!atlas_texture_.loadFromFile(
@@ -49,23 +52,22 @@ const ptree &Atlas::GetParseTree() const {
   return atlas_coords_parser_.GetParseTree();
 }
 
-map<string, sf::IntRect> &Atlas::GetRects(int id) {
+const map<string, sf::IntRect> &Atlas::GetRects(int id) const {
   try {
-    return atlas_rects_map_[registry_.IdToName(id)];
+    return atlas_rects_map_.at(registry_.IdToName(id));
   } catch (std::out_of_range e) {
     Logger::Log("Failed to get texture rect for " + registry_.IdToName(id),
                 MED);
-    return atlas_rects_map_["error"];
+    return atlas_rects_map_.at("error");
   }
 }
 
-map<string, sf::IntRect> &Atlas::GetRects(const string &name) {
-  return atlas_rects_map_[name];
+const map<string, sf::IntRect> &Atlas::GetRects(const string &name) const {
+  return atlas_rects_map_.at(name);
 }
 
-map<string, map<string, sf::IntRect>>
-Atlas::ReadRectsByKey(string element_key) const {
-
+const map<string, map<string, sf::IntRect>> Atlas::ReadRectsByKey(
+    string element_key) const {
   // Get the name of the object and make a pretty singular version
   string entity_type_pl = element_key.substr(element_key.rfind(".") + 1);
   string entity_type;

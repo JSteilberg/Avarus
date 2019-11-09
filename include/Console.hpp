@@ -49,10 +49,11 @@ using std::to_string;
  * opened some sort of closure e.g. '{' until they close the closure
  */
 class Console : public sf::Drawable {
-public:
+ public:
   // Creates a console at the specified location
   // Positioning starts from the bottom left corner.
-  Console(float x_pos, float y_pos, int width, int num_lines);
+  Console(float x_pos, float y_pos, int line_length, int num_lines,
+          int font_size);
 
   // Empty the edit buffer without completing it
   void ClearEditBuffer();
@@ -82,21 +83,20 @@ public:
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
 
-private:
-  int text_height_ = 20;
-  int font_size_ = 20;
-
-  // Holds the command history
-  list<string> history_;
-
+ private:
   int x_pos_;
   int y_pos_;
 
-  int width_;
+  int line_length_;
   float line_height_;
   int num_lines_;
 
+  int font_size_ = 20;
+
   bool has_update_;
+
+  // Font to draw the debug overlay with
+  sf::Font font_;
 
   // Translucent background to make info stand out
   sf::RectangleShape history_background_;
@@ -106,14 +106,11 @@ private:
   // Text object that is used to draw the console to screen
   sf::Text history_text_;
 
-  // Font to draw the debug overlay with
-  sf::Font font_;
-
   sf::String edit_text_;
 
   sf::Clock cursor_clock_;
 
-  bool blink_on_ = false;
+  bool blink_on_;
 };
 
-#endif // CONSOLE_H
+#endif  // CONSOLE_H

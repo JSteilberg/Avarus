@@ -23,10 +23,10 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <ConfigLoader.hpp>
 
-ConfigLoader::ConfigLoader(const string &cfg_file_location)
+ConfigLoader::ConfigLoader(string cfg_file_location)
     : cfg_file_location_(cfg_file_location),
-      config_parser_(cfg_file_location.c_str()) {
-
+      config_parser_(cfg_file_location),
+      config_() {
   Logger::Log("Parsing config file '" + cfg_file_location_ + "'", INFO);
   config_parser_.Parse();
 

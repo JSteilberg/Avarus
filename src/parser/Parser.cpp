@@ -23,12 +23,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Parser.hpp"
 
-Parser::Parser() {}
-
-Parser::Parser(const char file_name[]) {
-  file_name_ = file_name;
-  parsed_ = false;
-}
+Parser::Parser(string file_name)
+    : parse_tree_(), parsed_(false), file_name_(file_name) {}
 
 void Parser::Parse() {
   try {

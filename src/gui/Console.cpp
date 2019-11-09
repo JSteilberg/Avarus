@@ -23,11 +23,22 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Console.hpp"
 
-Console::Console(float x_pos, float y_pos, int width, int num_lines)
-    : x_pos_(x_pos), y_pos_(y_pos), width_(width), num_lines_(num_lines),
-      has_update_(false), history_background_(sf::Vector2f(width, 0)),
-      edit_background_(sf::Vector2f(width_, 0)) {
-
+Console::Console(float x_pos, float y_pos, int line_length = 80,
+                 int num_lines = 20, int font_size = 20)
+    : x_pos_(x_pos),
+      y_pos_(y_pos),
+      line_length_(line_length),
+      line_height_(0),
+      num_lines_(num_lines),
+      font_size_(font_size),
+      has_update_(false),
+      font_(),
+      history_background_(sf::Vector2f(line_length, 0)),
+      edit_background_(sf::Vector2f(line_length_, 0)),
+      history_text_(),
+      edit_text_(),
+      cursor_clock_(),
+      blink_on_(false) {
   if (!font_.loadFromFile("./res/fonts/Hack/Hack.ttf")) {
     Logger::Log("Failed to load font", MED);
   } else {
@@ -41,8 +52,9 @@ Console::Console(float x_pos, float y_pos, int width, int num_lines)
   history_text_.setFillColor(sf::Color::Black);
   history_text_.setString("_");
 
-  history_background_.setSize(sf::Vector2f(width, num_lines_ * line_height_));
-  edit_background_.setSize(sf::Vector2f(width, 1 * line_height_));
+  history_background_.setSize(
+      sf::Vector2f(line_length, num_lines_ * line_height_));
+  edit_background_.setSize(sf::Vector2f(line_length, 1 * line_height_));
 
   history_background_.setFillColor(sf::Color(90, 90, 90, 200));
   edit_background_.setFillColor(sf::Color(90, 90, 90, 200));
@@ -116,7 +128,8 @@ void Console::WriteCharacter(sf::Uint32 unicode) {
     //            INFO);
     edit_text_ += sf::String(unicode);
 
-    if (history_text_.findCharacterPos(999999).x >= (width_ - 10.1) + x_pos_) {
+    if (history_text_.findCharacterPos(999999).x >=
+        (line_length_ - 10.1) + x_pos_) {
       edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1) + "\n> " +
                    edit_text_[edit_text_.getSize() - 1];
     }

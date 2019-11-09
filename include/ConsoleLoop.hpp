@@ -44,6 +44,10 @@ public:
 
   void HandleKeyEvents(sf::Window &window);
 
+  ConsoleLoop(const ConsoleLoop &other);
+
+  ConsoleLoop operator=(const ConsoleLoop &other);
+
   virtual ~ConsoleLoop();
 
 private:

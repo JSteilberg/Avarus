@@ -30,7 +30,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
   console_on_ = false;
   }*/
-MainLoop::MainLoop(Game *game) : game_(game) { console_on_ = false; }
+MainLoop::MainLoop(Game *game)
+    : game_(game), update_list_(), console_on_(false) {}
 
 void MainLoop::Update(const sf::Time &deltaTime, sf::Window &window) {
   // TODO: Maybe handling key events should be outside update?
@@ -91,33 +92,33 @@ void MainLoop::HandleKeyEvents(sf::Window &window) {
       window.close();
     } else if (event.type == sf::Event::KeyPressed) {
       switch (event.key.code) {
-      case sf::Keyboard::Escape:
-        window.close();
-        break;
+        case sf::Keyboard::Escape:
+          window.close();
+          break;
 
-      case sf::Keyboard::F3:
-        game_->dbg_overlay_.Toggle();
+        case sf::Keyboard::F3:
+          game_->dbg_overlay_.Toggle();
 
-        // Ya know, sometimes people rail on ternary if statements.
-        // Everything in moderation.
-        Logger::Log(string("Debug menu turned ") +
-                        (game_->dbg_overlay_.IsActive() ? "on" : "off"),
-                    INFO);
-        break;
-      case sf::Keyboard::BackSlash:
-        game_->window_.setKeyRepeatEnabled(true);
-        game_->AddState(game_->console_loop_);
-        break;
-      case sf::Keyboard::T:
-        game_->player_.SetCurrentTexture(
-            game_->player_.GetCurrentTexture() == "norm" ? "hurt" : "norm");
-        Logger::Log("Set player texture to " +
-                        game_->player_.GetCurrentTexture(),
-                    INFO);
-        break;
+          // Ya know, sometimes people rail on ternary if statements.
+          // Everything in moderation.
+          Logger::Log(string("Debug menu turned ") +
+                          (game_->dbg_overlay_.IsActive() ? "on" : "off"),
+                      INFO);
+          break;
+        case sf::Keyboard::BackSlash:
+          game_->window_.setKeyRepeatEnabled(true);
+          game_->AddState(game_->console_loop_);
+          break;
+        case sf::Keyboard::T:
+          game_->player_.SetCurrentTexture(
+              game_->player_.GetCurrentTexture() == "norm" ? "hurt" : "norm");
+          Logger::Log(
+              "Set player texture to " + game_->player_.GetCurrentTexture(),
+              INFO);
+          break;
 
-      default:
-        break;
+        default:
+          break;
       }
     }
   }

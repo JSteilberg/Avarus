@@ -46,12 +46,6 @@ public:
   virtual const string ToString() const = 0;
 
   virtual ~GameState();
-
-protected:
-  // Holds the game that cerated the GameState
-  Game *game_;
-
-private:
 };
 
 #endif // GAMESTATE_H

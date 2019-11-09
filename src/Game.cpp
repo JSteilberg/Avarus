@@ -31,11 +31,18 @@ Game::Game()
               "Avarus v" + consts::kGameVersion),
       id_registry_(game_config_.GetVar("id_registry")),
       game_atlas_(game_config_.GetVar("game_atlas"), id_registry_),
-      gravity_(0.0f, 0.0f), world_(gravity_), player_(game_atlas_, world_),
-      dbg_overlay_(), console_overlay_(5, window_height_, 500, 20) {
-  main_loop_ = std::make_shared<MainLoop>(this);
-  console_loop_ = std::make_shared<ConsoleLoop>(this);
-
+      gravity_(0.0f, 0.0f),
+      world_(gravity_),
+      player_(game_atlas_, world_),
+      main_loop_(std::make_shared<MainLoop>(this)),
+      console_loop_(std::make_shared<ConsoleLoop>(this)),
+      dbg_overlay_(),
+      console_overlay_(5, window_height_, 500, 20, 20),
+      state_list_(),
+      new_states_(),
+      remove_states_(),
+      delta_clock_(),
+      update_clock_() {
   // window_.setFramerateLimit(60);
   window_.setKeyRepeatEnabled(false);
   state_list_.push_front(main_loop_);
@@ -49,7 +56,8 @@ int Game::Start() {
   delta_clock_.restart();
   update_clock_.restart();
 
-  thingsps_counter_clock_.restart();
+  sf::Clock thingsps_counter_clock;
+  thingsps_counter_clock.restart();
   int frames = 0;
   int updates = 0;
 
@@ -61,8 +69,8 @@ int Game::Start() {
       updates = updates + 1;
     }
 
-    if (thingsps_counter_clock_.getElapsedTime().asSeconds() >= 1) {
-      thingsps_counter_clock_.restart();
+    if (thingsps_counter_clock.getElapsedTime().asSeconds() >= 1) {
+      thingsps_counter_clock.restart();
       dbg_overlay_.Set("thingsps", to_string(frames) + " fps, " +
                                        to_string(updates) + " ups");
       frames = 0;
@@ -88,7 +96,6 @@ int Game::Start() {
 }
 
 void Game::Update() {
-
   update_clock_.restart();
   state_list_.back()->Update(delta_clock_.restart(), window_);
 

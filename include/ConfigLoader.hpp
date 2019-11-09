@@ -33,9 +33,9 @@ using std::map;
 using std::string;
 
 class ConfigLoader {
-public:
+ public:
   // Create the ConfigLoader with a given file
-  ConfigLoader(const string &cfg_file_location);
+  ConfigLoader(string cfg_file_location);
 
   string GetVar(const string &varname);
 
@@ -47,9 +47,9 @@ public:
 
   const string cfg_file_location_;
 
-private:
+ private:
   Parser config_parser_;
   map<string, string> config_;
 };
 
-#endif // CONFIGLOADER_H
+#endif  // CONFIGLOADER_H

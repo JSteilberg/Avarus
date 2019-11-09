@@ -38,6 +38,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "Console.hpp"
 #include "ConsoleLoop.hpp"
 #include "Constants.hpp"
+#include "DebugOverlay.hpp"
 #include "GameState.hpp"
 #include "MainLoop.hpp"
 #include "ObjRegister.hpp"
@@ -53,31 +54,20 @@ class ConsoleLoop;
 // Class to run an instance of the game.
 // All you have to do is declare an instance and run .start()
 class Game {
-public:
+ public:
   Game();
 
+  // Starts the game
   int Start();
 
   void Update();
 
+  // Add a new gamestate -- this could be a GUI element, or a mode,
+  // basically anything that requires "taking over" of events
   void AddState(shared_ptr<GameState> new_state);
 
+  // Removes a state
   void RemoveState(shared_ptr<GameState> remove_state);
-
-  // Used to get the amount of time to draw a frame
-  sf::Clock delta_clock_;
-
-  // Used to ensure updating happens a max of 60 times per second
-  sf::Clock update_clock_;
-
-  // Holds the current state of the game (Used for menus, main loop, etc.)
-  list<shared_ptr<GameState>> state_list_;
-
-  // Holds the new states that will be added after current update
-  list<shared_ptr<GameState>> new_states_;
-
-  // Holds the states that will be removed after current update
-  list<shared_ptr<GameState>> remove_states_;
 
   virtual ~Game();
 
@@ -89,17 +79,14 @@ public:
 
   int window_height_;
 
-  // Parsers for the game's map (will be removed at some point)
-  Parser map_parser_;
-
   // Main window for the game
   sf::RenderWindow window_;
 
+  // Parsers for the game's map (will be removed at some point)
+  //  Parser map_parser_;
+
   // Used for converting sprite int IDs into corresponding names
   IdRegister id_registry_;
-
-  // Property trees that correspond to the above parsers
-  // ptree tex_parse_tree_, map_parse_tree_;
 
   // Holds main texture and texture coordinates for all Sprites in the game
   Atlas game_atlas_;
@@ -125,7 +112,20 @@ public:
 
   Console console_overlay_;
 
-  sf::Clock thingsps_counter_clock_;
+  // Holds the current state of the game (Used for menus, main loop, etc.)
+  list<shared_ptr<GameState>> state_list_;
+
+  // Holds the new states that will be added after current update
+  list<shared_ptr<GameState>> new_states_;
+
+  // Holds the states that will be removed after current update
+  list<shared_ptr<GameState>> remove_states_;
+
+  // Used to get the amount of time to draw a frame
+  sf::Clock delta_clock_;
+
+  // Used to ensure updating happens a max of 60 times per second
+  sf::Clock update_clock_;
 };
 
-#endif // GAME_H
+#endif  // GAME_H

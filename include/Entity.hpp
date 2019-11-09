@@ -41,7 +41,7 @@ using std::string;
 // I hope to be an entity someday
 // TODO: Add ability to die
 class Entity {
-public:
+ public:
   // Set this Entity's position
   void SetPos(b2Vec2 pos);
 
@@ -64,10 +64,10 @@ public:
   void ApplyForce(b2Vec2 forceVec);
 
   // Update this Entity with a given deltaTime
-  virtual void Update(const sf::Time &delta_time) = 0;
+  virtual void Update(const sf::Time &delta_time);
 
   // Get the type ID for this Entity
-  virtual int GetTypeId() const = 0;
+  virtual int GetTypeId() const;
 
   // Sets the shape of this Entity's body
   void SetShape(const b2Vec2 *vertices, int vertex_count);
@@ -81,9 +81,13 @@ public:
   // Get the current texture rect key being used to draw the sprite
   string GetCurrentTexture();
 
+  Entity(const Entity &other);
+
+  Entity operator=(const Entity &other);
+
   virtual ~Entity();
 
-protected:
+ protected:
   // Basic constructor that includes the atlas texture and corresponding
   // texture rects
   Entity(const sf::Texture &atlas,
@@ -113,11 +117,11 @@ protected:
 
   b2FixtureDef fixture_def_;
 
-  float width_ = 1;
+  float width_;
 
-  float height_ = 2;
+  float height_;
 
-private:
+ private:
 };
 
-#endif // ENTITY_H
+#endif  // ENTITY_H

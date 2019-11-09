@@ -40,13 +40,10 @@ using boost::property_tree::read_json;
 using std::string;
 
 class Parser {
-public:
-  // Initializes the parser with nothing
-  Parser();
-
+ public:
   // Initializes the parser with the given file name. Does not actually parse
   // the file.
-  Parser(const char file_name[]);
+  Parser(string file_name);
 
   // Returns a boost::property_tree::ptree of the parsed file. Throws exception
   // if called before parse();
@@ -57,11 +54,10 @@ public:
 
   virtual ~Parser();
 
-protected:
-private:
+ private:
   ptree parse_tree_;
   bool parsed_;
   string file_name_;
 };
 
-#endif // PARSER_H
+#endif  // PARSER_H

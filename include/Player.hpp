@@ -34,20 +34,19 @@ using std::string;
 
 // Class to represent the player
 class Player : public Entity {
-public:
+ public:
   // Create a Player with an initial Atlas
   Player(Atlas &atlas, b2World &world);
 
   virtual ~Player();
 
-  void Update(const sf::Time &delta_time) override;
+  virtual void Update(const sf::Time &delta_time) override;
 
   virtual int GetTypeId() const override;
 
-protected:
-private:
+ private:
   // Corresponds to the player "type"
   const int type_id_ = 50000;
 };
 
-#endif // PLAYER_H
+#endif  // PLAYER_H

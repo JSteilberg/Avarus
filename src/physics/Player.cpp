@@ -25,7 +25,6 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 Player::Player(Atlas &atlas, b2World &world)
     : Entity(atlas.GetTexture(), atlas.GetRects(50000), world) {
-
   width_ = 1;
   height_ = 2;
 
@@ -39,7 +38,10 @@ Player::Player(Atlas &atlas, b2World &world)
   SetShape(vertices, 4);
 }
 
-void Player::Update(const sf::Time &delta_time) {}
+void Player::Update(const sf::Time &delta_time) {
+  float t = delta_time.asSeconds();
+  // do nothing
+}
 
 int Player::GetTypeId() const { return type_id_; }
 
