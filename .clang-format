@@ -1,0 +1,5 @@
+BreakConstructorInitializers: BeforeColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+#AllowAllArgumentsOnNextLine: true
+BasedOnStyle: Google
