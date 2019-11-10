@@ -30,4 +30,4 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 class EditableBuffer : public sf::Drawable {};
 
-#endif // EDITABLEBUFFER_H
+#endif  // EDITABLEBUFFER_H

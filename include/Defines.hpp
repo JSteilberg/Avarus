@@ -27,4 +27,4 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define DEBUG_MODE
 #define SCALE 15
 
-#endif // DEFINES_H
+#endif  // DEFINES_H

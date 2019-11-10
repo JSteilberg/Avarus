@@ -55,10 +55,11 @@ enum SeverityLevel {
 
 // Class for the game's logger. Supports different severity levels for logging
 class Logger {
-public:
+ public:
   // Logs (or doesn't) the given information with the given severity level,
   // along with a timestamp
-  template <class T> static void Log(const T &msg, SeverityLevel level) {
+  template <class T>
+  static void Log(const T &msg, SeverityLevel level) {
     std::stringstream ss;
     ss << msg;
     string msg_str = ss.str();
@@ -86,7 +87,8 @@ public:
 
   // Logs (or doesn't) the given information without any severity level or
   // timestamp
-  template <typename T> static void RawLog(const T &msg, SeverityLevel level) {
+  template <typename T>
+  static void RawLog(const T &msg, SeverityLevel level) {
     std::stringstream ss;
     ss << msg;
     string msg_str = ss.str();
@@ -122,11 +124,11 @@ public:
     return string(buffer);
   }
 
-protected:
+ protected:
   // dont you dare
   Logger();
 
   virtual ~Logger();
 };
 
-#endif // LOGGER_H
+#endif  // LOGGER_H

@@ -25,12 +25,12 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define BLOCK_H
 
 class Block {
-public:
+ public:
   Block();
   virtual ~Block();
 
-protected:
-private:
+ protected:
+ private:
 };
 
-#endif // BLOCK_H
+#endif  // BLOCK_H

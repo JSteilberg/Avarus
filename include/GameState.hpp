@@ -34,7 +34,7 @@ class Game;
 // Usually going on an std::stack of GameStates, an instance of GameState
 // represents a specific mode the Game is currently in.
 class GameState {
-public:
+ public:
   // Creates a GameState with no attributes
   GameState();
 
@@ -48,4 +48,4 @@ public:
   virtual ~GameState();
 };
 
-#endif // GAMESTATE_H
+#endif  // GAMESTATE_H

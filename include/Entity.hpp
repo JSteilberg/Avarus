@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -27,15 +27,16 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <map>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "Constants.hpp"
 #include "Logger.hpp"
 
 using std::string;
+using std::unordered_map;
 
 // An Entity is something that interacts physically, can be drawn, and can die
 // I hope to be an entity someday
@@ -91,11 +92,11 @@ class Entity {
   // Basic constructor that includes the atlas texture and corresponding
   // texture rects
   Entity(const sf::Texture &atlas,
-         const std::map<string, sf::IntRect> &texture_map, b2World &world);
+         const unordered_map<string, sf::IntRect> &texture_map, b2World &world);
 
   // Map of texture subsets to be used by this Entity. The first texture will be
   // mapped to "main".
-  const std::map<string, sf::IntRect> &texture_map_;
+  const unordered_map<string, sf::IntRect> &texture_map_;
 
   // Array of sf::Vector2f that define the shape of this Entity
   // VertexArray vertices_;

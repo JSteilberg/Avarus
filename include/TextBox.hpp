@@ -32,7 +32,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 enum FlowDirection { FROM_BOTTOM, FROM_TOP };
 
 class TextBox : public sf::Drawable {
-public:
+ public:
   TextBox(const sf::Font &font, int font_size = 20, int max_line_length = 80,
           int max_lines = 20,
           sf::Color background_color = sf::Color::Transparent,
@@ -60,7 +60,7 @@ public:
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
 
-private:
+ private:
   const sf::Font &font_;
   int font_size_;
   int max_line_length_;
@@ -80,4 +80,4 @@ private:
   bool has_update_ = false;
 };
 
-#endif // TEXTBOX_H
+#endif  // TEXTBOX_H

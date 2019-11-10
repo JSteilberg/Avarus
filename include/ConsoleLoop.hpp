@@ -31,7 +31,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 class DebugOverlay;
 
 class ConsoleLoop : public GameState {
-public:
+ public:
   ConsoleLoop(Game *game);
 
   // This is how the main loop do
@@ -50,8 +50,8 @@ public:
 
   virtual ~ConsoleLoop();
 
-private:
+ private:
   Game *game_;
 };
 
-#endif // CONSOLELOOP_H
+#endif  // CONSOLELOOP_H

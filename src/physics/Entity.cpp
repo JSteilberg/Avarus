@@ -24,7 +24,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "Entity.hpp"
 
 Entity::Entity(const sf::Texture &atlas,
-               const std::map<string, sf::IntRect> &texture_map, b2World &world)
+               const unordered_map<string, sf::IntRect> &texture_map, b2World &world)
     : texture_map_(texture_map),
       atlas_(atlas),
       sprite_(atlas, texture_map.at("norm")),

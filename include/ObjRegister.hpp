@@ -25,12 +25,12 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define OBJREGISTER_H
 
 class ObjRegister {
-public:
+ public:
   ObjRegister();
   virtual ~ObjRegister();
 
-protected:
-private:
+ protected:
+ private:
 };
 
-#endif // OBJREGISTER_H
+#endif  // OBJREGISTER_H

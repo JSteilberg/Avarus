@@ -25,12 +25,12 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define GENERATOR_H
 
 class Generator {
-public:
+ public:
   Generator();
   virtual ~Generator();
 
-protected:
-private:
+ protected:
+ private:
 };
 
-#endif // GENERATOR_H
+#endif  // GENERATOR_H
