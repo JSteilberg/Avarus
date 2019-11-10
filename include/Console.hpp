@@ -30,6 +30,9 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <vector>
 
 #include "Logger.hpp"
+#include "TextBox.hpp"
+
+class TextBox;
 
 using std::list;
 using std::string;
@@ -111,6 +114,8 @@ class Console : public sf::Drawable {
   sf::Clock cursor_clock_;
 
   bool blink_on_;
+
+  TextBox tb_;
 };
 
 #endif  // CONSOLE_H

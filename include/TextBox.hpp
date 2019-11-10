@@ -25,49 +25,71 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define TEXTBOX_H
 
 #include <SFML/Graphics.hpp>
+#include <algorithm>
+#include <limits>
 
 #include "Logger.hpp"
 
 // Direction to move when text
 enum FlowDirection { FROM_BOTTOM, FROM_TOP };
 
+// A textbox holds and wraps text automatically. It is able to do this while
+// accurately tracking the original text placed into it.
+// For a text box, \n represents a new line, whereas \r represents a
+// user-created line continuation (think when you press shift+enter in an
+// instant message box and instead of sending it creates a newline). Internally,
+// \a represents an automatic line continuation created by typing more than
+// max_line_length characters
 class TextBox : public sf::Drawable {
  public:
-  TextBox(const sf::Font &font, int font_size = 20, int max_line_length = 80,
-          int max_lines = 20,
-          sf::Color background_color = sf::Color::Transparent,
-          bool line_wrap = true, sf::String wrap_prefix = "",
+  TextBox(const sf::Font &font, int font_size = 20, size_t max_line_length = 80,
+          int max_lines = 20, sf::Color background_color = sf::Color::White,
+          sf::Color text_color = sf::Color::Black, bool line_wrap = true,
+          bool fit_height = false, sf::String wrap_prefix = L"",
+          float horizontal_margin = 5, float vertical_margin = 5,
           FlowDirection flow_direction = FROM_BOTTOM);
 
-  void SetText(sf::String text_string);
+  void Update();
 
-  void AddText(sf::String text_string);
+  void SetText(sf::String set_string);
+
+  void AddText(sf::String add_string);
 
   void Clear();
 
+  void RemoveFrom(size_t position, size_t count = 1);
+
   const sf::String &GetText() const;
+
+  sf::String GetDisplayedText() const;
 
   const sf::Text &GetTextDrawObject() const;
 
-  void SetFont(const sf::Font &font);
-
-  void SetDimensions(int max_line_length, int max_lines);
+  void SetDimensions(size_t max_line_length, int max_lines);
 
   void SetLineWrapEnabled(bool line_wrap);
 
   void SetFlowDirection(FlowDirection flow_direction);
 
+  void ReflowText();
+
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
 
  private:
+  size_t FirstEnd(size_t find_1, size_t find_2, size_t max_len);
+
   const sf::Font &font_;
   int font_size_;
-  int max_line_length_;
+  float pos_x_;
+  float pos_y_;
+  size_t max_line_length_;
   int max_lines_;
-  sf::Color background_color_;
   bool line_wrap_;
+  bool fit_height_;
   sf::String wrap_prefix_;
+  float horizontal_margin_;
+  float vertical_margin_;
   FlowDirection flow_direction_;
 
   sf::String text_string_;
@@ -77,7 +99,7 @@ class TextBox : public sf::Drawable {
 
   sf::RectangleShape background_;
 
-  bool has_update_ = false;
+  bool has_update_;
 };
 
 #endif  // TEXTBOX_H

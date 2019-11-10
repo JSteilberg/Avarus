@@ -22,8 +22,19 @@ this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 #include "ConsoleLoop.hpp"
+#include <iostream>
+ConsoleLoop::ConsoleLoop(Game *game) : game_(game) {
+  /*b.SetText(L"1234567890\n123456789012345678901234567890");
+  std::cout << "first Displayed\n"
+            << tb.GetDisplayedText().toAnsiString() << std::endl;
 
-ConsoleLoop::ConsoleLoop(Game *game) : game_(game) {}
+  tb.SetText(L"1234567\r8901234567890\n123456\n78901234567890");
+  std::cout << "Displayed\n"
+            << tb.GetDisplayedText().toAnsiString() << std::endl;
+  tb.AddText(L"abcdefghijklmnopqrstuvwxyz");
+  std::cout << "Now displayed\n"
+  << tb.GetDisplayedText().toAnsiString() << std::endl; */
+}
 
 // This is how the main loop do
 void ConsoleLoop::Update(const sf::Time &deltaTime, sf::Window &window) {
@@ -49,26 +60,26 @@ void ConsoleLoop::HandleKeyEvents(sf::Window &window) {
       window.close();
     } else if (event.type == sf::Event::KeyPressed) {
       switch (event.key.code) {
-      case sf::Keyboard::F3:
-        game_->dbg_overlay_.Toggle();
+        case sf::Keyboard::F3:
+          game_->dbg_overlay_.Toggle();
 
-        // Ya know, sometimes people rail on ternary if statements.
-        // Everything in moderation.
-        Logger::Log(string("Debug menu turned ") +
-                        (game_->dbg_overlay_.IsActive() ? "on" : "off"),
-                    INFO);
-        break;
+          // Ya know, sometimes people rail on ternary if statements.
+          // Everything in moderation.
+          Logger::Log(string("Debug menu turned ") +
+                          (game_->dbg_overlay_.IsActive() ? "on" : "off"),
+                      INFO);
+          break;
 
-      case sf::Keyboard::Escape:
-        //      case sf::Keyboard::BackSlash:
-        // Logger::Log(string("Console turned off"), INFO);
-        game_->window_.setKeyRepeatEnabled(false);
-        game_->RemoveState(game_->console_loop_);
-        return;
-        break;
+        case sf::Keyboard::Escape:
+          //      case sf::Keyboard::BackSlash:
+          // Logger::Log(string("Console turned off"), INFO);
+          game_->window_.setKeyRepeatEnabled(false);
+          game_->RemoveState(game_->console_loop_);
+          return;
+          break;
 
-      default:
-        break;
+        default:
+          break;
       }
     } else if (event.type == sf::Event::TextEntered) {
       game_->console_overlay_.WriteCharacter(event.text.unicode);

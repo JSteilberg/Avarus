@@ -38,13 +38,17 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
       history_text_(),
       edit_text_(),
       cursor_clock_(),
-      blink_on_(false) {
+      blink_on_(false),
+      tb_(font_, 20, 10, 10, sf::Color::White, sf::Color::Black, true, false,
+          sf::String(L""), 10, 5, FROM_BOTTOM) {
   if (!font_.loadFromFile("./res/fonts/Hack/Hack.ttf")) {
     Logger::Log("Failed to load font", MED);
   } else {
     history_text_.setFont(font_);
   }
   line_height_ = font_.getLineSpacing(font_size_);
+
+  Logger::Log(line_height_, INFO);
 
   cursor_clock_.restart();
 
@@ -60,6 +64,10 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
   edit_background_.setFillColor(sf::Color(90, 90, 90, 200));
 
   SetPosition(x_pos, y_pos);
+
+  tb_.SetText(
+      "1234567\r8901234567890\n123456\n7890123456789012345678901234567890123456"
+      "789012345678901234567890");
 }
 
 void Console::Update() {
@@ -69,6 +77,7 @@ void Console::Update() {
   /*for (size_t i = 0; i < msg_order_.size(); ++i) {
     msg_ = msg_ + msg_map_[msg_order_[i]] + "\n";
   }*/
+  tb_.Update();
 
   if (cursor_clock_.getElapsedTime().asSeconds() < .5f) {
     blink_on_ = false;
@@ -95,6 +104,7 @@ void Console::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   target.draw(history_background_, states);
   target.draw(edit_background_, states);
   target.draw(history_text_, states);
+  target.draw(tb_, states);
   // target.draw(font_, states);
 }
 

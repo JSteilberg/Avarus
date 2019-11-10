@@ -27,6 +27,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "Game.hpp"
 #include "GameState.hpp"
 #include "Logger.hpp"
+#include "TextBox.hpp"
 
 class DebugOverlay;
 
