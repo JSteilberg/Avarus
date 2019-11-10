@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -30,16 +30,18 @@ IdRegister::IdRegister(const string id_file)
 
   Logger::Log("Registering IDs", INFO);
   InitializeRegistry();
+  Logger::Log("All IDs registered", INFO);
 }
 
 void IdRegister::InitializeRegistry() {
   // Loop through the different id keys and add them to the registry
-  for (auto &id_pair : parser_.GetParseTree().get_child("ids")) {
-    registry_[id_pair.second.get_value<int>()] = id_pair.first.data();
-    inverted_registry_[id_pair.first.data()] = id_pair.second.get_value<int>();
-    Logger::RawLog("Registered id " + id_pair.second.data() + " to " +
-                       string(id_pair.first.data()),
-                   INFO);
+  for (auto &[entity_name, value] : parser_.GetParseTree()["ids"].items()) {
+    int entity_id = value.get<int>();
+    registry_[entity_id] = entity_name;
+    inverted_registry_[entity_name] = entity_id;
+    Logger::RawLog(
+        "Registered id " + std::to_string(entity_id) + " to " + entity_name,
+        INFO);
   }
 }
 

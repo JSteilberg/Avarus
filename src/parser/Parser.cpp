@@ -24,22 +24,39 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "Parser.hpp"
 
 Parser::Parser(string file_name)
-    : parse_tree_(), parsed_(false), file_name_(file_name) {}
+    : file_name_(file_name), parse_tree_(), parsed_(false) {}
 
 void Parser::Parse() {
+  std::ifstream file_stream;
+  file_stream.exceptions(std::ifstream::failbit);
   try {
-    read_json(file_name_, parse_tree_);
-  } catch (const json_parser_error &err) {
-    Logger::Log("Parser: " + string(err.what()), HIGH);
-    parsed_ = false;
+    file_stream.open(file_name_);
+  } catch (const std::exception &ex) {
+    string err_text = "Parser: Could not find file " + file_name_;
+    Logger::Log(err_text, HIGH);
+    throw std::runtime_error(err_text);
+  }
+  try {
+    if (file_stream >> parse_tree_) {
+      file_stream.close();
+    } else {
+      Logger::Log("Parser: Could not read " + file_name_, HIGH);
+      parsed_ = false;
+      file_stream.close();
+    }
+  } catch (const ParserError &err) {
+    Logger::Log("Parser error in '" + file_name_ + "'", HIGH);
+    Logger::Log(err.what(), HIGH);
     throw err;
   }
+
   parsed_ = true;
 }
 
-const ptree &Parser::GetParseTree() const {
+const Json &Parser::GetParseTree() const {
   if (!parsed_) {
-    throw std::runtime_error("Called GetParseTree() before calling Parse()");
+    throw std::runtime_error(
+        "Called GetParseTree() but have never parsed, or parsing failed!");
   }
   return parse_tree_;
 }

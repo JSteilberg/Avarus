@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -24,32 +24,40 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef CONFIGLOADER_H
 #define CONFIGLOADER_H
 
-#include <map>
 #include <string>
+#include <unordered_map>
 
 #include "Parser.hpp"
 
-using std::map;
 using std::string;
+using std::unordered_map;
 
 class ConfigLoader {
  public:
   // Create the ConfigLoader with a given file
   ConfigLoader(string cfg_file_location);
 
-  string GetVar(const string &varname);
+  // Get a variable from the loaded config as a string
+  const string &GetVar(const string &varname) const;
 
-  int GetIntVar(const string &varname);
+  // Get a variable from the loaded config as an int
+  int GetIntVar(const string &varname) const;
 
-  float GetFloatVar(const string &varname);
+  // Get a variable from the loaded config as an float
+  float GetFloatVar(const string &varname) const;
 
-  double GetDoubleVar(const string &varname);
+  // Get a variable from the loaded config as an double
+  double GetDoubleVar(const string &varname) const;
 
+  // Location of the config file
   const string cfg_file_location_;
 
  private:
-  Parser config_parser_;
-  map<string, string> config_;
+  // The actual configuration in 'name: value' format
+  unordered_map<string, string> config_;
+
+  // Error string for if we fail to find a variable
+  const string err_str_var_;
 };
 
 #endif  // CONFIGLOADER_H

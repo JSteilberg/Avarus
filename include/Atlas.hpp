@@ -25,21 +25,16 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define ATLAS_H
 
 #include <SFML/Graphics.hpp>
-#include <map>
+#include <sstream>
 #include <string>
+#include <unordered_map>
 
 #include "IdRegister.hpp"
 #include "Logger.hpp"
 #include "Parser.hpp"
 
-using boost::property_tree::ptree;
-using boost::property_tree::ptree_bad_data;
-using boost::property_tree::ptree_bad_path;
-using boost::property_tree::ptree_error;
-using boost::property_tree::read_json;
-using boost::property_tree::json_parser::json_parser_error;
-using std::map;
 using std::string;
+using std::unordered_map;
 
 // Class to encapsulate a large texture and divide it into smaller indexed
 // rectangles Prevents the game from needing to bind multiple textures to the
@@ -53,18 +48,18 @@ class Atlas {
   const Parser &GetParser() const;
 
   // Returns a ref to the Boost property tree that holds config information
-  const ptree &GetParseTree() const;
+  const Json &GetParseTree() const;
 
   // Returns a ref to the texture loaded according to this Atlas' config file
   const sf::Texture &GetTexture() const;
 
   // Returns map of the specified Sprite's IntRects (specified by id).
   // If there's only one, its value will be mapped to "norm"
-  const map<string, sf::IntRect> &GetRects(int id) const;
+  const unordered_map<string, sf::IntRect> &GetRects(int id) const;
 
   // Returns map of the specified Sprite's IntRects (specified by name).
   // If there's only one, its value will be mapped to "norm"
-  const map<string, sf::IntRect> &GetRects(const string &name) const;
+  const unordered_map<string, sf::IntRect> &GetRects(const string &name) const;
 
   virtual ~Atlas();
 
@@ -73,8 +68,8 @@ class Atlas {
   void LoadTextureRects();
 
   // Reads all the texture rects found in the element specified by key
-  const map<string, map<string, sf::IntRect>> ReadRectsByKey(
-      string element_key) const;
+  const unordered_map<string, unordered_map<string, sf::IntRect>>
+  ReadRectsByKey(string element_key) const;
 
   // Creates a 1x1 cyan texture
   const sf::Texture CreateErrorTexture();
@@ -95,7 +90,7 @@ class Atlas {
   // etc.) The string key for the second map is the name of a specific
   // sf::IntRect subsection of the atlas for a specific texture for a given
   // object (i.e. "norm", "step4", etc.)
-  map<string, map<string, sf::IntRect>> atlas_rects_map_;
+  unordered_map<string, unordered_map<string, sf::IntRect>> atlas_rects_map_;
 
   // 1x1 cyan texture
   sf::RenderTexture err_tex_;

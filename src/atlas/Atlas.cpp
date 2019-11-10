@@ -36,8 +36,9 @@ Atlas::Atlas(string file_location, const IdRegister &registry)
   string atlas_texture_file = "";
   try {
     atlas_coords_parser_.Parse();
+
     atlas_texture_file =
-        atlas_coords_parser_.GetParseTree().get<string>("atlas.file");
+        atlas_coords_parser_.GetParseTree().at("atlas").at("file");
 
     // If we got here, we loaded the atlas coordinate file successfully, so go
     // ahead and load the texture rects
@@ -50,7 +51,12 @@ Atlas::Atlas(string file_location, const IdRegister &registry)
                   HIGH);
       atlas_texture_ = CreateErrorTexture();
     }
-  } catch (const json_parser_error &ex) {
+  } catch (const ParserError &ex) {
+    Logger::Log("Creating default atlas coordinate map", INFO);
+    atlas_rects_map_["error"]["norm"] = sf::IntRect(0, 0, 1, 1);
+    atlas_texture_ = CreateErrorTexture();
+  } catch (const std::exception &ex) {
+    // Most likely couldn't read the file
     Logger::Log("Creating default atlas coordinate map", INFO);
     atlas_rects_map_["error"]["norm"] = sf::IntRect(0, 0, 1, 1);
     atlas_texture_ = CreateErrorTexture();
@@ -61,11 +67,11 @@ const Parser &Atlas::GetParser() const { return atlas_coords_parser_; }
 
 const sf::Texture &Atlas::GetTexture() const { return atlas_texture_; }
 
-const ptree &Atlas::GetParseTree() const {
+const Json &Atlas::GetParseTree() const {
   return atlas_coords_parser_.GetParseTree();
 }
 
-const map<string, sf::IntRect> &Atlas::GetRects(int id) const {
+const unordered_map<string, sf::IntRect> &Atlas::GetRects(int id) const {
   try {
     return atlas_rects_map_.at(registry_.IdToName(id));
   } catch (std::out_of_range e) {
@@ -75,61 +81,64 @@ const map<string, sf::IntRect> &Atlas::GetRects(int id) const {
   }
 }
 
-const map<string, sf::IntRect> &Atlas::GetRects(const string &name) const {
+const unordered_map<string, sf::IntRect> &Atlas::GetRects(
+    const string &name) const {
   return atlas_rects_map_.at(name);
 }
 
-const map<string, map<string, sf::IntRect>> Atlas::ReadRectsByKey(
-    string element_key) const {
+const unordered_map<string, unordered_map<string, sf::IntRect>>
+Atlas::ReadRectsByKey(string element_key) const {
   // Get the name of the object and make a pretty singular version
-  string entity_type_pl = element_key.substr(element_key.rfind(".") + 1);
-  string entity_type;
-  if (entity_type_pl.substr(entity_type_pl.length() - 3) == "ies") {
-    entity_type = entity_type_pl.substr(0, entity_type_pl.length() - 3) + "y";
-  } else if (entity_type_pl.substr(entity_type_pl.length() - 1, 1) == "s") {
-    entity_type = entity_type_pl.substr(0, entity_type_pl.length() - 1);
+  string drawable_type_pl = element_key;  //.substr(element_key.rfind(".") + 1);
+  string drawable_type;
+  if (drawable_type_pl.substr(drawable_type_pl.length() - 3) == "ies") {
+    drawable_type =
+        drawable_type_pl.substr(0, drawable_type_pl.length() - 3) + "y";
+  } else if (drawable_type_pl.substr(drawable_type_pl.length() - 1, 1) == "s") {
+    drawable_type = drawable_type_pl.substr(0, drawable_type_pl.length() - 1);
   } else {
-    entity_type = entity_type_pl;
+    drawable_type = drawable_type_pl;
   }
 
-  Logger::Log("Loading " + entity_type_pl, INFO);
+  Logger::Log("Loading " + drawable_type_pl, INFO);
 
-  map<string, map<string, sf::IntRect>> read_rects_map;
+  unordered_map<string, unordered_map<string, sf::IntRect>> read_rects_map;
 
   // Loop through all the objects found in the given key
-  for (auto &name_rects :
-       atlas_coords_parser_.GetParseTree().get_child(element_key)) {
-    Logger::Log(entity_type + " name=" + string(name_rects.first.data()), INFO);
+  for (auto &[drawable_name, drawable_properties] :
+       atlas_coords_parser_.GetParseTree()
+           .at("atlas")
+           .at(element_key)
+           .items()) {
+    Logger::Log(drawable_type + " name=" + drawable_name, INFO);
 
     // Loop through the different sf::IntRects within each object
-    for (auto &rects : name_rects.second.get_child("rects")) {
+    for (auto &rect : drawable_properties["rects"]) {
       // Create the rect
-      sf::IntRect rect(rects.second.get<int>("x"), rects.second.get<int>("y"),
-                       rects.second.get<int>("w"), rects.second.get<int>("l"));
+      sf::IntRect sf_rect(rect.at("x"), rect.at("y"), rect.at("w"),
+                          rect.at("l"));
 
       // Add the rect to the rects map
-      read_rects_map[name_rects.first.data()]
-                    [rects.second.get<string>("name")] = rect;
+      read_rects_map[drawable_name][rect.at("name").get<string>()] = sf_rect;
 
-      Logger::RawLog("Rect " + rects.second.get<string>("name") +
-                         ": x=" + rects.second.get<string>("x") +
-                         ", y=" + rects.second.get<string>("y") +
-                         ", w=" + rects.second.get<string>("w") +
-                         ", l=" + rects.second.get<string>("l"),
-                     INFO);
+      std::stringstream ss;
+      ss << "Rect " << rect.at("name") << ": x=" << rect.at("x")
+         << ", y=" << rect.at("y") << ", w=" << rect.at("w")
+         << ", l=" << rect.at("l");
+      Logger::RawLog(ss.str(), INFO);
     }
   }
   return read_rects_map;
 }
 
 void Atlas::LoadTextureRects() {
-  auto rects = ReadRectsByKey("atlas.objects");
+  auto rects = ReadRectsByKey("objects");
   atlas_rects_map_.insert(rects.begin(), rects.end());
 
-  rects = ReadRectsByKey("atlas.entities");
+  rects = ReadRectsByKey("entities");
   atlas_rects_map_.insert(rects.begin(), rects.end());
 
-  rects = ReadRectsByKey("atlas.other");
+  rects = ReadRectsByKey("other");
   atlas_rects_map_.insert(rects.begin(), rects.end());
 
   try {

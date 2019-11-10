@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -24,23 +24,21 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <ConfigLoader.hpp>
 
 ConfigLoader::ConfigLoader(string cfg_file_location)
-    : cfg_file_location_(cfg_file_location),
-      config_parser_(cfg_file_location),
-      config_() {
+    : cfg_file_location_(cfg_file_location), config_(), err_str_var_("ERR") {
   Logger::Log("Parsing config file '" + cfg_file_location_ + "'", INFO);
+  Parser config_parser_(cfg_file_location_);
   config_parser_.Parse();
 
-  for (auto &config_pair : config_parser_.GetParseTree()) {
-    config_.insert({config_pair.first.data(), config_pair.second.data()});
-    Logger::Log("Registered config " + string(config_pair.first.data()) + ": " +
-                    string(config_pair.second.data()),
+  for (auto &[variable, setting] : config_parser_.GetParseTree().items()) {
+    config_.insert({variable, setting});
+    Logger::Log("Registered config " + variable + ": " + setting.get<string>(),
                 INFO);
   }
 
   return;
 }
 
-int ConfigLoader::GetIntVar(const string &varname) {
+int ConfigLoader::GetIntVar(const string &varname) const {
   if (config_.count(varname)) {
     return std::stoi(config_.at(varname));
   } else {
@@ -49,7 +47,7 @@ int ConfigLoader::GetIntVar(const string &varname) {
   }
 }
 
-float ConfigLoader::GetFloatVar(const string &varname) {
+float ConfigLoader::GetFloatVar(const string &varname) const {
   if (config_.count(varname)) {
     return std::stof(config_.at(varname));
   } else {
@@ -57,7 +55,7 @@ float ConfigLoader::GetFloatVar(const string &varname) {
     return -1.0f;
   }
 }
-double ConfigLoader::GetDoubleVar(const string &varname) {
+double ConfigLoader::GetDoubleVar(const string &varname) const {
   if (config_.count(varname)) {
     return std::stod(config_.at(varname));
   } else {
@@ -66,11 +64,11 @@ double ConfigLoader::GetDoubleVar(const string &varname) {
   }
 }
 
-string ConfigLoader::GetVar(const string &varname) {
+const string &ConfigLoader::GetVar(const string &varname) const {
   if (config_.count(varname)) {
     return config_.at(varname);
   } else {
     Logger::Log("Failed to find element " + varname, MED);
-    return "ERR";
+    return err_str_var_;
   }
 }

@@ -1,6 +1,6 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -g -std=c++0x -pedantic -Wstrict-aliasing -Weffc++
-INC = -I./include/ 
+CXXFLAGS = -Wall -Wextra -g -std=c++1z -pedantic -Wstrict-aliasing -Weffc++
+INC = -I./include/ -I./json/
 LIB = -L./lib/
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
 

@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -24,9 +24,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <fstream>
+#include <json.hpp>
 #include <map>
 #include <sstream>
 #include <stdexcept>
@@ -34,10 +33,10 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Logger.hpp"
 
-using boost::property_tree::json_parser_error;
-using boost::property_tree::ptree;
-using boost::property_tree::read_json;
 using std::string;
+
+typedef nlohmann::json Json;
+typedef nlohmann::detail::parse_error ParserError;
 
 class Parser {
  public:
@@ -47,7 +46,7 @@ class Parser {
 
   // Returns a boost::property_tree::ptree of the parsed file. Throws exception
   // if called before parse();
-  const ptree &GetParseTree() const;
+  const Json &GetParseTree() const;
 
   // Parses the file being held in state
   void Parse();
@@ -55,9 +54,10 @@ class Parser {
   virtual ~Parser();
 
  private:
-  ptree parse_tree_;
-  bool parsed_;
   string file_name_;
+
+  Json parse_tree_;
+  bool parsed_;
 };
 
 #endif  // PARSER_H
