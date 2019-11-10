@@ -67,6 +67,7 @@
 		<Unit filename="include/Parser.hpp" />
 		<Unit filename="include/Player.hpp" />
 		<Unit filename="include/TextBox.hpp" />
+		<Unit filename="json/json.hpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/IdRegister.cpp" />
 		<Unit filename="src/Logger.cpp" />
