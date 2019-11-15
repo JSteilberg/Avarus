@@ -27,6 +27,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <limits>
+#include <string>
 
 #include "Logger.hpp"
 
@@ -46,7 +47,6 @@ class TextBox : public sf::Drawable {
           int max_lines = 20, sf::Color background_color = sf::Color::White,
           sf::Color text_color = sf::Color::Black, bool line_wrap = true,
           bool fit_height = false, sf::String wrap_prefix = L"",
-          float horizontal_margin = 5, float vertical_margin = 5,
           FlowDirection flow_direction = FROM_BOTTOM);
 
   void Update();
@@ -65,11 +65,32 @@ class TextBox : public sf::Drawable {
 
   const sf::Text &GetTextDrawObject() const;
 
-  void SetDimensions(size_t max_line_length, int max_lines);
+  TextBox &SetPosition(float pos_x, float pos_y);
 
-  void SetLineWrapEnabled(bool line_wrap);
+  TextBox &SetFontSize(int new_font_size);
 
-  void SetFlowDirection(FlowDirection flow_direction);
+  TextBox &SetBackgroundColor(sf::Color new_color);
+
+  TextBox &SetTextColor(sf::Color new_color);
+
+  TextBox &SetLineWrapEnabled(bool line_wrap_enabled);
+
+  TextBox &SetFitHeightEnabled(bool fit_height_enabled);
+
+  TextBox &SetWrapPrefix(sf::String new_wrap_prefix);
+
+  TextBox &SetMargins(float left_margin, float right_margin,
+                      float bottom_margin, float top_margin);
+
+  TextBox &SetDimensions(size_t max_line_length, int max_lines);
+
+  TextBox &SetFlowDirection(FlowDirection flow_direction);
+
+  // Width of the background box, in pixels
+  float GetWidth();
+
+  // Height of the background box, in pixels
+  float GetHeight();
 
   void ReflowText();
 
@@ -77,29 +98,71 @@ class TextBox : public sf::Drawable {
                     sf::RenderStates states) const override;
 
  private:
+  void CalcCurrentNumLines();
+  void ForceUpdate();
+  // Internal, finds the minimum betwen occurrences of '\r', '\n', and the
+  // max line length
   size_t FirstEnd(size_t find_1, size_t find_2, size_t max_len);
 
+  // Font to draw text with
   const sf::Font &font_;
+
+  // Font size
   int font_size_;
+
+  // Positioning for the text box; text position is determined by
+  // both this and the margins
+  // This position refers to the window coordinates of the TOP-LEFT corner
+  // of the textbox, with no mind to whether fit_height_ is enabled
   float pos_x_;
   float pos_y_;
+
+  // Margins for the text within its box
+  float left_margin_;
+  float right_margin_;
+  float top_margin_;
+  float bottom_margin_;
+
+  // Maximum length, in characters, for a line of text in the TextBox
   size_t max_line_length_;
+
+  // Maxinum number of lines in the TextBox
   int max_lines_;
+
+  // Do automatic line wrapping?
   bool line_wrap_;
+
+  // Should the height of the TextBox always be max_lines_, or should it
+  // stretch to fit the current amount of text
   bool fit_height_;
+
+  // Prefix for wrapped lines
   sf::String wrap_prefix_;
-  float horizontal_margin_;
-  float vertical_margin_;
+
+  // Direction to flow multiple lines of text
   FlowDirection flow_direction_;
 
+  // Actual text, corresponds exactly to what the user entered
   sf::String text_string_;
+
+  // Text with automatic line wrapping
   sf::String displayed_text_string_;
 
+  // Actual drawable object holding drawn text
   sf::Text text_draw_obj_;
 
+  // Background for the text
   sf::RectangleShape background_;
 
+  // Current number of lines in displayed_text_string_ (!!NOT!! text_string_)
+  int current_num_lines_;
+
+  // Internal, flag that is set if an update needs to be carried out
   bool has_update_;
+
+  const unsigned char newline_ = '\n';
+  const unsigned char user_continuation_ = '\r';
+  const unsigned char auto_continuation_ = '\a';
 };
 
 #endif  // TEXTBOX_H

@@ -39,8 +39,7 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
       edit_text_(),
       cursor_clock_(),
       blink_on_(false),
-      tb_(font_, 20, 10, 10, sf::Color::White, sf::Color::Black, true, false,
-          sf::String(L""), 10, 5, FROM_BOTTOM) {
+      tb_(font_) {
   if (!font_.loadFromFile("./res/fonts/Hack/Hack.ttf")) {
     Logger::Log("Failed to load font", MED);
   } else {
@@ -48,7 +47,14 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
   }
   line_height_ = font_.getLineSpacing(font_size_);
 
-  Logger::Log(line_height_, INFO);
+  // Logger::Log(line_height_, INFO);
+
+  tb_.SetDimensions(20, 20).SetMargins(5.f, 10.f, 5.f, 5.f);
+  tb_.SetText(
+      "1234567\r8901234567890\n123456\n7890123456789012345678901234567890123456"
+      "789012345678901234567890");
+
+  tb_.SetPosition(x_pos, y_pos - tb_.GetHeight());
 
   cursor_clock_.restart();
 
@@ -64,10 +70,6 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
   edit_background_.setFillColor(sf::Color(90, 90, 90, 200));
 
   SetPosition(x_pos, y_pos);
-
-  tb_.SetText(
-      "1234567\r8901234567890\n123456\n7890123456789012345678901234567890123456"
-      "789012345678901234567890");
 }
 
 void Console::Update() {
