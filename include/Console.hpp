@@ -81,7 +81,7 @@ class Console : public sf::Drawable {
   // Resize the console to be of new width and new number of lines
   void Resize(int new_width, int new_num_lines);
 
-  void WriteCharacter(sf::Uint32 unicode);
+  void WriteCharacter(sf::Uint32 unicode, bool shift_held);
 
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
@@ -101,21 +101,13 @@ class Console : public sf::Drawable {
   // Font to draw the debug overlay with
   sf::Font font_;
 
-  // Translucent background to make info stand out
-  sf::RectangleShape history_background_;
+  TextBox history_box_;
 
-  sf::RectangleShape edit_background_;
-
-  // Text object that is used to draw the console to screen
-  sf::Text history_text_;
-
-  sf::String edit_text_;
+  TextBox edit_box_;
 
   sf::Clock cursor_clock_;
 
   bool blink_on_;
-
-  TextBox tb_;
 };
 
 #endif  // CONSOLE_H

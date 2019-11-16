@@ -82,7 +82,10 @@ void ConsoleLoop::HandleKeyEvents(sf::Window &window) {
           break;
       }
     } else if (event.type == sf::Event::TextEntered) {
-      game_->console_overlay_.WriteCharacter(event.text.unicode);
+      game_->console_overlay_.WriteCharacter(
+          event.text.unicode,
+          (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
+           sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)));
     }
   }
 }

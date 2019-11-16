@@ -26,12 +26,13 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <SFML/Graphics.hpp>
 #include <algorithm>
-#include <limits>
 #include <string>
+#include <vector>
 
 #include "Logger.hpp"
 
 using std::string;
+using std::vector;
 
 // Direction to move when text
 enum FlowDirection { FROM_BOTTOM, FROM_TOP };
@@ -46,7 +47,7 @@ enum FlowDirection { FROM_BOTTOM, FROM_TOP };
 class TextBox : public sf::Drawable {
  public:
   TextBox(const sf::Font &font, int font_size = 20, size_t max_line_length = 80,
-          int max_lines = 20, sf::Color background_color = sf::Color::White,
+          size_t max_lines = 20, sf::Color background_color = sf::Color::White,
           sf::Color text_color = sf::Color::Black, bool line_wrap = true,
           bool fit_height = false, string wrap_prefix = "",
           FlowDirection flow_direction = FROM_BOTTOM);
@@ -84,7 +85,7 @@ class TextBox : public sf::Drawable {
   TextBox &SetMargins(float left_margin, float right_margin,
                       float bottom_margin, float top_margin);
 
-  TextBox &SetDimensions(size_t max_line_length, int max_lines);
+  TextBox &SetDimensions(size_t max_line_length, size_t max_lines);
 
   TextBox &SetFlowDirection(FlowDirection flow_direction);
 
@@ -135,7 +136,7 @@ class TextBox : public sf::Drawable {
   size_t max_line_length_;
 
   // Maxinum number of lines in the TextBox
-  int max_lines_;
+  size_t max_lines_;
 
   // Do automatic line wrapping?
   bool line_wrap_;
@@ -163,7 +164,7 @@ class TextBox : public sf::Drawable {
   sf::RectangleShape background_;
 
   // Current number of lines in displayed_text_string_ (!!NOT!! text_string_)
-  int current_num_lines_;
+  size_t current_num_lines_;
 
   // Internal, flag that is set if an update needs to be carried out
   bool has_update_;

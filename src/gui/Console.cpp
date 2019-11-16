@@ -33,44 +33,32 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
       font_size_(font_size),
       has_update_(false),
       font_(),
-      history_background_(sf::Vector2f(line_length, 0)),
-      edit_background_(sf::Vector2f(line_length_, 0)),
-      history_text_(),
-      edit_text_(),
+      history_box_(font_),
+      edit_box_(font_),
       cursor_clock_(),
-      blink_on_(false),
-      tb_(font_) {
+      blink_on_(false) {
   if (!font_.loadFromFile("./res/fonts/Hack/Hack.ttf")) {
     Logger::Log("Failed to load font", MED);
   } else {
-    history_text_.setFont(font_);
+    // nothing right now
   }
   line_height_ = font_.getLineSpacing(font_size_);
-
   // Logger::Log(line_height_, INFO);
-  tb_.SetDimensions(20, 10)
-      .SetMargins(5.f, 10.f, 0.f, 10.f)
+  edit_box_.SetDimensions(line_length, num_lines)
+      .SetMargins(5.f, 10.f, 5.f, 5.f)
       .SetWrapPrefix("> ")
-      .SetFitHeightEnabled(true);
-  /*tb_.SetText(
-      "1234567\r8901234567890\n123456\n7890123456789012345678901234567890123456"
-      "789012345678901234567890");*/
-  tb_.SetText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10");
-  // tb_.SetText("12\n34");
-  tb_.SetPosition(x_pos, y_pos - tb_.GetMaxBoxHeight() - 10);
+      .SetFitHeightEnabled(true)
+      .SetBackgroundColor(sf::Color(90, 90, 90, 200))
+      .SetPosition(x_pos, y_pos - edit_box_.GetMaxBoxHeight());
+
+  history_box_.SetDimensions(line_length, num_lines)
+      .SetMargins(5.f, 10.f, 5.f, 5.f)
+      .SetWrapPrefix("> ")
+      .SetFitHeightEnabled(false)
+      .SetBackgroundColor(sf::Color(90, 90, 90, 200))
+      .SetPosition(x_pos, y_pos - history_box_.GetMaxBoxHeight());
 
   cursor_clock_.restart();
-
-  history_text_.setCharacterSize(font_size_);
-  history_text_.setFillColor(sf::Color::Black);
-  history_text_.setString("_");
-
-  history_background_.setSize(
-      sf::Vector2f(line_length, num_lines_ * line_height_));
-  edit_background_.setSize(sf::Vector2f(line_length, 1 * line_height_));
-
-  history_background_.setFillColor(sf::Color(90, 90, 90, 200));
-  edit_background_.setFillColor(sf::Color(90, 90, 90, 200));
 
   SetPosition(x_pos, y_pos);
 }
@@ -82,7 +70,8 @@ void Console::Update() {
   /*for (size_t i = 0; i < msg_order_.size(); ++i) {
     msg_ = msg_ + msg_map_[msg_order_[i]] + "\n";
   }*/
-  tb_.Update();
+  history_box_.Update();
+  edit_box_.Update();
 
   if (cursor_clock_.getElapsedTime().asSeconds() < .5f) {
     blink_on_ = false;
@@ -94,9 +83,9 @@ void Console::Update() {
   }
 
   if (blink_on_) {
-    history_text_.setString(edit_text_ + L"_");
+    // history_text_.setString(edit_text_ + L"_");
   } else {
-    history_text_.setString(edit_text_ + L" ");
+    // history_text_.setString(edit_text_ + L" ");
   }
 
   if (has_update_) {
@@ -106,54 +95,40 @@ void Console::Update() {
 
 void Console::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   // Draw background rectangle and overlay text
-  target.draw(history_background_, states);
-  target.draw(edit_background_, states);
-  target.draw(history_text_, states);
-  target.draw(tb_, states);
-  // target.draw(font_, states);
+  target.draw(history_box_, states);
+  target.draw(edit_box_, states);
 }
 
 void Console::SetPosition(float x_pos, float y_pos) {
-  history_text_.setPosition(x_pos + 5, y_pos - (num_lines_ * line_height_) - 5);
-  history_background_.setPosition(x_pos,
-                                  y_pos - (num_lines_ * line_height_) - 5);
-  edit_background_.setPosition(x_pos, y_pos - line_height_ - 5);
+  /*history_text_.setPosition(x_pos + 5, y_pos - (num_lines_ * line_height_) -
+  5); history_background_.setPosition(x_pos, y_pos - (num_lines_ * line_height_)
+  - 5); edit_background_.setPosition(x_pos, y_pos - line_height_ - 5);*/
   x_pos_ = x_pos;
   y_pos_ = y_pos;
   has_update_ = true;
 }
 
-void Console::WriteCharacter(sf::Uint32 unicode) {
-  // Logger::Log(std::string(sf::String(unicode)), INFO);
+void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
   if (unicode == sf::String("\b")) {
-    if (edit_text_.getSize() > 3 and
-        edit_text_.substring(edit_text_.getSize() - 3) == "\n> ") {
-      edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 3);
-    } else if (edit_text_.getSize() > 4 and
-               edit_text_.substring(edit_text_.getSize() - 4, 3) == "\n> ") {
-      edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 4);
-    } else {
-      edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1);
+    if (edit_box_.GetText().size() > 0) {
+      edit_box_.RemoveFrom(edit_box_.GetText().size() - 1, 1);
     }
   } else if (unicode == sf::String("\r")) {
-    edit_text_ += "\n";
-  } else {
-    // Logger::Log("x: " + to_string(history_text_.findCharacterPos(9999).x) +
-    //                "y: " + to_string(history_text_.findCharacterPos(9999).y),
-    //            INFO);
-    edit_text_ += sf::String(unicode);
-
-    if (history_text_.findCharacterPos(999999).x >=
-        (line_length_ - 10.1) + x_pos_) {
-      edit_text_ = edit_text_.substring(0, edit_text_.getSize() - 1) + "\n> " +
-                   edit_text_[edit_text_.getSize() - 1];
+    if (shift_held) {
+      edit_box_.AddText("\r");
+    } else {
+      string text = edit_box_.GetText() + "\n";
+      history_box_.AddText(text);
+      edit_box_.Clear();
     }
+  } else {
+    edit_box_.AddText(sf::String(unicode).toAnsiString());
   }
 
   if (blink_on_) {
-    history_text_.setString(edit_text_ + L"_");
+    // history_text_.setString(edit_text_ + L"_");
   } else {
-    history_text_.setString(edit_text_ + L" ");
+    // history_text_.setString(edit_text_ + L" ");
   }
 
   has_update_ = true;

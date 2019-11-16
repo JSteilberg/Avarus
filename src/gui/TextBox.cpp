@@ -24,7 +24,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "TextBox.hpp"
 
 TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
-                 int max_lines, sf::Color background_color,
+                 size_t max_lines, sf::Color background_color,
                  sf::Color text_color, bool line_wrap, bool fit_height,
                  string wrap_prefix, FlowDirection flow_direction)
     : font_(font),
@@ -44,7 +44,7 @@ TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
       text_string_(""),
       text_draw_obj_(),
       background_(),
-      current_num_lines_(0),
+      current_num_lines_(1),
       has_update_(false) {
   has_update_ = true;
   text_draw_obj_.setFillColor(text_color);
@@ -53,8 +53,10 @@ TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
 
 void TextBox::SetText(string set_string) {
   Clear();
-  AddText(set_string);
-  ForceUpdate();
+  text_string_ = set_string;
+  ReflowText();
+  // AddText(set_string);
+  // ForceUpdate();
 }
 
 void TextBox::ReflowText() {
@@ -84,7 +86,7 @@ void TextBox::ReflowText() {
   // (so that the total line length is still max_line_length)
   const int autocont_max_line_length = max_line_length - wrap_prefix_.length();
 
-  current_num_lines_ = 0;
+  current_num_lines_ = 1;
 
   string flowed_string;
   int line_length_counter = 0;
@@ -92,18 +94,19 @@ void TextBox::ReflowText() {
 
   for (size_t i = 0; i < text_string_.length(); ++i) {
     const char chr = text_string_[i];
-    line_length_counter++;
 
     if (chr == newline_ || chr == user_continuation_) {
       // 1 and 2 - Both result in passing on the char and resetting the line
       // length counter, as well as setting the max line length to full
       current_max_line_length = max_line_length;
-      line_length_counter = 0;
+      flowed_string += chr;
 
       current_num_lines_++;
+      line_length_counter = 0;
 
-      flowed_string += chr;
-    } else if (line_length_counter > current_max_line_length) {
+    } else if (chr == auto_continuation_) {
+      continue;
+    } else if (line_length_counter >= current_max_line_length) {
       // If our line was too long, start an auto continuation;
       flowed_string += auto_continuation_;
       flowed_string += chr;
@@ -117,13 +120,15 @@ void TextBox::ReflowText() {
 
       current_num_lines_++;
 
-    } else if (chr == auto_continuation_) {
-      // Remove old auto-cont chars
-      continue;
     } else {
       flowed_string += chr;
+      line_length_counter++;
     }
   }
+  // Debugging
+  // sf::String sfstr(flowed_string);
+  // sfstr.replace("\a", "*");
+  // std::cout << sfstr.toAnsiString() << std::endl;
 
   if (current_num_lines_ > max_lines_) {
     current_num_lines_ = max_lines_;
@@ -134,8 +139,12 @@ void TextBox::ReflowText() {
 }
 
 void TextBox::RemoveFrom(size_t position, size_t count) {
-  string new_text = text_string_;
-  new_text.erase(position, count);
+  // string new_text = text_string_;
+  // new_text.erase(position, count);
+  if (position >= text_string_.size()) {
+    return;
+  }
+  text_string_ = text_string_.erase(position, count);
   ReflowText();  // Already forces an update
 }
 
@@ -148,16 +157,14 @@ void TextBox::Update() {
 void TextBox::ForceUpdate() {
   has_update_ = false;
 
-  const float line_height = font_.getLineSpacing(font_size_);
-
   text_draw_obj_.setFont(font_);
   text_draw_obj_.setCharacterSize(font_size_);
   text_draw_obj_.setString(GetDisplayedText());
 
   if (flow_direction_ == FROM_BOTTOM) {
-    text_draw_obj_.setPosition(pos_x_ + left_margin_,
-                               pos_y_ + GetMaxBoxHeight() - GetTextHeight() -
-                                   line_height - bottom_margin_);
+    text_draw_obj_.setPosition(
+        pos_x_ + left_margin_,
+        pos_y_ + GetMaxBoxHeight() - GetTextHeight() - bottom_margin_);
   } else if (flow_direction_ == FROM_TOP) {
     text_draw_obj_.setPosition(pos_x_ + left_margin_, pos_y_ + top_margin_);
   }
@@ -167,14 +174,13 @@ void TextBox::ForceUpdate() {
 }
 
 void TextBox::AddText(string add_string) {
-  ForceUpdate();
-  text_string_ += add_string;
-  ReflowText();
+  // ForceUpdate();
+  SetText(text_string_ + add_string);
 }
 
 void TextBox::Clear() {
-  text_string_.clear();
-  text_draw_obj_.setString("");
+  text_string_ = "";
+  // text_draw_obj_.setString("");
   ForceUpdate();
 }
 
@@ -201,11 +207,28 @@ string TextBox::GetDisplayedText() const {
     if (text_string_[i] == auto_continuation_) {
       ret_str += newline_;
       ret_str += wrap_prefix_;
-    } else if (text_string_[i] == user_continuation_) {
+    } else if (text_string_[i] == user_continuation_ ||
+               text_string_[i] == newline_) {
       ret_str += newline_;
     } else {
       ret_str += text_string_[i];
     }
+  }
+
+  vector<int> newline_positions;
+  newline_positions.reserve(max_lines_ * 2);
+  newline_positions.push_back(0);
+
+  for (size_t i = 0; i < ret_str.length(); ++i) {
+    if (ret_str[i] == newline_) {
+      newline_positions.push_back(i);
+    }
+  }
+
+  // std::cout << newline_positions.size() << std::endl;
+  if (newline_positions.size() > max_lines_) {
+    int remove_idx = newline_positions[newline_positions.size() - max_lines_];
+    ret_str = ret_str.substr(remove_idx + 1);
   }
   return ret_str;
 }
@@ -270,7 +293,7 @@ TextBox &TextBox::SetMargins(float left_margin, float right_margin,
   return *this;
 }
 
-TextBox &TextBox::SetDimensions(size_t max_line_length, int max_lines) {
+TextBox &TextBox::SetDimensions(size_t max_line_length, size_t max_lines) {
   max_line_length_ = max_line_length;
   max_lines_ = max_lines;
   ForceUpdate();
@@ -307,5 +330,5 @@ float TextBox::GetTextWidth() {
 
 float TextBox::GetTextHeight() {
   const float line_height = font_.getLineSpacing(font_size_);
-  return line_height * current_num_lines_;  // + (top_margin_ + bottom_margin_);
+  return line_height * current_num_lines_;
 }
