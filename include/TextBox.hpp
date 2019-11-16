@@ -31,6 +31,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Logger.hpp"
 
+using std::string;
+
 // Direction to move when text
 enum FlowDirection { FROM_BOTTOM, FROM_TOP };
 
@@ -46,22 +48,22 @@ class TextBox : public sf::Drawable {
   TextBox(const sf::Font &font, int font_size = 20, size_t max_line_length = 80,
           int max_lines = 20, sf::Color background_color = sf::Color::White,
           sf::Color text_color = sf::Color::Black, bool line_wrap = true,
-          bool fit_height = false, sf::String wrap_prefix = L"",
+          bool fit_height = false, string wrap_prefix = "",
           FlowDirection flow_direction = FROM_BOTTOM);
 
   void Update();
 
-  void SetText(sf::String set_string);
+  void SetText(string set_string);
 
-  void AddText(sf::String add_string);
+  void AddText(string add_string);
 
   void Clear();
 
   void RemoveFrom(size_t position, size_t count = 1);
 
-  const sf::String &GetText() const;
+  const string &GetText() const;
 
-  sf::String GetDisplayedText() const;
+  string GetDisplayedText() const;
 
   const sf::Text &GetTextDrawObject() const;
 
@@ -77,7 +79,7 @@ class TextBox : public sf::Drawable {
 
   TextBox &SetFitHeightEnabled(bool fit_height_enabled);
 
-  TextBox &SetWrapPrefix(sf::String new_wrap_prefix);
+  TextBox &SetWrapPrefix(string new_wrap_prefix);
 
   TextBox &SetMargins(float left_margin, float right_margin,
                       float bottom_margin, float top_margin);
@@ -87,10 +89,19 @@ class TextBox : public sf::Drawable {
   TextBox &SetFlowDirection(FlowDirection flow_direction);
 
   // Width of the background box, in pixels
-  float GetWidth();
+  float GetBoxWidth();
 
   // Height of the background box, in pixels
-  float GetHeight();
+  float GetBoxHeight();
+
+  // Width of the text, in pixels [always max width for now]
+  float GetTextWidth();
+
+  // Height of the text, in pixels
+  float GetTextHeight();
+
+  // Get the max possible height of the box in pixels
+  float GetMaxBoxHeight();
 
   void ReflowText();
 
@@ -98,11 +109,8 @@ class TextBox : public sf::Drawable {
                     sf::RenderStates states) const override;
 
  private:
-  void CalcCurrentNumLines();
+  // Internal
   void ForceUpdate();
-  // Internal, finds the minimum betwen occurrences of '\r', '\n', and the
-  // max line length
-  size_t FirstEnd(size_t find_1, size_t find_2, size_t max_len);
 
   // Font to draw text with
   const sf::Font &font_;
@@ -137,16 +145,16 @@ class TextBox : public sf::Drawable {
   bool fit_height_;
 
   // Prefix for wrapped lines
-  sf::String wrap_prefix_;
+  string wrap_prefix_;
 
   // Direction to flow multiple lines of text
   FlowDirection flow_direction_;
 
   // Actual text, corresponds exactly to what the user entered
-  sf::String text_string_;
+  string text_string_;
 
   // Text with automatic line wrapping
-  sf::String displayed_text_string_;
+  // string displayed_text_string_;
 
   // Actual drawable object holding drawn text
   sf::Text text_draw_obj_;
@@ -160,9 +168,9 @@ class TextBox : public sf::Drawable {
   // Internal, flag that is set if an update needs to be carried out
   bool has_update_;
 
-  const unsigned char newline_ = '\n';
-  const unsigned char user_continuation_ = '\r';
-  const unsigned char auto_continuation_ = '\a';
+  const char newline_ = '\n';
+  const char user_continuation_ = '\r';
+  const char auto_continuation_ = '\a';
 };
 
 #endif  // TEXTBOX_H

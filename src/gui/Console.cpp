@@ -48,13 +48,16 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
   line_height_ = font_.getLineSpacing(font_size_);
 
   // Logger::Log(line_height_, INFO);
-
-  tb_.SetDimensions(20, 20).SetMargins(5.f, 10.f, 5.f, 5.f);
-  tb_.SetText(
+  tb_.SetDimensions(20, 10)
+      .SetMargins(5.f, 10.f, 0.f, 10.f)
+      .SetWrapPrefix("> ")
+      .SetFitHeightEnabled(true);
+  /*tb_.SetText(
       "1234567\r8901234567890\n123456\n7890123456789012345678901234567890123456"
-      "789012345678901234567890");
-
-  tb_.SetPosition(x_pos, y_pos - tb_.GetHeight());
+      "789012345678901234567890");*/
+  tb_.SetText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10");
+  // tb_.SetText("12\n34");
+  tb_.SetPosition(x_pos, y_pos - tb_.GetMaxBoxHeight() - 10);
 
   cursor_clock_.restart();
 

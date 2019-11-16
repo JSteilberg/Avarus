@@ -26,7 +26,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
                  int max_lines, sf::Color background_color,
                  sf::Color text_color, bool line_wrap, bool fit_height,
-                 sf::String wrap_prefix, FlowDirection flow_direction)
+                 string wrap_prefix, FlowDirection flow_direction)
     : font_(font),
       font_size_(font_size),
       pos_x_(0),
@@ -41,8 +41,7 @@ TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
       fit_height_(fit_height),
       wrap_prefix_(wrap_prefix),
       flow_direction_(flow_direction),
-      text_string_(L""),
-      displayed_text_string_(L""),
+      text_string_(""),
       text_draw_obj_(),
       background_(),
       current_num_lines_(0),
@@ -52,7 +51,7 @@ TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
   background_.setFillColor(background_color);
 }
 
-void TextBox::SetText(sf::String set_string) {
+void TextBox::SetText(string set_string) {
   Clear();
   AddText(set_string);
   ForceUpdate();
@@ -80,47 +79,64 @@ void TextBox::ReflowText() {
   //    followed by `wrap_prefix`. Yes I know this is the beep character lol,
   //    someone let me know if it's a bad idea to do this
 
-  size_t first_line_len = FirstEnd(
-      text_string_.find("\n"), text_string_.find("\r"), max_line_length_ + 1);
-  sf::String right_half;
-  if (first_line_len == max_line_length_ + 1) {
-    displayed_text_string_ = text_string_.substring(0, first_line_len) + "\a";
-    right_half = text_string_.substring(first_line_len);
-  } else {
-    displayed_text_string_ = text_string_.substring(0, first_line_len + 1);
-    right_half = text_string_.substring(first_line_len + 1);
-  }
+  const int max_line_length = max_line_length_;
+  // Max length of line is reduced if it is a continuation
+  // (so that the total line length is still max_line_length)
+  const int autocont_max_line_length = max_line_length - wrap_prefix_.length();
 
-  while (right_half.getSize() > max_line_length_) {
-    size_t line_len = FirstEnd(right_half.find("\n"), right_half.find("\r"),
-                               max_line_length_ + 1);
-    if (line_len == max_line_length_ + 1) {
-      displayed_text_string_ += right_half.substring(0, line_len - 1) + "\a";
-      right_half = right_half.substring(line_len - 1);
+  current_num_lines_ = 0;
+
+  string flowed_string;
+  int line_length_counter = 0;
+  int current_max_line_length = max_line_length;
+
+  for (size_t i = 0; i < text_string_.length(); ++i) {
+    const char chr = text_string_[i];
+    line_length_counter++;
+
+    if (chr == newline_ || chr == user_continuation_) {
+      // 1 and 2 - Both result in passing on the char and resetting the line
+      // length counter, as well as setting the max line length to full
+      current_max_line_length = max_line_length;
+      line_length_counter = 0;
+
+      current_num_lines_++;
+
+      flowed_string += chr;
+    } else if (line_length_counter > current_max_line_length) {
+      // If our line was too long, start an auto continuation;
+      flowed_string += auto_continuation_;
+      flowed_string += chr;
+
+      // Also remember the length of this line is reduced
+      current_max_line_length = autocont_max_line_length;
+
+      // And since we passed through the extra character, the new line length
+      // starts at 1
+      line_length_counter = 1;
+
+      current_num_lines_++;
+
+    } else if (chr == auto_continuation_) {
+      // Remove old auto-cont chars
+      continue;
     } else {
-      displayed_text_string_ += right_half.substring(0, line_len + 1);
-      right_half = right_half.substring(line_len + 1);
+      flowed_string += chr;
     }
   }
-  displayed_text_string_ += right_half;
+
+  if (current_num_lines_ > max_lines_) {
+    current_num_lines_ = max_lines_;
+  }
+
+  text_string_ = flowed_string;
   ForceUpdate();
 }
 
 void TextBox::RemoveFrom(size_t position, size_t count) {
-  sf::String new_text = text_string_;
+  string new_text = text_string_;
   new_text.erase(position, count);
   ReflowText();  // Already forces an update
-}
-
-size_t TextBox::FirstEnd(size_t find_1, size_t find_2, size_t max_len) {
-  const size_t size_t_max = std::numeric_limits<std::size_t>::max();
-  if (find_1 == sf::String::InvalidPos) {
-    find_1 = size_t_max;
-  }
-  if (find_2 == sf::String::InvalidPos) {
-    find_2 = size_t_max;
-  }
-  return std::min(std::min(find_1, find_2), max_len);
 }
 
 void TextBox::Update() {
@@ -130,67 +146,67 @@ void TextBox::Update() {
 }
 
 void TextBox::ForceUpdate() {
-  CalcCurrentNumLines();
+  has_update_ = false;
 
   const float line_height = font_.getLineSpacing(font_size_);
-  // const float char_width = font_.getGlyph(L'_', font_size_, false).advance;
 
   text_draw_obj_.setFont(font_);
   text_draw_obj_.setCharacterSize(font_size_);
   text_draw_obj_.setString(GetDisplayedText());
 
   if (flow_direction_ == FROM_BOTTOM) {
-    text_draw_obj_.setPosition(
-        pos_x_ + left_margin_,
-        //          pos_y_ + GetHeight() -
-        pos_y_ + line_height * (max_lines_ - current_num_lines_ - 1) +
-            top_margin_ - 300);
+    text_draw_obj_.setPosition(pos_x_ + left_margin_,
+                               pos_y_ + GetMaxBoxHeight() - GetTextHeight() -
+                                   line_height - bottom_margin_);
   } else if (flow_direction_ == FROM_TOP) {
     text_draw_obj_.setPosition(pos_x_ + left_margin_, pos_y_ + top_margin_);
   }
 
-  background_.setPosition(pos_x_, pos_y_);
-
-  background_.setSize(sf::Vector2f(GetWidth(), GetHeight()));
-  has_update_ = false;
+  background_.setPosition(pos_x_, pos_y_ + GetMaxBoxHeight() - GetBoxHeight());
+  background_.setSize(sf::Vector2f(GetBoxWidth(), GetBoxHeight()));
 }
 
-void TextBox::CalcCurrentNumLines() {
-  current_num_lines_ = 0;
-  for (size_t i = 0; i < displayed_text_string_.getSize(); ++i) {
-    // Logger::Log(std::to_string(displayed_text_string_[i]) + "\t" +
-    // newline_,
-    //             INFO);
-    if (displayed_text_string_[i] == newline_) current_num_lines_++;
-    if (displayed_text_string_[i] == user_continuation_) current_num_lines_++;
-    if (displayed_text_string_[i] == auto_continuation_) current_num_lines_++;
-  }
-}
-
-void TextBox::AddText(sf::String add_string) {
+void TextBox::AddText(string add_string) {
   ForceUpdate();
   text_string_ += add_string;
   ReflowText();
-  ForceUpdate();
 }
 
 void TextBox::Clear() {
   text_string_.clear();
-  displayed_text_string_.clear();
-  text_draw_obj_.setString(L"");
+  text_draw_obj_.setString("");
   ForceUpdate();
 }
 
-const sf::String &TextBox::GetText() const {
-  sf::String ret_str = text_string_;
-  ret_str.replace('\r', "\n" + wrap_prefix_);
+const string &TextBox::GetText() const {
+  string ret_str;
+  ret_str.reserve(text_string_.length());
+
+  // Remove all the auto continuation lines
+  for (size_t i = 0; i < text_string_.length(); ++i) {
+    if (text_string_[i] != auto_continuation_) {
+      ret_str.push_back(text_string_[i]);
+    }
+  }
+
   return text_string_;
 }
 
-sf::String TextBox::GetDisplayedText() const {
-  sf::String ret_str = displayed_text_string_;
-  ret_str.replace('\a', "\n" + wrap_prefix_);
-  ret_str.replace('\r', "\n" + wrap_prefix_);
+string TextBox::GetDisplayedText() const {
+  string ret_str;
+  ret_str.reserve(text_string_.length() * 2);
+
+  // Replace all new line types with \n
+  for (size_t i = 0; i < text_string_.length(); ++i) {
+    if (text_string_[i] == auto_continuation_) {
+      ret_str += newline_;
+      ret_str += wrap_prefix_;
+    } else if (text_string_[i] == user_continuation_) {
+      ret_str += newline_;
+    } else {
+      ret_str += text_string_[i];
+    }
+  }
   return ret_str;
 }
 
@@ -238,7 +254,7 @@ TextBox &TextBox::SetFitHeightEnabled(bool fit_height_enabled) {
   return *this;
 }
 
-TextBox &TextBox::SetWrapPrefix(sf::String new_wrap_prefix) {
+TextBox &TextBox::SetWrapPrefix(string new_wrap_prefix) {
   wrap_prefix_ = new_wrap_prefix;
   ForceUpdate();
   return *this;
@@ -267,19 +283,29 @@ TextBox &TextBox::SetFlowDirection(FlowDirection flow_direction) {
   return *this;
 }
 
-float TextBox::GetWidth() {
-  const float char_width = font_.getGlyph(L'_', font_size_, false).advance;
-  return char_width * max_line_length_ + (left_margin_ + right_margin_);
+float TextBox::GetBoxWidth() {
+  return left_margin_ + GetTextWidth() + right_margin_;
 }
 
-float TextBox::GetHeight() {
-  CalcCurrentNumLines();
-
-  const float line_height = font_.getLineSpacing(font_size_);
-
+float TextBox::GetBoxHeight() {
   if (fit_height_) {
-    return line_height * current_num_lines_ + (top_margin_ + bottom_margin_);
+    return top_margin_ + GetTextHeight() + bottom_margin_;
   } else {
-    return line_height * max_lines_ + (top_margin_ + bottom_margin_);
+    return GetMaxBoxHeight();
   }
+}
+
+float TextBox::GetMaxBoxHeight() {
+  const float line_height = font_.getLineSpacing(font_size_);
+  return top_margin_ + (line_height * max_lines_) + bottom_margin_;
+}
+
+float TextBox::GetTextWidth() {
+  const float char_width = font_.getGlyph(L'_', font_size_, false).advance;
+  return char_width * max_line_length_;
+}
+
+float TextBox::GetTextHeight() {
+  const float line_height = font_.getLineSpacing(font_size_);
+  return line_height * current_num_lines_;  // + (top_margin_ + bottom_margin_);
 }
