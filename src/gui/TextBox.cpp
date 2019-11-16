@@ -55,11 +55,31 @@ TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
 void TextBox::SetText(sf::String set_string) {
   Clear();
   AddText(set_string);
-  Update();
+  ForceUpdate();
 }
 
 void TextBox::ReflowText() {
-  //_text_string_.replace("\a", "");
+  // REFLOW TEXT BEHAVIOR::
+  //
+  // The text consists of text characters, along with the special characters.
+  // To help understand the behavior I am outlining, imagine you are using an
+  // instant messaging platform- When you hit enter, you send a message [1].
+  // When you hold shift and hit enter, a new line is made but no message is
+  // sent [2]. When you type long enough, you go beyond the edge of the text
+  // box, but your text simply wraps around and continues on the next line
+  // (yet there is no actual new line in the text) [3].
+  //
+  // 1. '\n' true newline
+  //    Fully breaks text, going to next line.
+  // 2. '\r' user continuation
+  //    Appears identital to [1], but is a different character, enabling
+  //    different behavior.
+  // 3. '\a' auto continuation
+  //    There is no real newline, only visually. Calls to GetText() will have
+  //    this character removed. Visually, it will be replaced with a newline and
+  //    followed by `wrap_prefix`. Yes I know this is the beep character lol,
+  //    someone let me know if it's a bad idea to do this
+
   size_t first_line_len = FirstEnd(
       text_string_.find("\n"), text_string_.find("\r"), max_line_length_ + 1);
   sf::String right_half;
@@ -83,16 +103,13 @@ void TextBox::ReflowText() {
     }
   }
   displayed_text_string_ += right_half;
-  has_update_ = true;
-  Update();
+  ForceUpdate();
 }
 
 void TextBox::RemoveFrom(size_t position, size_t count) {
   sf::String new_text = text_string_;
   new_text.erase(position, count);
-  ReflowText();
-  has_update_ = true;
-  Update();
+  ReflowText();  // Already forces an update
 }
 
 size_t TextBox::FirstEnd(size_t find_1, size_t find_2, size_t max_len) {
