@@ -45,7 +45,7 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
   line_height_ = font_.getLineSpacing(font_size_);
   // Logger::Log(line_height_, INFO);
   edit_box_.SetDimensions(line_length, num_lines)
-      .SetMargins(5.f, 10.f, 5.f, 5.f)
+      .SetMargins(5.f, 10.f, 3.f, 0.f)
       .SetWrapPrefix("> ")
       .SetFitHeightEnabled(true)
       .SetBackgroundColor(sf::Color(90, 90, 90, 200))
@@ -120,7 +120,10 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
       string text = edit_box_.GetText() + "\n";
       history_box_.AddText(text);
       edit_box_.Clear();
+      edit_box_.ReflowText();
     }
+  } else if (unicode == sf::String("\t")) {
+    edit_box_.AddText("  ");
   } else {
     edit_box_.AddText(sf::String(unicode).toAnsiString());
   }
