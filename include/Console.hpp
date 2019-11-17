@@ -81,7 +81,11 @@ class Console : public sf::Drawable {
   // Resize the console to be of new width and new number of lines
   void Resize(int new_width, int new_num_lines);
 
+  // Adds a single character to the console
   void WriteCharacter(sf::Uint32 unicode, bool shift_held);
+
+  // Writes a string to the console
+  void Write(sf::String str);
 
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
@@ -105,7 +109,11 @@ class Console : public sf::Drawable {
 
   TextBox edit_box_;
 
+  sf::Text cursor_;
+
   sf::Clock cursor_clock_;
+
+  int cursor_pos_;
 
   bool blink_on_;
 };

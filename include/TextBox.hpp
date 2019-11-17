@@ -56,7 +56,7 @@ class TextBox : public sf::Drawable {
 
   void SetText(string set_string);
 
-  void AddText(string add_string);
+  void AddText(string add_string, int pos = -1);
 
   void Clear();
 
