@@ -35,41 +35,42 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
       font_(),
       history_box_(font_),
       edit_box_(font_),
+      cursor_(),
       cursor_clock_(),
+      cursor_pos_(0),
       blink_on_(false) {
   if (!font_.loadFromFile("./res/fonts/Hack/Hack.ttf")) {
     Logger::Log("Failed to load font", MED);
   } else {
     // nothing right now
   }
+
+  cursor_.setFont(font_);
+  cursor_.setCharacterSize(font_size_);
+  cursor_.setString("_");
+
   line_height_ = font_.getLineSpacing(font_size_);
   // Logger::Log(line_height_, INFO);
   edit_box_.SetDimensions(line_length, num_lines)
-      .SetMargins(5.f, 10.f, 3.f, 0.f)
-      .SetWrapPrefix("> ")
+      .SetMargins(5.f, 15.f, 3.f, 0.f)
+      .SetWrapPrefix(">")
       .SetFitHeightEnabled(true)
       .SetBackgroundColor(sf::Color(90, 90, 90, 200))
       .SetPosition(x_pos, y_pos - edit_box_.GetMaxBoxHeight());
 
   history_box_.SetDimensions(line_length, num_lines)
-      .SetMargins(5.f, 10.f, 5.f, 5.f)
-      .SetWrapPrefix("> ")
+      .SetMargins(5.f, 15.f, 5.f, 5.f)
+      .SetWrapPrefix(">")
       .SetFitHeightEnabled(false)
       .SetBackgroundColor(sf::Color(90, 90, 90, 200))
       .SetPosition(x_pos, y_pos - history_box_.GetMaxBoxHeight());
 
   cursor_clock_.restart();
-
+  cursor_.setPosition(20, 200);
   SetPosition(x_pos, y_pos);
 }
 
 void Console::Update() {
-  // string msg_ =
-
-  // Loop through the message keys in order and add them to the dbg overlay
-  /*for (size_t i = 0; i < msg_order_.size(); ++i) {
-    msg_ = msg_ + msg_map_[msg_order_[i]] + "\n";
-  }*/
   history_box_.Update();
   edit_box_.Update();
 
@@ -82,11 +83,7 @@ void Console::Update() {
     cursor_clock_.restart();
   }
 
-  if (blink_on_) {
-    // history_text_.setString(edit_text_ + L"_");
-  } else {
-    // history_text_.setString(edit_text_ + L" ");
-  }
+  cursor_.setPosition(edit_box_.IndexToCoordinates(cursor_pos_));
 
   if (has_update_) {
     has_update_ = false;
@@ -97,6 +94,9 @@ void Console::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   // Draw background rectangle and overlay text
   target.draw(history_box_, states);
   target.draw(edit_box_, states);
+  if (blink_on_) {
+    target.draw(cursor_, states);
+  }
 }
 
 void Console::SetPosition(float x_pos, float y_pos) {
@@ -112,8 +112,11 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
   if (unicode == sf::String("\b")) {
     if (edit_box_.GetText().size() > 0) {
       edit_box_.RemoveFrom(edit_box_.GetText().size() - 1, 1);
+      cursor_pos_--;
     }
   } else if (unicode == sf::String("\r")) {
+    cursor_pos_++;
+
     if (shift_held) {
       edit_box_.AddText("\r");
     } else {
@@ -121,18 +124,27 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
       history_box_.AddText(text);
       edit_box_.Clear();
       edit_box_.ReflowText();
+      cursor_pos_ = 0;
     }
   } else if (unicode == sf::String("\t")) {
     edit_box_.AddText("  ");
+    cursor_pos_ += 2;
   } else {
-    edit_box_.AddText(sf::String(unicode).toAnsiString());
+    cursor_pos_++;
+    edit_box_.AddText(sf::String(unicode).toAnsiString(), -1);
   }
+  has_update_ = true;
+}
 
-  if (blink_on_) {
-    // history_text_.setString(edit_text_ + L"_");
-  } else {
-    // history_text_.setString(edit_text_ + L" ");
+void Console::MoveCursor(int amount) {
+  cursor_pos_ += amount;
+  if (cursor_pos_ < 0) {
+    cursor_pos_ = 0;
   }
+  has_update_ = true;
+}
 
+void Console::Write(sf::String str) {
+  edit_box_.AddText(str.toAnsiString());
   has_update_ = true;
 }

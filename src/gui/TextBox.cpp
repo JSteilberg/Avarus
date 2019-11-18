@@ -173,9 +173,19 @@ void TextBox::ForceUpdate() {
   background_.setSize(sf::Vector2f(GetBoxWidth(), GetBoxHeight()));
 }
 
-void TextBox::AddText(string add_string) {
+void TextBox::AddText(string add_string, int pos) {
+  size_t add_pos;
+  if (pos < 0) {
+    if ((int)text_string_.size() + pos >= 0) {
+      add_pos = text_string_.size() + pos + 1;
+    } else {
+      add_pos = 0;
+    }
+  } else {
+    add_pos = pos;
+  }
   // ForceUpdate();
-  SetText(text_string_ + add_string);
+  SetText(text_string_.insert(add_pos, add_string));
 }
 
 void TextBox::Clear() {
@@ -231,6 +241,23 @@ string TextBox::GetDisplayedText() const {
     ret_str = ret_str.substr(remove_idx + 1);
   }
   return ret_str;
+}
+
+sf::Vector2f TextBox::IndexToCoordinates(size_t index) {
+  // const float char_width = font_.getGlyph(L'_', font_size_, false).advance;
+  // sf::Vector2f orig_pos = text_draw_obj_.FindCharacterPos(index);
+  ReflowText();
+  ForceUpdate();
+
+  size_t char_counter = 0;
+  for (size_t i = 0; i < index; ++i) {
+    if (text_string_[i] == auto_continuation_) {
+      char_counter += wrap_prefix_.length() + 2;
+    } else {
+      char_counter++;
+    }
+  }
+  return text_draw_obj_.findCharacterPos(char_counter);
 }
 
 const sf::Text &TextBox::GetTextDrawObject() const { return text_draw_obj_; }

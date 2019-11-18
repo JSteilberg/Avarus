@@ -87,6 +87,10 @@ class Console : public sf::Drawable {
   // Writes a string to the console
   void Write(sf::String str);
 
+  // Moves the cursor to the right by amount
+  // (or if amount is negative, to the left)
+  void MoveCursor(int amount);
+
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
 

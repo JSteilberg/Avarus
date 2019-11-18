@@ -104,7 +104,12 @@ class TextBox : public sf::Drawable {
   // Get the max possible height of the box in pixels
   float GetMaxBoxHeight();
 
+  // Re-add line breaks for overflowing text
   void ReflowText();
+
+  // Get the actual coordinates of the character in text_string_, taking into
+  // account wrapping and the wrap string
+  sf::Vector2f IndexToCoordinates(size_t index);
 
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;

@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -37,7 +37,7 @@ Game::Game()
       main_loop_(std::make_shared<MainLoop>(this)),
       console_loop_(std::make_shared<ConsoleLoop>(this)),
       dbg_overlay_(),
-      console_overlay_(5, window_height_, 50, 20, 20),
+      console_overlay_(5, window_height_, 30, 20, 20),
       state_list_(),
       new_states_(),
       remove_states_(),
