@@ -55,8 +55,6 @@ void TextBox::SetText(string set_string) {
   Clear();
   text_string_ = set_string;
   ReflowText();
-  // AddText(set_string);
-  // ForceUpdate();
 }
 
 void TextBox::ReflowText() {
@@ -174,10 +172,11 @@ void TextBox::ForceUpdate() {
 }
 
 void TextBox::AddText(string add_string, int pos) {
+  string new_str = GetText();
   size_t add_pos;
   if (pos < 0) {
-    if ((int)text_string_.size() + pos >= 0) {
-      add_pos = text_string_.size() + pos + 1;
+    if ((int)new_str.size() + pos >= 0) {
+      add_pos = new_str.size() + pos + 1;
     } else {
       add_pos = 0;
     }
@@ -185,7 +184,7 @@ void TextBox::AddText(string add_string, int pos) {
     add_pos = pos;
   }
   // ForceUpdate();
-  SetText(text_string_.insert(add_pos, add_string));
+  SetText(new_str.insert(add_pos, add_string));
 }
 
 void TextBox::Clear() {
@@ -194,7 +193,7 @@ void TextBox::Clear() {
   ForceUpdate();
 }
 
-const string &TextBox::GetText() const {
+const string TextBox::GetText() const {
   string ret_str;
   ret_str.reserve(text_string_.length());
 
@@ -205,7 +204,7 @@ const string &TextBox::GetText() const {
     }
   }
 
-  return text_string_;
+  return ret_str;
 }
 
 string TextBox::GetDisplayedText() const {
@@ -246,18 +245,24 @@ string TextBox::GetDisplayedText() const {
 sf::Vector2f TextBox::IndexToCoordinates(size_t index) {
   // const float char_width = font_.getGlyph(L'_', font_size_, false).advance;
   // sf::Vector2f orig_pos = text_draw_obj_.FindCharacterPos(index);
-  ReflowText();
-  ForceUpdate();
 
+  return text_draw_obj_.findCharacterPos(IndexToDrawnIndex(index));
+  // return text_draw_obj_.findCharacterPos(index);
+}
+
+size_t TextBox::IndexToDrawnIndex(size_t index) {
   size_t char_counter = 0;
   for (size_t i = 0; i < index; ++i) {
-    if (text_string_[i] == auto_continuation_) {
-      char_counter += wrap_prefix_.length() + 2;
+    if (text_string_[i + 1] == auto_continuation_) {
+      // text_string_[i] == auto_continuation_) {
+      // std::cout << wrap_prefix_.length() + 1 << std::endl;
+      char_counter += (wrap_prefix_.length() + 1);
+      index++;
     } else {
       char_counter++;
     }
   }
-  return text_draw_obj_.findCharacterPos(char_counter);
+  return char_counter;
 }
 
 const sf::Text &TextBox::GetTextDrawObject() const { return text_draw_obj_; }

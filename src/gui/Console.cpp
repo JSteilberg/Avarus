@@ -71,9 +71,6 @@ Console::Console(float x_pos, float y_pos, int line_length = 80,
 }
 
 void Console::Update() {
-  history_box_.Update();
-  edit_box_.Update();
-
   if (cursor_clock_.getElapsedTime().asSeconds() > .5f) {
     blink_on_ = false;
   } else if (cursor_clock_.getElapsedTime().asSeconds() < .5f) {
@@ -83,9 +80,11 @@ void Console::Update() {
     cursor_clock_.restart();
   }
 
-  cursor_.setPosition(edit_box_.IndexToCoordinates(cursor_pos_));
-
   if (has_update_) {
+    history_box_.Update();
+    edit_box_.Update();
+    cursor_.setPosition(edit_box_.IndexToCoordinates(cursor_pos_));
+
     has_update_ = false;
   }
 }
@@ -115,23 +114,22 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
       cursor_pos_--;
     }
   } else if (unicode == sf::String("\r")) {
-    cursor_pos_++;
-
     if (shift_held) {
-      edit_box_.AddText("\r");
+      edit_box_.AddText("\r", cursor_pos_);
     } else {
       string text = edit_box_.GetText() + "\n";
       history_box_.AddText(text);
       edit_box_.Clear();
       edit_box_.ReflowText();
-      cursor_pos_ = 0;
+      cursor_pos_ = -1;
     }
+    cursor_pos_++;
   } else if (unicode == sf::String("\t")) {
-    edit_box_.AddText("  ");
+    edit_box_.AddText("  ", cursor_pos_);
     cursor_pos_ += 2;
   } else {
+    edit_box_.AddText(sf::String(unicode).toAnsiString(), cursor_pos_);
     cursor_pos_++;
-    edit_box_.AddText(sf::String(unicode).toAnsiString(), -1);
   }
   has_update_ = true;
 }
@@ -141,7 +139,18 @@ void Console::MoveCursor(int amount) {
   if (cursor_pos_ < 0) {
     cursor_pos_ = 0;
   }
+  size_t edit_box_len = edit_box_.GetText().length();
+  int edit_box_len_int = 0;
+  if (edit_box_len < 999999) {
+    edit_box_len_int = (int)edit_box_len;
+  }
+
+  if (cursor_pos_ > edit_box_len_int) {
+    cursor_pos_ = edit_box_len_int;
+  }
+
   cursor_clock_.restart();
+
   has_update_ = true;
 }
 

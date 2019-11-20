@@ -62,7 +62,7 @@ class TextBox : public sf::Drawable {
 
   void RemoveFrom(size_t position, size_t count = 1);
 
-  const string &GetText() const;
+  const string GetText() const;
 
   string GetDisplayedText() const;
 
@@ -110,6 +110,8 @@ class TextBox : public sf::Drawable {
   // Get the actual coordinates of the character in text_string_, taking into
   // account wrapping and the wrap string
   sf::Vector2f IndexToCoordinates(size_t index);
+
+  size_t IndexToDrawnIndex(size_t index);
 
   virtual void draw(sf::RenderTarget &target,
                     sf::RenderStates states) const override;
