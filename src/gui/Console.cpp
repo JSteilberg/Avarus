@@ -74,9 +74,9 @@ void Console::Update() {
   history_box_.Update();
   edit_box_.Update();
 
-  if (cursor_clock_.getElapsedTime().asSeconds() < .5f) {
+  if (cursor_clock_.getElapsedTime().asSeconds() > .5f) {
     blink_on_ = false;
-  } else if (cursor_clock_.getElapsedTime().asSeconds() > .5f) {
+  } else if (cursor_clock_.getElapsedTime().asSeconds() < .5f) {
     blink_on_ = true;
   }
   if (cursor_clock_.getElapsedTime().asSeconds() > 1.0f) {
@@ -141,6 +141,7 @@ void Console::MoveCursor(int amount) {
   if (cursor_pos_ < 0) {
     cursor_pos_ = 0;
   }
+  cursor_clock_.restart();
   has_update_ = true;
 }
 
