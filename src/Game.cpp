@@ -38,7 +38,7 @@ Game::Game()
       main_loop_(std::make_shared<MainLoop>(this)),
       console_loop_(std::make_shared<ConsoleLoop>(this)),
       dbg_overlay_(),
-      console_overlay_(lua_host_, 5, window_height_, 30, 20, 20),
+      console_overlay_(lua_host_, 5, window_height_, 50, 20, 17),
       state_list_(),
       new_states_(),
       remove_states_(),

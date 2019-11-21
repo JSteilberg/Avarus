@@ -54,16 +54,16 @@ Console::Console(LuaHost &lua_host, float x_pos, float y_pos,
   // Logger::Log(line_height_, INFO);
   edit_box_.SetDimensions(line_length, num_lines)
       .SetMargins(5.f, 15.f, 3.f, 0.f)
-      .SetWrapPrefix(">")
+      .SetWrapPrefix("> ")
       .SetFitHeightEnabled(true)
-      .SetBackgroundColor(sf::Color(90, 90, 90, 200))
+      .SetBackgroundColor(sf::Color(100, 135, 105, 200))
       .SetPosition(x_pos, y_pos - edit_box_.GetMaxBoxHeight());
 
   history_box_.SetDimensions(line_length, num_lines)
       .SetMargins(5.f, 15.f, 5.f, 5.f)
-      .SetWrapPrefix(">")
+      .SetWrapPrefix("> ")
       .SetFitHeightEnabled(false)
-      .SetBackgroundColor(sf::Color(90, 90, 90, 200))
+      .SetBackgroundColor(sf::Color(100, 135, 105, 200))
       .SetPosition(x_pos, y_pos - history_box_.GetMaxBoxHeight());
 
   cursor_clock_.restart();
@@ -118,9 +118,9 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
     if (shift_held) {
       edit_box_.AddText("\r", cursor_pos_);
     } else {
-      string text = edit_box_.GetText() + "\n";
+      string text = edit_box_.GetText();
       string output = lua_host_.Script(text);
-      history_box_.AddText(text);
+      history_box_.AddText(text + "\n");
       if (output != "") {
         history_box_.AddText(">> " + output + "\n");
       }
