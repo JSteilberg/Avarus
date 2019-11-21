@@ -22,6 +22,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 #include <iostream>
+
 #include "Constants.hpp"
 #include "Game.hpp"
 

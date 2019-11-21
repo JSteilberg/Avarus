@@ -44,7 +44,7 @@ class Player : public Entity {
 
   virtual int GetTypeId() const override;
 
- private:
+  // private:
   // Corresponds to the player "type"
   const int type_id_ = 50000;
 };

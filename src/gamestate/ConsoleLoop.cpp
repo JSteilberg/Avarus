@@ -14,7 +14,7 @@ version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License should accompany
 this program; if not, write to the Free Software Foundation, Inc.,
@@ -22,6 +22,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 #include "ConsoleLoop.hpp"
+
 #include <iostream>
 ConsoleLoop::ConsoleLoop(Game *game) : game_(game) {
   /*b.SetText(L"1234567890\n123456789012345678901234567890");

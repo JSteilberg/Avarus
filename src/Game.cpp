@@ -24,7 +24,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "Game.hpp"
 
 Game::Game()
-    : game_config_(consts::kConfigLocation),
+    : lua_host_(),
+      game_config_(consts::kConfigLocation),
       window_width_(game_config_.GetIntVar("window_width")),
       window_height_(game_config_.GetIntVar("window_height")),
       window_(sf::VideoMode(window_width_, window_height_),
@@ -37,7 +38,7 @@ Game::Game()
       main_loop_(std::make_shared<MainLoop>(this)),
       console_loop_(std::make_shared<ConsoleLoop>(this)),
       dbg_overlay_(),
-      console_overlay_(5, window_height_, 30, 20, 20),
+      console_overlay_(lua_host_, 5, window_height_, 30, 20, 20),
       state_list_(),
       new_states_(),
       remove_states_(),
@@ -50,6 +51,8 @@ Game::Game()
   dbg_overlay_.Set("ver", string("Avarus v") + consts::kGameVersion);
   dbg_overlay_.Set("thingsps", "0");
   dbg_overlay_.Set("pos", "player pos: 0,0");
+
+  lua_host_.GetState()["pl"] = &player_;
 }
 
 int Game::Start() {

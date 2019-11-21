@@ -25,6 +25,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define GAME_H
 
 #include <Box2D/Box2D.h>
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <list>
@@ -40,6 +41,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "Constants.hpp"
 #include "DebugOverlay.hpp"
 #include "GameState.hpp"
+#include "LuaHost.hpp"
 #include "MainLoop.hpp"
 #include "ObjRegister.hpp"
 #include "Parser.hpp"
@@ -72,6 +74,10 @@ class Game {
   virtual ~Game();
 
   // private:
+
+  // Manages execution of lua code
+  LuaHost lua_host_;
+
   // Holds config data for the game
   ConfigLoader game_config_;
 

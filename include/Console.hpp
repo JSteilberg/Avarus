@@ -24,12 +24,16 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
+#define SOL_ALL_SAFETIES_ON 1
+
 #include <SFML/Graphics.hpp>
 #include <list>
+#include <sol/sol.hpp>
 #include <string>
 #include <vector>
 
 #include "Logger.hpp"
+#include "LuaHost.hpp"
 #include "TextBox.hpp"
 
 class TextBox;
@@ -55,8 +59,8 @@ class Console : public sf::Drawable {
  public:
   // Creates a console at the specified location
   // Positioning starts from the bottom left corner.
-  Console(float x_pos, float y_pos, int line_length, int num_lines,
-          int font_size);
+  Console(LuaHost &lua_host_, float x_pos, float y_pos, int line_length,
+          int num_lines, int font_size);
 
   // Empty the edit buffer without completing it
   void ClearEditBuffer();
@@ -95,6 +99,8 @@ class Console : public sf::Drawable {
                     sf::RenderStates states) const override;
 
  private:
+  LuaHost &lua_host_;
+
   int x_pos_;
   int y_pos_;
 

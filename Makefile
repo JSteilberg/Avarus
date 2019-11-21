@@ -1,17 +1,18 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -g -std=c++1z -pedantic -Wstrict-aliasing -Weffc++
-INC = -I./include/ -I./json/
+INC = -I./include/ -I./lua_jit
 LIB = -L./lib/
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
 
 main: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 			Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \
-			ConsoleLoop.o EditableBuffer.o TextBox.o 
+			ConsoleLoop.o EditableBuffer.o TextBox.o LuaHost.o
 	$(CXX) $(CXXFLAGS) $(LIB) -o Avarus.out main.o \
 		Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 		Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \
-		ConsoleLoop.o EditableBuffer.o TextBox.o \
-		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D
+		ConsoleLoop.o EditableBuffer.o TextBox.o LuaHost.o \
+		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D -lluajit -pagezero_size 10000 -image_base 100000000
+
 
 tools: KeyCode.o Logger.o
 	$(CXX) $(CXXFLAGS) $(LIB) -o KeyCode.out KeyCode.o Logger.o \
@@ -73,6 +74,9 @@ EditableBuffer.o: src/gui/EditableBuffer.cpp include/EditableBuffer.hpp
 
 TextBox.o: src/gui/TextBox.cpp include/TextBox.hpp
 	$(COMP) src/gui/TextBox.cpp
+
+LuaHost.o: src/lua/LuaHost.cpp include/LuaHost.hpp
+	$(COMP) src/lua/LuaHost.cpp
 
 clean:
 	rm -rf *.o

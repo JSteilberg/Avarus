@@ -200,7 +200,11 @@ const string TextBox::GetText() const {
   // Remove all the auto continuation lines
   for (size_t i = 0; i < text_string_.length(); ++i) {
     if (text_string_[i] != auto_continuation_) {
-      ret_str.push_back(text_string_[i]);
+      if (text_string_[i] == user_continuation_) {
+        ret_str.push_back(newline_);
+      } else {
+        ret_str.push_back(text_string_[i]);
+      }
     }
   }
 

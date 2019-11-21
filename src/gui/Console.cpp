@@ -23,9 +23,10 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Console.hpp"
 
-Console::Console(float x_pos, float y_pos, int line_length = 80,
-                 int num_lines = 20, int font_size = 20)
-    : x_pos_(x_pos),
+Console::Console(LuaHost &lua_host, float x_pos, float y_pos,
+                 int line_length = 80, int num_lines = 20, int font_size = 20)
+    : lua_host_(lua_host),
+      x_pos_(x_pos),
       y_pos_(y_pos),
       line_length_(line_length),
       line_height_(0),
@@ -113,12 +114,16 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
       edit_box_.RemoveFrom(edit_box_.GetText().size() - 1, 1);
       cursor_pos_--;
     }
-  } else if (unicode == sf::String("\r")) {
+  } else if (unicode == sf::String("\r") || unicode == sf::String("\n")) {
     if (shift_held) {
       edit_box_.AddText("\r", cursor_pos_);
     } else {
       string text = edit_box_.GetText() + "\n";
+      string output = lua_host_.Script(text);
       history_box_.AddText(text);
+      if (output != "") {
+        history_box_.AddText(">> " + output + "\n");
+      }
       edit_box_.Clear();
       edit_box_.ReflowText();
       cursor_pos_ = -1;

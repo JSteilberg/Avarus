@@ -25,7 +25,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define PARSER_H
 
 #include <fstream>
-#include <json.hpp>
+#include <json/json.hpp>
 #include <map>
 #include <sstream>
 #include <stdexcept>
