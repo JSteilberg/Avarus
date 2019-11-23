@@ -47,3 +47,4 @@ bin/
 # Libs
 include/Box2d/
 include/SFML/
+lua_jit/
