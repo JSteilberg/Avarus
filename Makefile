@@ -4,7 +4,7 @@ INC = -I./include/ -I./lua_jit
 LIB = -L./lib/
 COMP = $(CXX) $(CXXFLAGS) $(INC) -c
 
-main: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
+macos: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 			Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \
 			ConsoleLoop.o EditableBuffer.o TextBox.o LuaHost.o
 	$(CXX) $(CXXFLAGS) $(LIB) -o Avarus.out main.o \
@@ -12,6 +12,15 @@ main: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 		Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \
 		ConsoleLoop.o EditableBuffer.o TextBox.o LuaHost.o \
 		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D -lluajit -pagezero_size 10000 -image_base 100000000
+
+linux: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
+			Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \
+			ConsoleLoop.o EditableBuffer.o TextBox.o LuaHost.o
+	$(CXX) $(CXXFLAGS) $(LIB) -o Avarus.out main.o \
+		Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
+		Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \
+		ConsoleLoop.o EditableBuffer.o TextBox.o LuaHost.o \
+		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D -lluajit -ldl
 
 
 tools: KeyCode.o Logger.o
