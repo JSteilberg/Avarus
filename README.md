@@ -7,8 +7,9 @@ The aim is to create something along the lines of a space game, complete with pl
 Naturally, all these instructions begin with _cloning the repository_. `git clone https://github.com/JSteilberg/Avarus.git`.
 ### GNU/Linux
 1. Run `sudo apt-get install libsfml-dev libbox2d-dev`
-2. Install Lua JIT (or just Lua, but JIT should be better) http://luajit.org/install.html. Move the headers into `./lua_jit/`, and if necessary move the lib file (`libluajit.a`) into `./lib`.
-3. Enter the repo, run `make`, and then run `./Avarus.out`
+2. Unfortunately the libsfml-dev library may not be new enough for Avarus. Run `apt show libsfml-dev`, and if the version is less than 2.5 then you have to install by hand. To do so, follow the instructions on https://www.sfml-dev.org/tutorials/2.5/start-linux.php (option 3 most likely).
+3. Install Lua JIT (or just Lua, but JIT should be better) http://luajit.org/install.html. Move the headers into `./lua_jit/`, and if necessary move the lib file (`libluajit.a`) into `./lib`.
+4. Enter the repo, run `make`, and then run `./Avarus.out`
 
 ### Windows
 Should be possible<sup>[citation needed]</sup>, I did it around February 2019.
@@ -25,7 +26,7 @@ Follow the instructions for https://www.sfml-dev.org/tutorials/2.5/start-cb.php 
     * Standalone method: Run `brew cask install xquartz` then `brew install freeglut`.
     * Xcode method: Just install Xcode https://developer.apple.com/download.
 3. Now you need to build Box2D. Follow the instructions on https://www.iforce2d.net/b2dtut/setup-osx. Then move the internal `Box2D` folder (the one that has `Box2D.h` within it) into `Avarus/include`
-4. Now you need to install SFML. If you're using Xcode, follow the full instructions on https://www.sfml-dev.org/tutorials/2.2/start-osx.php. Otherwise just do the 'Installing SFML' section. Then find the folder called `include` within the downloaded archive, and move the `SFML` folder within that folder into `Avarus/include`.
+4. Now you need to install SFML. If you're using Xcode, follow the full instructions on https://www.sfml-dev.org/tutorials/2.5/start-osx.php. Otherwise just do the 'Installing SFML' section. Then find the folder called `include` within the downloaded archive, and move the `SFML` folder within that folder into `Avarus/include`.
 5. Install Lua JIT (or just Lua, but JIT should be better) http://luajit.org/install.html. Move the headers into `./lua_jit/`, and if necessary move the lib file (`libluajit.a`) into `./lib`.
 6. Now you should be able to run `make` inside the `Avarus` folder. Then within that folder run `./Avarus.out`
 
@@ -33,6 +34,11 @@ Follow the instructions for https://www.sfml-dev.org/tutorials/2.5/start-cb.php 
 Inspiration taken (so far) from: 
 * Terraria lmao
 
+## Official dependencies
+* SFML 2.5+
+* Box2D 2.3+
+* Lua JIT 2.0+
+* OpenGL
 
 ## TODO: 
 * ~~Add a debugging overlay~~

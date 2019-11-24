@@ -13,7 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-Wall" />
-					<Add option="-std=c++0x" />
+					<Add option="-std=c++1z" />
 					<Add option="-m64" />
 					<Add option="-g" />
 				</Compiler>
@@ -37,14 +37,26 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wredundant-decls" />
+			<Add option="-Wundef" />
+			<Add option="-Wfloat-equal" />
+			<Add option="-Wswitch-default" />
+			<Add option="-Wmain" />
+			<Add option="-pedantic" />
+			<Add option="-Wextra" />
 			<Add option="-Wall" />
-			<Add directory="/home/jack/Projects/Avarus/include" />
+			<Add option="-std=c++1z" />
+			<Add directory="include" />
+			<Add directory="lua_jit" />
 		</Compiler>
 		<Linker>
 			<Add library="sfml-graphics" />
 			<Add library="sfml-window" />
 			<Add library="sfml-system" />
 			<Add library="Box2D" />
+			<Add library="luajit" />
+			<Add library="dl" />
+			<Add directory="lib" />
 		</Linker>
 		<Unit filename="include/Atlas.hpp" />
 		<Unit filename="include/Block.hpp" />
@@ -62,12 +74,20 @@
 		<Unit filename="include/Generator.hpp" />
 		<Unit filename="include/IdRegister.hpp" />
 		<Unit filename="include/Logger.hpp" />
+		<Unit filename="include/LuaHost.hpp" />
 		<Unit filename="include/MainLoop.hpp" />
 		<Unit filename="include/ObjRegister.hpp" />
 		<Unit filename="include/Parser.hpp" />
 		<Unit filename="include/Player.hpp" />
 		<Unit filename="include/TextBox.hpp" />
-		<Unit filename="json/json.hpp" />
+		<Unit filename="include/json/json.hpp" />
+		<Unit filename="include/sol/sol.hpp" />
+		<Unit filename="lua_jit/lauxlib.h" />
+		<Unit filename="lua_jit/lua.h" />
+		<Unit filename="lua_jit/lua.hpp" />
+		<Unit filename="lua_jit/luaconf.h" />
+		<Unit filename="lua_jit/luajit.h" />
+		<Unit filename="lua_jit/lualib.h" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/IdRegister.cpp" />
 		<Unit filename="src/Logger.cpp" />
@@ -80,6 +100,7 @@
 		<Unit filename="src/gui/DebugOverlay.cpp" />
 		<Unit filename="src/gui/EditableBuffer.cpp" />
 		<Unit filename="src/gui/TextBox.cpp" />
+		<Unit filename="src/lua/LuaHost.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/parser/ConfigLoader.cpp" />
 		<Unit filename="src/parser/Parser.cpp" />
