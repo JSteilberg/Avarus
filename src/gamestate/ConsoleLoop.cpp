@@ -82,8 +82,7 @@ void ConsoleLoop::HandleKeyEvents(sf::Window &window) {
         case sf::Keyboard::V:
           if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
               sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)) {
-            // I'm using an old version of sfml without clipboar, ree
-            // game_->console_overlay_.Write(sf::Clipboard::getString());
+            game_->console_overlay_.Write(sf::Clipboard::getString());
           }
           break;
 

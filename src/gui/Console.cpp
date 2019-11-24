@@ -110,10 +110,16 @@ void Console::SetPosition(float x_pos, float y_pos) {
 
 void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
   if (unicode == sf::String("\b")) {
-    if (edit_box_.GetText().size() > 0) {
-      edit_box_.RemoveFrom(edit_box_.GetText().size() - 1, 1);
+    if (edit_box_.GetText().size() > 0 && cursor_pos_ > 0) {
+      edit_box_.RemoveFrom(cursor_pos_ - 1, 1);
       cursor_pos_--;
     }
+  } else if (unicode == sf::String((wchar_t)127)) {
+    if (edit_box_.GetText().size() > 0 &&
+        cursor_pos_ < edit_box_.GetText().size()) {
+      edit_box_.RemoveFrom(cursor_pos_, 1);
+    }
+
   } else if (unicode == sf::String("\r") || unicode == sf::String("\n")) {
     if (shift_held) {
       edit_box_.AddText("\r", cursor_pos_);

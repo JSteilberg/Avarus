@@ -42,6 +42,7 @@ TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
       wrap_prefix_(wrap_prefix),
       flow_direction_(flow_direction),
       text_string_(""),
+      raw_text_string_(""),
       text_draw_obj_(),
       background_(),
       current_num_lines_(1),
@@ -132,7 +133,7 @@ void TextBox::ReflowText() {
     current_num_lines_ = max_lines_;
   }
 
-  text_string_ = flowed_string;
+  raw_text_string_ = flowed_string;
   ForceUpdate();
 }
 
@@ -140,6 +141,10 @@ void TextBox::RemoveFrom(size_t position, size_t count) {
   // string new_text = text_string_;
   // new_text.erase(position, count);
   if (position >= text_string_.size()) {
+    Logger::Log("Tried to remove from position " + std::to_string(position) +
+                    ", but text size is size " +
+                    std::to_string(text_string_.size()),
+                MED);
     return;
   }
   text_string_ = text_string_.erase(position, count);
@@ -154,6 +159,7 @@ void TextBox::Update() {
 
 void TextBox::ForceUpdate() {
   has_update_ = false;
+  Logger::Log("Update to textbox", INFO);
 
   text_draw_obj_.setFont(font_);
   text_draw_obj_.setCharacterSize(font_size_);
@@ -172,11 +178,10 @@ void TextBox::ForceUpdate() {
 }
 
 void TextBox::AddText(string add_string, int pos) {
-  string new_str = GetText();
   size_t add_pos;
   if (pos < 0) {
-    if ((int)new_str.size() + pos >= 0) {
-      add_pos = new_str.size() + pos + 1;
+    if ((int)text_string_.size() + pos >= 0) {
+      add_pos = text_string_.size() + pos + 1;
     } else {
       add_pos = 0;
     }
@@ -184,7 +189,7 @@ void TextBox::AddText(string add_string, int pos) {
     add_pos = pos;
   }
   // ForceUpdate();
-  SetText(new_str.insert(add_pos, add_string));
+  SetText(text_string_.insert(add_pos, add_string));
 }
 
 void TextBox::Clear() {
@@ -194,6 +199,9 @@ void TextBox::Clear() {
 }
 
 const string TextBox::GetText() const {
+  return text_string_;
+
+  // NO
   string ret_str;
   ret_str.reserve(text_string_.length());
 
@@ -213,18 +221,18 @@ const string TextBox::GetText() const {
 
 string TextBox::GetDisplayedText() const {
   string ret_str;
-  ret_str.reserve(text_string_.length() * 2);
+  ret_str.reserve(raw_text_string_.length() * 2);
 
   // Replace all new line types with \n
-  for (size_t i = 0; i < text_string_.length(); ++i) {
-    if (text_string_[i] == auto_continuation_) {
+  for (size_t i = 0; i < raw_text_string_.length(); ++i) {
+    if (raw_text_string_[i] == auto_continuation_) {
       ret_str += newline_;
       ret_str += wrap_prefix_;
-    } else if (text_string_[i] == user_continuation_ ||
-               text_string_[i] == newline_) {
+    } else if (raw_text_string_[i] == user_continuation_ ||
+               raw_text_string_[i] == newline_) {
       ret_str += newline_;
     } else {
-      ret_str += text_string_[i];
+      ret_str += raw_text_string_[i];
     }
   }
 
@@ -257,8 +265,8 @@ sf::Vector2f TextBox::IndexToCoordinates(size_t index) {
 size_t TextBox::IndexToDrawnIndex(size_t index) {
   size_t char_counter = 0;
   for (size_t i = 0; i < index; ++i) {
-    if (text_string_[i + 1] == auto_continuation_) {
-      // text_string_[i] == auto_continuation_) {
+    if (raw_text_string_[i + 1] == auto_continuation_) {
+      // raw_text_string_[i] == auto_continuation_) {
       // std::cout << wrap_prefix_.length() + 1 << std::endl;
       char_counter += (wrap_prefix_.length() + 1);
       index++;

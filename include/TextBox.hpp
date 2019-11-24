@@ -161,6 +161,9 @@ class TextBox : public sf::Drawable {
   // Actual text, corresponds exactly to what the user entered
   string text_string_;
 
+  // Text with auto newlines
+  string raw_text_string_;
+
   // Text with automatic line wrapping
   // string displayed_text_string_;
 
