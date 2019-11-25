@@ -49,6 +49,30 @@ const int kPositionIterations = 2;
 // Location of configuration file containing things like graphics params
 const string kConfigLocation = "./res/cfg/config.json";
 
+// ASCII constants
+  const char kSOH = '\x01';
+  const char kSTX = '\x02';
+  const char kETX = '\x03';
+  const char kEOT = '\x04';
+  const char kENQ = '\x05';
+  const char kACK = '\x06';
+  const char kBEL = '\x07';
+  const char kBS = '\x08';
+  const char kHT = '\x09';
+  const char kLF = '\x0a';
+  const char kVT = '\x0b';
+  const char kFF = '\x0c';
+  const char kCR = '\x0d';
+  const char kSO = '\x0e';
+
+  const char kEscape = '\x1b';
+  const char kDelete = '\x7f';
+  const char kBackspace = kBS;
+  const char kNewline = '\n';
+  const char kCarriageReturn = kCR;
+  const char kTab = kHT;
+
+
 }  // namespace consts
 
 #endif  // CONSTANTS_H

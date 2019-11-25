@@ -55,54 +55,70 @@ void ConsoleLoop::Draw(sf::RenderWindow &window) {
 
 void ConsoleLoop::HandleKeyEvents(sf::Window &window) {
   sf::Event event;
-
+  bool ctrl_pressed = false;
   while (window.pollEvent(event)) {
     if (event.type == sf::Event::Closed) {
       window.close();
     } else if (event.type == sf::Event::KeyPressed) {
-      switch (event.key.code) {
-        case sf::Keyboard::F3:
-          game_->dbg_overlay_.Toggle();
-
-          // Ya know, sometimes people rail on ternary if statements.
-          // Everything in moderation.
-          Logger::Log(string("Debug menu turned ") +
-                          (game_->dbg_overlay_.IsActive() ? "on" : "off"),
-                      INFO);
-          break;
-
-        case sf::Keyboard::Escape:
-          //      case sf::Keyboard::BackSlash:
-          // Logger::Log(string("Console turned off"), INFO);
-          game_->window_.setKeyRepeatEnabled(false);
-          game_->RemoveState(game_->console_loop_);
-          return;
-          break;
-
-        case sf::Keyboard::V:
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
-              sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)) {
-            game_->console_overlay_.Write(sf::Clipboard::getString());
-          }
-          break;
-
-        case sf::Keyboard::Left:
-          game_->console_overlay_.MoveCursor(-1);
-          break;
-
-        case sf::Keyboard::Right:
-          game_->console_overlay_.MoveCursor(1);
-          break;
-
-        default:
-          break;
+      if (event.key.control) {
+        HandleControlEvents(event.key.code);
+        ctrl_pressed = true;
+      } else {
+        HandleButtonEvents(event.key.code);
       }
-    } else if (event.type == sf::Event::TextEntered) {
+    } else if (event.type == sf::Event::TextEntered && !ctrl_pressed){
       game_->console_overlay_.WriteCharacter(
           event.text.unicode,
           (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
            sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)));
+    } else {
+      ctrl_pressed = false;
     }
+  }
+}
+
+void ConsoleLoop::HandleControlEvents(sf::Keyboard::Key keycode) {
+  switch (keycode) {
+    case sf::Keyboard::V:
+        game_->console_overlay_.Write(sf::Clipboard::getString());
+      break;
+    case sf::Keyboard::L:
+      game_->console_overlay_.Write("\n\n\n\n\n\n");
+      break;
+    default:
+      break;
+  }
+}
+
+void ConsoleLoop::HandleButtonEvents(sf::Keyboard::Key keycode) {
+  switch (keycode) {
+    case sf::Keyboard::F3:
+      game_->dbg_overlay_.Toggle();
+
+      // Ya know, sometimes people rail on ternary if statements.
+      // Everything in moderation.
+      Logger::Log(string("Debug menu turned ") +
+                      (game_->dbg_overlay_.IsActive() ? "on" : "off"),
+                  INFO);
+      break;
+
+    case sf::Keyboard::Escape:
+      //      case sf::Keyboard::BackSlash:
+      // Logger::Log(string("Console turned off"), INFO);
+      game_->window_.setKeyRepeatEnabled(false);
+      game_->RemoveState(game_->console_loop_);
+      return;
+      break;
+    case sf::Keyboard::Left:
+      game_->console_overlay_.MoveCursor(-1);
+      break;
+
+    case sf::Keyboard::Right:
+      game_->console_overlay_.MoveCursor(1);
+      break;
+
+    default:
+      break;
   }
 }
 

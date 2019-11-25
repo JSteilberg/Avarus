@@ -52,6 +52,10 @@ class ConsoleLoop : public GameState {
   virtual ~ConsoleLoop();
 
  private:
+  void HandleControlEvents(sf::Keyboard::Key keycode);
+
+  void HandleButtonEvents(sf::Keyboard::Key keycode);
+
   Game *game_;
 };
 

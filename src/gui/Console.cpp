@@ -110,18 +110,26 @@ void Console::SetPosition(float x_pos, float y_pos) {
 
 void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
   Logger::Log(unicode, INFO);
-  if (unicode == sf::String("\b")) {
+  switch(unicode) {
+  case consts::kBackspace:
     if (edit_box_.GetText().size() > 0 && cursor_pos_ > 0) {
       edit_box_.RemoveFrom(cursor_pos_ - 1, 1);
       cursor_pos_--;
     }
-  } else if (unicode == sf::String((char)127)) {
+    break;
+
+  case consts::kDelete:
     if (edit_box_.GetText().size() > 0 &&
         cursor_pos_ < edit_box_.GetText().size()) {
       edit_box_.RemoveFrom(cursor_pos_, 1);
     }
+    break;
 
-  } else if (unicode == sf::String("\r") || unicode == sf::String("\n")) {
+  case consts::kEscape:
+    break;
+
+  case consts::kCarriageReturn:
+  case consts::kNewline:
     if (shift_held) {
       edit_box_.AddText("\r", cursor_pos_);
     } else {
@@ -136,12 +144,19 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
       cursor_pos_ = -1;
     }
     cursor_pos_++;
-  } else if (unicode == sf::String("\t")) {
+    break;
+
+  case consts::kTab:
     edit_box_.AddText("  ", cursor_pos_);
     cursor_pos_ += 2;
-  } else {
+    break;
+
+  default:
     edit_box_.AddText(sf::String(unicode).toAnsiString(), cursor_pos_);
     cursor_pos_++;
+    break;
+
+
   }
   has_update_ = true;
 }
@@ -166,6 +181,7 @@ void Console::MoveCursor(int amount) {
 }
 
 void Console::Write(sf::String str) {
-  edit_box_.AddText(str.toAnsiString());
+  edit_box_.AddText(str.toAnsiString(), cursor_pos_);
+  cursor_pos_ += str.getSize();
   has_update_ = true;
 }
