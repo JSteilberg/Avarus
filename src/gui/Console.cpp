@@ -109,12 +109,13 @@ void Console::SetPosition(float x_pos, float y_pos) {
 }
 
 void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
+  Logger::Log(unicode, INFO);
   if (unicode == sf::String("\b")) {
     if (edit_box_.GetText().size() > 0 && cursor_pos_ > 0) {
       edit_box_.RemoveFrom(cursor_pos_ - 1, 1);
       cursor_pos_--;
     }
-  } else if (unicode == sf::String((wchar_t)127)) {
+  } else if (unicode == sf::String((char)127)) {
     if (edit_box_.GetText().size() > 0 &&
         cursor_pos_ < edit_box_.GetText().size()) {
       edit_box_.RemoveFrom(cursor_pos_, 1);
@@ -146,18 +147,17 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
 }
 
 void Console::MoveCursor(int amount) {
-  cursor_pos_ += amount;
-  if (cursor_pos_ < 0) {
+  if (amount < 0 && amount > -999999 && (size_t)-amount > cursor_pos_) {
+    // Bounds checking
     cursor_pos_ = 0;
-  }
-  size_t edit_box_len = edit_box_.GetText().length();
-  int edit_box_len_int = 0;
-  if (edit_box_len < 999999) {
-    edit_box_len_int = (int)edit_box_len;
+  } else {
+    cursor_pos_ += amount;
   }
 
-  if (cursor_pos_ > edit_box_len_int) {
-    cursor_pos_ = edit_box_len_int;
+  size_t edit_box_len = edit_box_.GetText().length();
+
+  if (cursor_pos_ > edit_box_len) {
+    cursor_pos_ = edit_box_len;
   }
 
   cursor_clock_.restart();

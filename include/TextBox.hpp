@@ -25,13 +25,12 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #define TEXTBOX_H
 
 #include <SFML/Graphics.hpp>
-#include <algorithm>
 #include <string>
 #include <vector>
 
 #include "Logger.hpp"
+#include "StringConstants.hpp"
 
-using std::string;
 using std::vector;
 
 // Direction to move when text
@@ -44,27 +43,27 @@ enum FlowDirection { FROM_BOTTOM, FROM_TOP };
 // instant message box and instead of sending it creates a newline). Internally,
 // \a represents an automatic line continuation created by typing more than
 // max_line_length characters
+template <typename TString>
 class TextBox : public sf::Drawable {
  public:
   TextBox(const sf::Font &font, int font_size = 20, size_t max_line_length = 80,
           size_t max_lines = 20, sf::Color background_color = sf::Color::White,
           sf::Color text_color = sf::Color::Black, bool line_wrap = true,
-          bool fit_height = false, string wrap_prefix = "",
-          FlowDirection flow_direction = FROM_BOTTOM);
+          bool fit_height = false, FlowDirection flow_direction = FROM_BOTTOM);
 
   void Update();
 
-  void SetText(string set_string);
+  void SetText(TString set_string);
 
-  void AddText(string add_string, int pos = -1);
+  void AddText(TString add_string, int pos = -1);
 
   void Clear();
 
   void RemoveFrom(size_t position, size_t count = 1);
 
-  const string GetText() const;
+  const TString GetText() const;
 
-  string GetDisplayedText() const;
+  TString GetDisplayedText() const;
 
   const sf::Text &GetTextDrawObject() const;
 
@@ -80,7 +79,7 @@ class TextBox : public sf::Drawable {
 
   TextBox &SetFitHeightEnabled(bool fit_height_enabled);
 
-  TextBox &SetWrapPrefix(string new_wrap_prefix);
+  TextBox &SetWrapPrefix(TString new_wrap_prefix);
 
   TextBox &SetMargins(float left_margin, float right_margin,
                       float bottom_margin, float top_margin);
@@ -123,6 +122,8 @@ class TextBox : public sf::Drawable {
   // Font to draw text with
   const sf::Font &font_;
 
+  const StringConstants<TString> sc_;
+
   // Font size
   int font_size_;
 
@@ -153,19 +154,16 @@ class TextBox : public sf::Drawable {
   bool fit_height_;
 
   // Prefix for wrapped lines
-  string wrap_prefix_;
+  TString wrap_prefix_;
 
   // Direction to flow multiple lines of text
   FlowDirection flow_direction_;
 
   // Actual text, corresponds exactly to what the user entered
-  string text_string_;
+  TString text_string_;
 
   // Text with auto newlines
-  string raw_text_string_;
-
-  // Text with automatic line wrapping
-  // string displayed_text_string_;
+  TString raw_text_string_;
 
   // Actual drawable object holding drawn text
   sf::Text text_draw_obj_;
@@ -173,15 +171,12 @@ class TextBox : public sf::Drawable {
   // Background for the text
   sf::RectangleShape background_;
 
-  // Current number of lines in displayed_text_string_ (!!NOT!! text_string_)
+  // Current number of lines in raw_text_string_ (!!NOT!! text_string_)
   size_t current_num_lines_;
 
   // Internal, flag that is set if an update needs to be carried out
   bool has_update_;
 
-  const char newline_ = '\n';
-  const char user_continuation_ = '\r';
-  const char auto_continuation_ = '\a';
 };
 
 #endif  // TEXTBOX_H

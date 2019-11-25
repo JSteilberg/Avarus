@@ -36,8 +36,6 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include "LuaHost.hpp"
 #include "TextBox.hpp"
 
-class TextBox;
-
 using std::list;
 using std::string;
 using std::to_string;
@@ -99,6 +97,7 @@ class Console : public sf::Drawable {
                     sf::RenderStates states) const override;
 
  private:
+  // Used to interpret Lua typed into console
   LuaHost &lua_host_;
 
   int x_pos_;
@@ -115,15 +114,20 @@ class Console : public sf::Drawable {
   // Font to draw the debug overlay with
   sf::Font font_;
 
-  TextBox history_box_;
+  // Box holding already entered text and responses from Lua
+  TextBox<string> history_box_;
 
-  TextBox edit_box_;
+  // Holds the text currently being typed
+  TextBox<string> edit_box_;
 
+  // Cursor underline that gets drawn to screen
   sf::Text cursor_;
 
+  // Used to time the cursor blink
   sf::Clock cursor_clock_;
 
-  int cursor_pos_;
+  // Holds the position of the cursor in the edit box
+  size_t cursor_pos_;
 
   bool blink_on_;
 };

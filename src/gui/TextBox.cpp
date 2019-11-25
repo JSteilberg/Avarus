@@ -23,11 +23,13 @@ this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "TextBox.hpp"
 
-TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
+template <typename TString>
+TextBox<TString>::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
                  size_t max_lines, sf::Color background_color,
                  sf::Color text_color, bool line_wrap, bool fit_height,
-                 string wrap_prefix, FlowDirection flow_direction)
+                 FlowDirection flow_direction)
     : font_(font),
+      sc_(),
       font_size_(font_size),
       pos_x_(0),
       pos_y_(0),
@@ -39,10 +41,10 @@ TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
       max_lines_(max_lines),
       line_wrap_(line_wrap),
       fit_height_(fit_height),
-      wrap_prefix_(wrap_prefix),
+      wrap_prefix_(),
       flow_direction_(flow_direction),
-      text_string_(""),
-      raw_text_string_(""),
+      text_string_(),
+      raw_text_string_(),
       text_draw_obj_(),
       background_(),
       current_num_lines_(1),
@@ -52,13 +54,15 @@ TextBox::TextBox(const sf::Font &font, int font_size, size_t max_line_length,
   background_.setFillColor(background_color);
 }
 
-void TextBox::SetText(string set_string) {
+template <typename TString>
+void TextBox<TString>::SetText(TString set_string) {
   Clear();
   text_string_ = set_string;
   ReflowText();
 }
 
-void TextBox::ReflowText() {
+template <typename TString>
+void TextBox<TString>::ReflowText() {
   // REFLOW TEXT BEHAVIOR::
   //
   // The text consists of text characters, along with the special characters.
@@ -87,14 +91,14 @@ void TextBox::ReflowText() {
 
   current_num_lines_ = 1;
 
-  string flowed_string;
+  TString flowed_string;
   int line_length_counter = 0;
   int current_max_line_length = max_line_length;
 
   for (size_t i = 0; i < text_string_.length(); ++i) {
-    const char chr = text_string_[i];
+    const wchar_t chr = text_string_[i];
 
-    if (chr == newline_ || chr == user_continuation_) {
+    if (chr == sc_.newline_ || chr == sc_.user_continuation_) {
       // 1 and 2 - Both result in passing on the char and resetting the line
       // length counter, as well as setting the max line length to full
       current_max_line_length = max_line_length;
@@ -103,11 +107,11 @@ void TextBox::ReflowText() {
       current_num_lines_++;
       line_length_counter = 0;
 
-    } else if (chr == auto_continuation_) {
+    } else if (chr == sc_.auto_continuation_) {
       continue;
     } else if (line_length_counter >= current_max_line_length) {
       // If our line was too long, start an auto continuation;
-      flowed_string += auto_continuation_;
+      flowed_string += sc_.auto_continuation_;
       flowed_string += chr;
 
       // Also remember the length of this line is reduced
@@ -137,7 +141,8 @@ void TextBox::ReflowText() {
   ForceUpdate();
 }
 
-void TextBox::RemoveFrom(size_t position, size_t count) {
+template <typename TString>
+void TextBox<TString>::RemoveFrom(size_t position, size_t count) {
   // string new_text = text_string_;
   // new_text.erase(position, count);
   if (position >= text_string_.size()) {
@@ -151,13 +156,15 @@ void TextBox::RemoveFrom(size_t position, size_t count) {
   ReflowText();  // Already forces an update
 }
 
-void TextBox::Update() {
+template <typename TString>
+void TextBox<TString>::Update() {
   if (has_update_) {
     ForceUpdate();
   }
 }
 
-void TextBox::ForceUpdate() {
+template <typename TString>
+void TextBox<TString>::ForceUpdate() {
   has_update_ = false;
   Logger::Log("Update to textbox", INFO);
 
@@ -177,7 +184,8 @@ void TextBox::ForceUpdate() {
   background_.setSize(sf::Vector2f(GetBoxWidth(), GetBoxHeight()));
 }
 
-void TextBox::AddText(string add_string, int pos) {
+template <typename TString>
+void TextBox<TString>::AddText(TString add_string, int pos) {
   size_t add_pos;
   if (pos < 0) {
     if ((int)text_string_.size() + pos >= 0) {
@@ -192,45 +200,31 @@ void TextBox::AddText(string add_string, int pos) {
   SetText(text_string_.insert(add_pos, add_string));
 }
 
-void TextBox::Clear() {
-  text_string_ = "";
+template <typename TString>
+void TextBox<TString>::Clear() {
+  text_string_.clear();
   // text_draw_obj_.setString("");
   ForceUpdate();
 }
 
-const string TextBox::GetText() const {
+template <typename TString>
+const TString TextBox<TString>::GetText() const {
   return text_string_;
-
-  // NO
-  string ret_str;
-  ret_str.reserve(text_string_.length());
-
-  // Remove all the auto continuation lines
-  for (size_t i = 0; i < text_string_.length(); ++i) {
-    if (text_string_[i] != auto_continuation_) {
-      if (text_string_[i] == user_continuation_) {
-        ret_str.push_back(newline_);
-      } else {
-        ret_str.push_back(text_string_[i]);
-      }
-    }
-  }
-
-  return ret_str;
 }
 
-string TextBox::GetDisplayedText() const {
-  string ret_str;
+template <typename TString>
+TString TextBox<TString>::GetDisplayedText() const {
+  TString ret_str;
   ret_str.reserve(raw_text_string_.length() * 2);
 
   // Replace all new line types with \n
   for (size_t i = 0; i < raw_text_string_.length(); ++i) {
-    if (raw_text_string_[i] == auto_continuation_) {
-      ret_str += newline_;
+    if (raw_text_string_[i] == sc_.auto_continuation_) {
+      ret_str += sc_.newline_;
       ret_str += wrap_prefix_;
-    } else if (raw_text_string_[i] == user_continuation_ ||
-               raw_text_string_[i] == newline_) {
-      ret_str += newline_;
+    } else if (raw_text_string_[i] == sc_.user_continuation_ ||
+               raw_text_string_[i] == sc_.newline_) {
+      ret_str += sc_.newline_;
     } else {
       ret_str += raw_text_string_[i];
     }
@@ -241,7 +235,7 @@ string TextBox::GetDisplayedText() const {
   newline_positions.push_back(0);
 
   for (size_t i = 0; i < ret_str.length(); ++i) {
-    if (ret_str[i] == newline_) {
+    if (ret_str[i] == sc_.newline_) {
       newline_positions.push_back(i);
     }
   }
@@ -254,7 +248,8 @@ string TextBox::GetDisplayedText() const {
   return ret_str;
 }
 
-sf::Vector2f TextBox::IndexToCoordinates(size_t index) {
+template <typename TString>
+sf::Vector2f TextBox<TString>::IndexToCoordinates(size_t index) {
   // const float char_width = font_.getGlyph(L'_', font_size_, false).advance;
   // sf::Vector2f orig_pos = text_draw_obj_.FindCharacterPos(index);
 
@@ -262,11 +257,12 @@ sf::Vector2f TextBox::IndexToCoordinates(size_t index) {
   // return text_draw_obj_.findCharacterPos(index);
 }
 
-size_t TextBox::IndexToDrawnIndex(size_t index) {
+template <typename TString>
+size_t TextBox<TString>::IndexToDrawnIndex(size_t index) {
   size_t char_counter = 0;
   for (size_t i = 0; i < index; ++i) {
-    if (raw_text_string_[i + 1] == auto_continuation_) {
-      // raw_text_string_[i] == auto_continuation_) {
+    if (raw_text_string_[i + 1] == sc_.auto_continuation_) {
+      // raw_text_string_[i] == sc_.auto_continuation_) {
       // std::cout << wrap_prefix_.length() + 1 << std::endl;
       char_counter += (wrap_prefix_.length() + 1);
       index++;
@@ -277,57 +273,67 @@ size_t TextBox::IndexToDrawnIndex(size_t index) {
   return char_counter;
 }
 
-const sf::Text &TextBox::GetTextDrawObject() const { return text_draw_obj_; }
+template <typename TString>
+const sf::Text &TextBox<TString>::GetTextDrawObject() const { return text_draw_obj_; }
 
-void TextBox::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+template <typename TString>
+void TextBox<TString>::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   target.draw(background_, states);
   target.draw(text_draw_obj_, states);
 }
 
-TextBox &TextBox::SetPosition(float pos_x, float pos_y) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetPosition(float pos_x, float pos_y) {
   pos_x_ = pos_x;
   pos_y_ = pos_y;
   ForceUpdate();
   return *this;
 }
 
-TextBox &TextBox::SetFontSize(int new_font_size) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetFontSize(int new_font_size) {
   font_size_ = new_font_size;
   ForceUpdate();
   return *this;
 }
 
-TextBox &TextBox::SetBackgroundColor(sf::Color new_color) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetBackgroundColor(sf::Color new_color) {
   background_.setFillColor(new_color);
   ForceUpdate();
   return *this;
 }
 
-TextBox &TextBox::SetTextColor(sf::Color new_color) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetTextColor(sf::Color new_color) {
   text_draw_obj_.setFillColor(new_color);
   ForceUpdate();
   return *this;
 }
 
-TextBox &TextBox::SetLineWrapEnabled(bool line_wrap_enabled) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetLineWrapEnabled(bool line_wrap_enabled) {
   line_wrap_ = line_wrap_enabled;
   ForceUpdate();
   return *this;
 }
 
-TextBox &TextBox::SetFitHeightEnabled(bool fit_height_enabled) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetFitHeightEnabled(bool fit_height_enabled) {
   fit_height_ = fit_height_enabled;
   ForceUpdate();
   return *this;
 }
 
-TextBox &TextBox::SetWrapPrefix(string new_wrap_prefix) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetWrapPrefix(TString new_wrap_prefix) {
   wrap_prefix_ = new_wrap_prefix;
   ForceUpdate();
   return *this;
 }
 
-TextBox &TextBox::SetMargins(float left_margin, float right_margin,
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetMargins(float left_margin, float right_margin,
                              float bottom_margin, float top_margin) {
   left_margin_ = left_margin;
   right_margin_ = right_margin;
@@ -337,24 +343,28 @@ TextBox &TextBox::SetMargins(float left_margin, float right_margin,
   return *this;
 }
 
-TextBox &TextBox::SetDimensions(size_t max_line_length, size_t max_lines) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetDimensions(size_t max_line_length, size_t max_lines) {
   max_line_length_ = max_line_length;
   max_lines_ = max_lines;
   ForceUpdate();
   return *this;
 }
 
-TextBox &TextBox::SetFlowDirection(FlowDirection flow_direction) {
+template <typename TString>
+TextBox<TString> &TextBox<TString>::SetFlowDirection(FlowDirection flow_direction) {
   flow_direction_ = flow_direction;
   ForceUpdate();
   return *this;
 }
 
-float TextBox::GetBoxWidth() {
+template <typename TString>
+float TextBox<TString>::GetBoxWidth() {
   return left_margin_ + GetTextWidth() + right_margin_;
 }
 
-float TextBox::GetBoxHeight() {
+template <typename TString>
+float TextBox<TString>::GetBoxHeight() {
   if (fit_height_) {
     return top_margin_ + GetTextHeight() + bottom_margin_;
   } else {
@@ -362,17 +372,24 @@ float TextBox::GetBoxHeight() {
   }
 }
 
-float TextBox::GetMaxBoxHeight() {
+template <typename TString>
+float TextBox<TString>::GetMaxBoxHeight() {
   const float line_height = font_.getLineSpacing(font_size_);
   return top_margin_ + (line_height * max_lines_) + bottom_margin_;
 }
 
-float TextBox::GetTextWidth() {
+template <typename TString>
+float TextBox<TString>::GetTextWidth() {
   const float char_width = font_.getGlyph(L'_', font_size_, false).advance;
   return char_width * max_line_length_;
 }
 
-float TextBox::GetTextHeight() {
+template <typename TString>
+float TextBox<TString>::GetTextHeight() {
   const float line_height = font_.getLineSpacing(font_size_);
   return line_height * current_num_lines_;
 }
+
+
+template class TextBox<std::wstring>;
+template class TextBox<std::string>;
