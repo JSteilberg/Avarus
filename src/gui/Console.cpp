@@ -109,7 +109,7 @@ void Console::SetPosition(float x_pos, float y_pos) {
 }
 
 void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
-  Logger::Log(unicode, INFO);
+  //Logger::Log(unicode, INFO);
   switch(unicode) {
   case consts::kBackspace:
     if (edit_box_.GetText().size() > 0 && cursor_pos_ > 0) {
@@ -123,9 +123,6 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
         cursor_pos_ < edit_box_.GetText().size()) {
       edit_box_.RemoveFrom(cursor_pos_, 1);
     }
-    break;
-
-  case consts::kEscape:
     break;
 
   case consts::kCarriageReturn:
@@ -151,9 +148,37 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
     cursor_pos_ += 2;
     break;
 
+    // CTRL-l
+  case consts::kFF:
+    history_box_.AddText(string(num_lines_, '\n'));
+    break;
+
+    // CTRL-a
+  case consts::kSOH:
+    cursor_pos_ = 0;
+    break;
+
+    // CTRL-e
+  case consts::kENQ:
+    cursor_pos_ = edit_box_.GetText().length();
+    break;
+
+    // CTRL-f
+  case consts::kACK:
+    MoveCursor(1);
+    break;
+
+    // CTRL-b
+  case consts::kSTX:
+    MoveCursor(-1);
+    break;
+
+
   default:
-    edit_box_.AddText(sf::String(unicode).toAnsiString(), cursor_pos_);
-    cursor_pos_++;
+    if (unicode >= 32) {
+      edit_box_.AddText(sf::String(unicode).toAnsiString(), cursor_pos_);
+      cursor_pos_++;
+    }
     break;
 
 
@@ -169,8 +194,7 @@ void Console::MoveCursor(int amount) {
     cursor_pos_ += amount;
   }
 
-  size_t edit_box_len = edit_box_.GetText().length();
-
+  const size_t edit_box_len = edit_box_.GetText().length();
   if (cursor_pos_ > edit_box_len) {
     cursor_pos_ = edit_box_len;
   }

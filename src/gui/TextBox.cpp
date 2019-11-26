@@ -166,7 +166,7 @@ void TextBox<TString>::Update() {
 template <typename TString>
 void TextBox<TString>::ForceUpdate() {
   has_update_ = false;
-  Logger::Log("Update to textbox", INFO);
+  //Logger::Log("Update to textbox", INFO);
 
   text_draw_obj_.setFont(font_);
   text_draw_obj_.setCharacterSize(font_size_);
@@ -203,7 +203,8 @@ void TextBox<TString>::AddText(TString add_string, int pos) {
 template <typename TString>
 void TextBox<TString>::Clear() {
   text_string_.clear();
-  // text_draw_obj_.setString("");
+  raw_text_string_.clear();
+  text_draw_obj_.setString("");
   ForceUpdate();
 }
 

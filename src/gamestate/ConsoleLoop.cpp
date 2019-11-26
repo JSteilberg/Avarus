@@ -62,7 +62,7 @@ void ConsoleLoop::HandleKeyEvents(sf::Window &window) {
     } else if (event.type == sf::Event::KeyPressed) {
       if (event.key.control) {
         HandleControlEvents(event.key.code);
-        ctrl_pressed = true;
+        ctrl_pressed = false;
       } else {
         HandleButtonEvents(event.key.code);
       }
@@ -82,8 +82,8 @@ void ConsoleLoop::HandleControlEvents(sf::Keyboard::Key keycode) {
     case sf::Keyboard::V:
         game_->console_overlay_.Write(sf::Clipboard::getString());
       break;
-    case sf::Keyboard::L:
-      game_->console_overlay_.Write("\n\n\n\n\n\n");
+      //case sf::Keyboard::L:
+      //game_->console_overlay_.Write("\n\n\n\n\n\n");
       break;
     default:
       break;
