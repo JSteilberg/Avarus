@@ -11,7 +11,7 @@ linux: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 		Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 		Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \
 		ConsoleLoop.o EditableBuffer.o TextBox.o LuaHost.o \
-		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D -lluajit -ldl
+		-lsfml-graphics -lsfml-window -lsfml-system -lBox2D -lluajit -ldl -pthread
 
 macos: main.o Game.o MainLoop.o Parser.o IdRegister.o Player.o DebugOverlay.o \
 			Atlas.o GameState.o Logger.o Entity.o ConfigLoader.o Console.o \

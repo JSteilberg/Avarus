@@ -81,6 +81,15 @@ void Console::Update() {
     cursor_clock_.restart();
   }
 
+  std::list<string> results = lua_host_.GetResults();
+  if (!results.empty()) {
+    for (auto && result : results) {
+      if (result != "") {
+        history_box_.AddText(">> " + result+ "\n");
+      }
+    }
+  }
+
   if (has_update_) {
     history_box_.Update();
     edit_box_.Update();
@@ -131,11 +140,10 @@ void Console::WriteCharacter(sf::Uint32 unicode, bool shift_held) {
       edit_box_.AddText("\r", cursor_pos_);
     } else {
       string text = edit_box_.GetText();
-      string output = lua_host_.Script(text);
-      history_box_.AddText(text + "\n");
-      if (output != "") {
-        history_box_.AddText(">> " + output + "\n");
+      if (text != "") {
+        lua_host_.Script(text);
       }
+      history_box_.AddText(text + "\n");
       edit_box_.Clear();
       edit_box_.ReflowText();
       cursor_pos_ = -1;
