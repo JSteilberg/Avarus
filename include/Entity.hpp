@@ -29,6 +29,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <atomic>
 #include <unordered_map>
 #include <vector>
 
@@ -46,11 +47,15 @@ class Entity {
   // Set this Entity's position
   void SetPos(b2Vec2 pos);
 
+  void SetPos(float pos_x, float pos_y);
+
   // Get this Entity's position
   b2Vec2 GetPos();
 
   // Set this Entity's velocity
   void SetVel(b2Vec2 vel);
+
+  void SetVel(float vel_x, float vel_y);
 
   // Get this Entity's velocity
   b2Vec2 GetVel();
@@ -121,6 +126,14 @@ class Entity {
   float width_;
 
   float height_;
+
+  std::atomic<b2Vec2> position_;
+
+  std::atomic<float> rotation_;
+
+  std::atomic_bool has_position_change_;
+
+  std::atomic_bool has_rotation_change_;
 
  private:
 };

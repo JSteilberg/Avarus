@@ -39,6 +39,7 @@ Player::Player(Atlas &atlas, b2World &world)
 }
 
 void Player::Update(const sf::Time &delta_time) {
+  Entity::Update(delta_time);
   float t = delta_time.asSeconds();
   // do nothing
 }

@@ -34,16 +34,19 @@ Entity::Entity(const sf::Texture &atlas,
       shape_(),
       fixture_def_(),
       width_(1),
-      height_(2) {
+      height_(2),
+      position_(b2Vec2(0,0)),
+      rotation_(0.f),
+      has_position_change_(true),
+      has_rotation_change_(true){
   sprite_.setScale(
       width_ * consts::kPixelScale / texture_map.at("norm").width,
       height_ * consts::kPixelScale / texture_map.at("norm").height);
 
   body_def_.type = b2_dynamicBody;
   body_def_.position.Set(0, 0);
-
   body_ = world.CreateBody(&body_def_);
-
+  body_->SetTransform(position_, rotation_);
   SetCurrentTexture(current_texture_);
 }
 
@@ -74,22 +77,29 @@ void Entity::SetCurrentTexture(std::string key) {
 
 string Entity::GetCurrentTexture() { return current_texture_; }
 
-void Entity::SetPos(b2Vec2 pos) {
-  body_->SetTransform(body_->GetPosition() + pos, body_->GetAngle());
+void Entity::SetPos(b2Vec2 position) {
+  position_ = position;
+  has_position_change_ = true;
 }
 
-b2Vec2 Entity::GetPos() { return body_->GetPosition(); }
+void Entity::SetPos(float pos_x, float pos_y) {
+  SetPos(b2Vec2(pos_x, pos_y));
+}
+
+b2Vec2 Entity::GetPos() { return position_; }
 
 void Entity::SetVel(b2Vec2 vel) { body_->SetLinearVelocity(vel); }
 
+void Entity::SetVel(float vel_x, float vel_y) {body_->SetLinearVelocity(b2Vec2(vel_x, vel_y));}
+
 b2Vec2 Entity::GetVel() { return body_->GetLinearVelocity(); }
 
-void Entity::SetRot(float rot) {
-  sprite_.setRotation(rot);
-  body_->SetTransform(body_->GetPosition(), rot);
+void Entity::SetRot(float rotation) {
+  rotation_ = rotation;
+  has_rotation_change_= true;
 }
 
-float Entity::GetRot() { return body_->GetAngle(); }
+float Entity::GetRot() { return rotation_;}
 
 void Entity::ApplyForce(b2Vec2 forceVec) {
   body_->ApplyForce(forceVec, body_->GetWorldCenter(), true);
@@ -99,7 +109,20 @@ void Entity::ApplyForce(b2Vec2 forceVec) {
 int Entity::GetTypeId() const { return -1; }
 
 // Update this Entity with a given deltaTime
-void Entity::Update(const sf::Time &delta_time) {}
+void Entity::Update(const sf::Time &delta_time) {
+  if (has_position_change_) {
+    has_position_change_ = false;
+    body_->SetTransform(position_, body_->GetAngle());
+  } else {
+    position_ = body_->GetPosition();
+  }
+  if (has_rotation_change_) {
+    has_rotation_change_ = false;
+    body_->SetTransform(body_->GetPosition(), rotation_);
+  } else {
+    rotation_ = body_->GetAngle();
+  }
+}
 
 Entity::~Entity() {
   // destructor

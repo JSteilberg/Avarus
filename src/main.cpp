@@ -22,6 +22,7 @@ this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 #include <iostream>
+#include <exception>
 
 #include "Constants.hpp"
 #include "Game.hpp"
@@ -37,5 +38,8 @@ int main() {
             << std::endl;
 
   Game game;
-  return game.Start();
+  int res = game.Start();
+  game.~Game();
+  Logger::Log("Game destructed", INFO);
+  exit(res);
 }

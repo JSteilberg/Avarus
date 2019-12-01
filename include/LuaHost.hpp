@@ -58,6 +58,8 @@ class LuaHost {
   // Flag to kill the lua thread willingly
   bool kill_lua_thread_;
 
+  bool thread_done_;
+
   // Constantly pops from script_queue_, executing all items then placing the
   // results in result_queue
   std::thread lua_thread_;

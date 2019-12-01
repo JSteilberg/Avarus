@@ -23,13 +23,24 @@ LuaHost::LuaHost()
       script_mutex_(),
       result_mutex_(),
       kill_lua_thread_(false),
+      thread_done_(false),
       lua_thread_(&LuaHost::Execute, this) {
   lua_state_.open_libraries(sol::lib::base);
 
   sol::usertype<Player> player_type = lua_state_.new_usertype<Player>(
-      "player", sol::constructors<Player(Atlas&, b2World&)>(), "set_rot",
-      &Player::SetRot, "id", &Player::type_id_);
+      "player", sol::constructors<Player(Atlas&, b2World&)>(),
+      "set_rot", &Player::SetRot,
+      "get_rot", &Player::GetRot,
+      "set_pos", sol::resolve<void(float, float)>(&Player::SetPos),
+      "get_pos", &Player::GetPos,
+      "set_vel", sol::resolve<void(float, float)>(&Player::SetVel),
+      "get_vel", &Player::GetVel,
+      "apply_force", &Player::ApplyForce,
+      "set_current_texture", &Player::SetCurrentTexture,
+      "get_current_texture", &Player::GetCurrentTexture,
+      "id", &Player::type_id_);
 
+  lua_thread_.detach();
   Logger::Log("Constructed Lua Host", INFO);
 }
 
@@ -93,6 +104,8 @@ void LuaHost::Execute() {
       }
     }
   }
+  thread_done_ = true;
+  Logger::Log("Killed lua host", INFO);
 }
 
 sol::state& LuaHost::GetState() { return lua_state_; }
@@ -101,6 +114,10 @@ LuaHost::~LuaHost() {
   Logger::Log("Killing lua host", INFO);
   kill_lua_thread_ = true;
   cv_.notify_all();
-  lua_thread_.join();
-  Logger::Log("Killed lua host", INFO);
+
+  // Give the thread some time to end on its own, then give up if it can't
+  std::this_thread::sleep_for(500ms);
+  if (!thread_done_) {
+    Logger::Log("Possible failure to gently kill lua host. Forcibly killing...", INFO);
+  }
 }
