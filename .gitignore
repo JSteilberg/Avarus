@@ -5,6 +5,9 @@ bin/
 *.cbp
 *.dll
 
+# Emacs
+.dir-locals.el
+
 # Compiled Object files
 *.slo
 *.lo
