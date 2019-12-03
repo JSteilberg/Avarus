@@ -26,6 +26,12 @@ tools: KeyCode.o Logger.o
 	$(CXX) $(CXXFLAGS) $(LIB) -o KeyCode.out KeyCode.o Logger.o \
 	-lsfml-graphics -lsfml-window -lsfml-system
 
+worldgen: Civilization.o
+	$(CXX) $(CXXFLAGS) $(LIB) -o worldgen.out Civilization.o
+
+Civilization.o: src/worldgen/Civilization.cpp
+	$(COMP) src/worldgen/Civilization.cpp
+
 KeyCode.o: src/tools/KeyCode.cpp
 	$(COMP) src/tools/KeyCode.cpp
 
