@@ -1,193 +1,59 @@
-#include <iostream>
+#include <string>
 #include <random>
 #include <chrono>
-#include <list>
-#include <map>
-#include <string>
 #include <json/json.hpp>
-#include <limits>
-//#include <functional>
 
-class CivAttribute {
-protected:
-  typedef std::string string;
-  typedef nlohmann::json json;
-  template <class T>
-  using list = std::list<T>;
-  template <class T, class V>
-  using map = std::map<T, V>;
+#include "CivAttribute.hpp"
 
-  using AttributeMap = map<string, CivAttribute>;
-public:
-  CivAttribute() {}
 
-  virtual string GetName();
-
-  virtual double OccurrenceProbability(AttributeMap current_tags) { return 0; }
-  virtual bool DependenciesSatisfied(AttributeMap potential_tags) { return true; }
-  virtual bool MutexesSatisfied(AttributeMap current_tags) { return true; }
-
-  virtual list<string> GetParents() { return list<string>(); }
-  virtual list<string> GetChildren() { return list<string>(); }
-  virtual list<string> GetMutexes() { return list<string>(); }
-
-  bool ContainsAll(AttributeMap att_map, list<string> attributes) {
-    for (string att : attributes) {
-      if (att_map.find(att) == att_map.end()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  bool ContainsAny(AttributeMap att_map, list<string> attributes) {
-    for (string att : attributes) {
-      if (att_map.find(att) == att_map.end()) {
-        return true;
-      }
-    }
-    return false;
-  }
-};
-
+namespace wgen {
 class Eat : public CivAttribute {
 public:
 
-  Eat() {}
+  Eat() : CivAttribute({},{"choke", "fork"}, {}) {}
 
   string GetName() override { return "eat"; }
 
-  double OccurrenceProbability(AttributeMap current_tags) override {
+  virtual double OccurrenceProbability(const AttributeMap &current_tags) const override {
     return .5;
   }
-
-  bool DependenciesSatisfied(AttributeMap potential_tags) override {
-    return ContainsAll(potential_tags, GetParents());
-  }
-
-  bool MutexesSatisfied(AttributeMap current_tags) override {
-    return !ContainsAny(current_tags, GetMutexes());
-  }
-
-  list<string> GetMutexes() override {
-    return list<string>();
-  }
-
-  list<string> GetParents() override {
-    return parents_;
-  }
-
-  list<string> GetChildren() override {
-    return children_;
-  }
-
-  list<string> parents_ = {};
-  list<string> children_ = {"choke", "fork"};
 };
 
 class Drink : public CivAttribute {
 public:
 
-  Drink() {}
+  Drink() : CivAttribute({}, {"choke"}, {}) {}
 
   string GetName() override { return "drink"; }
 
-  double OccurrenceProbability(AttributeMap current_tags) override {
+  double OccurrenceProbability(const AttributeMap &current_tags) const override {
     return .5;
   }
 
-  bool DependenciesSatisfied(AttributeMap potential_tags) override {
-    return ContainsAll(potential_tags, GetParents());
-  }
-
-  bool MutexesSatisfied(AttributeMap current_tags) override {
-    return !ContainsAny(current_tags, GetMutexes());
-  }
-
-  list<string> GetMutexes() override {
-    return list<string>();
-  }
-
-  list<string> GetParents() override {
-    return parents_;
-  }
-
-  list<string> GetChildren() override {
-    return children_;
-  }
-
-  list<string> parents_ = {};
-  list<string> children_ = {"choke"};
 };
 
 class Choke : public CivAttribute {
 public:
 
-  Choke() {}
+  Choke() : CivAttribute({}, {"eat", "drink"}, {}) {}
 
   string GetName() override { return "choke"; }
 
-  double OccurrenceProbability(AttributeMap current_tags) override {
+  double OccurrenceProbability(const AttributeMap &current_tags) const override {
     return .5;
   }
-
-  bool DependenciesSatisfied(AttributeMap potential_tags) override {
-    return ContainsAll(potential_tags, GetParents());
-  }
-
-  bool MutexesSatisfied(AttributeMap current_tags) override {
-    return !ContainsAny(current_tags, GetMutexes());
-  }
-
-  list<string> GetMutexes() override {
-    return list<string>();
-  }
-
-  list<string> GetParents() override {
-    return parents_;
-  }
-
-  list<string> GetChildren() override {
-    return children_;
-  }
-
-  list<string> parents_ = {"eat", "drink"};
-  list<string> children_ = {};
 };
 
 class Fork : public CivAttribute {
 public:
 
-  Fork() {};
+  Fork() : CivAttribute({}, {"eat"}, {}) {};
 
   string GetName() override { return "fork"; }
 
-  double OccurrenceProbability(AttributeMap current_tags) override {
+  double OccurrenceProbability(const AttributeMap &current_tags) const override {
     return .5;
   }
-
-  bool DependenciesSatisfied(AttributeMap potential_tags) override {
-    return ContainsAll(potential_tags, GetParents());
-  }
-
-  bool MutexesSatisfied(AttributeMap current_tags) override {
-    return !ContainsAny(current_tags, GetMutexes());
-  }
-
-  list<string> GetMutexes() override {
-    return list<string>();
-  }
-
-  list<string> GetParents() override {
-    return parents_;
-  }
-
-  list<string> GetChildren() override {
-    return children_;
-  }
-
-  list<string> parents_ = {"eat"};
-  list<string> children_ = {};
 };
 
 class Civilization {
@@ -243,20 +109,14 @@ public:
 
     }
 
-    potential_attributes_["eat"] = Eat();
-    potential_attributes_["drink"] = Drink();
-    potential_attributes_["choke"] = Choke();
-    potential_attributes_["fork"] = Fork();
+    potential_attributes_["eat"] = std::make_unique<Eat>();
+    potential_attributes_["drink"] = std::make_unique<Drink>();
+    potential_attributes_["choke"] = std::make_unique<Choke>();
+    potential_attributes_["fork"] = std::make_unique<Fork>();
 
     //while (!potential_attributes_.empty()) {
     //   int idx = RandInt(0, potential_attributes_.size());
     //}
-
-    for (int i = 0; i < 100; ++i) {
-      std::cout << RandInt(0, 10) << std::endl;
-    }
-
-    std::cout << engine_() << "\n" << engine_() << std::endl;
   }
 
   double Clamp(double number, double min, double max=kLargeNumber) {
@@ -292,8 +152,8 @@ private:
 
   json specifics_;
 
-  std::map<string, CivAttribute> current_attributes_;
-  std::map<string, CivAttribute> potential_attributes_;
+  AttributeMap current_attributes_;
+  AttributeMap potential_attributes_;
 };
 
 
@@ -306,11 +166,12 @@ std::ostream& operator<<(std::ostream &strm, const Civilization &civ) {
               << "\ntribalism:    " << civ.tribalism_
               << "\nage:          " << civ.age_ << "\n";
 }
+}
 
 
 int main() {
   for (size_t i = 0; i < 10; ++i) {
-    std::cout << Civilization() << std::endl;
+    std::cout << wgen::Civilization() << std::endl;
   }
 
 }
