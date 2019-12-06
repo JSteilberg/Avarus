@@ -10,11 +10,11 @@ namespace wgen {
 class Eat : public CivAttribute {
 public:
 
-  Eat() : CivAttribute({},{"choke", "fork"}, {}) {}
+  Eat() : CivAttribute({}, {"choke", "fork"}, {}) {}
 
   string GetName() override { return "eat"; }
 
-  virtual double OccurrenceProbability(const AttributeMap &current_tags) const override {
+  virtual double OccurrenceProbability(AttributeList current_tags) const override {
     return .5;
   }
 };
@@ -26,7 +26,7 @@ public:
 
   string GetName() override { return "drink"; }
 
-  double OccurrenceProbability(const AttributeMap &current_tags) const override {
+  double OccurrenceProbability(AttributeList current_tags) const override {
     return .5;
   }
 
@@ -39,7 +39,7 @@ public:
 
   string GetName() override { return "choke"; }
 
-  double OccurrenceProbability(const AttributeMap &current_tags) const override {
+  double OccurrenceProbability(AttributeList current_tags) const override {
     return .5;
   }
 };
@@ -51,7 +51,7 @@ public:
 
   string GetName() override { return "fork"; }
 
-  double OccurrenceProbability(const AttributeMap &current_tags) const override {
+  double OccurrenceProbability(AttributeList current_tags) const override {
     return .5;
   }
 };
@@ -109,14 +109,22 @@ public:
 
     }
 
-    potential_attributes_["eat"] = std::make_unique<Eat>();
-    potential_attributes_["drink"] = std::make_unique<Drink>();
-    potential_attributes_["choke"] = std::make_unique<Choke>();
-    potential_attributes_["fork"] = std::make_unique<Fork>();
+    potential_attributes_.push_front(std::make_shared<Eat>());
+    potential_attributes_.push_front(std::make_shared<Drink>());
+    potential_attributes_.push_front(std::shared_ptr<Choke>(new Choke()));
+    potential_attributes_.push_front(std::make_shared<Fork>());
 
-    //while (!potential_attributes_.empty()) {
-    //   int idx = RandInt(0, potential_attributes_.size());
-    //}
+    for (shared_ptr<CivAttribute> &att : potential_attributes_) {
+      att->InitializeRelationships(potential_attributes_);
+    }
+
+
+    /*while (!potential_attributes_.empty()) {
+       int idx = RandInt(0, potential_attributes_.size());
+       if (potential_attributes_[idx]->DependenciesSatisfied(potential_attributes_)) {
+
+       }
+       }*/
   }
 
   double Clamp(double number, double min, double max=kLargeNumber) {
@@ -133,12 +141,16 @@ public:
     return unitrand_(engine_);
   }
 
+  double RandInt(int high) {
+    return RandInt(0, high);
+  }
+
   double RandInt(int low, int high) {
     return uniform_int(low, high-1)(engine_);
   }
 
 private:
-  std::mt19937 engine_;
+  std::mt19937 engine_; // twisted
   uniform_real unitrand_;
 
   constexpr const static double kLargeNumber = 999999999999999;
@@ -152,8 +164,8 @@ private:
 
   json specifics_;
 
-  AttributeMap current_attributes_;
-  AttributeMap potential_attributes_;
+  AttributeList current_attributes_;
+  AttributeList potential_attributes_;
 };
 
 
