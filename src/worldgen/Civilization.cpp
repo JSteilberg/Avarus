@@ -1,76 +1,21 @@
 #include <string>
 #include <random>
 #include <chrono>
-#include <json/json.hpp>
 
 #include "CivAttribute.hpp"
+#include "Worldgen.hpp"
 
 
 namespace wgen {
-class Eat : public CivAttribute {
-public:
-
-  Eat() : CivAttribute({}, {"choke", "fork"}, {}) {}
-
-  string GetName() override { return "eat"; }
-
-  virtual double OccurrenceProbability(AttributeList current_tags) const override {
-    return .5;
-  }
-};
-
-class Drink : public CivAttribute {
-public:
-
-  Drink() : CivAttribute({}, {"choke"}, {}) {}
-
-  string GetName() override { return "drink"; }
-
-  double OccurrenceProbability(AttributeList current_tags) const override {
-    return .5;
-  }
-
-};
-
-class Choke : public CivAttribute {
-public:
-
-  Choke() : CivAttribute({}, {"eat", "drink"}, {}) {}
-
-  string GetName() override { return "choke"; }
-
-  double OccurrenceProbability(AttributeList current_tags) const override {
-    return .5;
-  }
-};
-
-class Fork : public CivAttribute {
-public:
-
-  Fork() : CivAttribute({}, {"eat"}, {}) {};
-
-  string GetName() override { return "fork"; }
-
-  double OccurrenceProbability(AttributeList current_tags) const override {
-    return .5;
-  }
-};
-
 class Civilization {
   // I think this is the first time I've ever used friend without feeling bad
   friend std::ostream& operator<<(std::ostream&, const Civilization&);
 
-  typedef std::normal_distribution<double> normal;
-  typedef std::gamma_distribution<double> gamma;
-  typedef std::uniform_real_distribution<double> uniform_real;
-  typedef std::uniform_int_distribution<int> uniform_int;
-  typedef std::string string;
-  typedef nlohmann::json json;
 public:
   Civilization(time_t seed=std::chrono::system_clock::now().time_since_epoch().count()) :
     unitrand_(0.0, 1.0) {
 
-    std::cout << "Using seed " << seed << std::endl;
+    std::cout << "Seed " << seed << std::endl;
     engine_.seed(seed);
 
     // burn card
@@ -105,26 +50,61 @@ public:
 
   void GenCriticalThinking() {
     if (intelligence_ > 70 || rand() < .05) {
-      specifics_["critical_thinking"] = 1;
 
     }
 
-    potential_attributes_.push_front(std::make_shared<Eat>());
-    potential_attributes_.push_front(std::make_shared<Drink>());
-    potential_attributes_.push_front(std::shared_ptr<Choke>(new Choke()));
-    potential_attributes_.push_front(std::make_shared<Fork>());
+    potential_attributes_.push_back(std::make_shared<Eat>());
+    potential_attributes_.push_back(std::make_shared<Spoon>());
+    potential_attributes_.push_back(std::make_shared<Drink>());
+    potential_attributes_.push_back(std::make_shared<Choke>());
+    potential_attributes_.push_back(std::make_shared<Fork>());
 
+    std::list<shared_ptr<CivAttribute>> adding_attributes;
     for (shared_ptr<CivAttribute> &att : potential_attributes_) {
       att->InitializeRelationships(potential_attributes_);
+      if (att->GetParents().empty()) {
+        std::cout << att->GetName() << std::endl;
+        adding_attributes.push_back(att);
+      }
     }
 
 
-    /*while (!potential_attributes_.empty()) {
-       int idx = RandInt(0, potential_attributes_.size());
-       if (potential_attributes_[idx]->DependenciesSatisfied(potential_attributes_)) {
+    while (!adding_attributes.empty()) {
+      shared_ptr<CivAttribute> curr_attr = adding_attributes.back();
+      adding_attributes.pop_back();
 
+      if (!curr_attr->MutexesSatisfied(current_attributes_)
+          || !curr_attr->DependenciesSatisfied(potential_attributes_)) {
+         // TODO: Replace with std::erase when it comes out
+         auto loc = std::find(potential_attributes_.begin(), potential_attributes_.end(), curr_attr);
+         potential_attributes_.erase(loc);
+         continue;
        }
-       }*/
+
+       auto unsatisfied_deps = curr_attr->GetUnsatisfiedDependencies(current_attributes_);
+       if (unsatisfied_deps.empty()) {
+         if (Rand() < curr_attr->OccurrenceProbability(current_attributes_)
+             && !CivAttribute::Contains(current_attributes_, curr_attr)) {
+           current_attributes_.push_back(curr_attr);
+           for (auto &child : curr_attr->GetChildren()) {
+             if (!CivAttribute::Contains(adding_attributes, child)) {
+               adding_attributes.push_back(child);
+             }
+           }
+         }
+       } else {
+         for (auto &dep : unsatisfied_deps) {
+           if (!CivAttribute::Contains(adding_attributes, dep)) {
+             adding_attributes.push_back(dep);
+           }
+         }
+       }
+    }
+
+    std::cout << "Attributes: " << std::endl;
+    for (auto &att : current_attributes_) {
+      std::cout << " " << att;
+    }
   }
 
   double Clamp(double number, double min, double max=kLargeNumber) {
@@ -162,23 +142,20 @@ private:
   double disgust_;
   double age_;
 
-  json specifics_;
-
   AttributeList current_attributes_;
   AttributeList potential_attributes_;
 };
 
-
-
-std::ostream& operator<<(std::ostream &strm, const Civilization &civ) {
-  return strm << "Civilization"
-              << "\nintelligence: " << civ.intelligence_
-              << "\nfriendliness: " << civ.friendliness_
-              << "\nemotionality: " << civ.emotionality_
-              << "\ntribalism:    " << civ.tribalism_
-              << "\nage:          " << civ.age_ << "\n";
+  std::ostream& operator<<(std::ostream &strm, const Civilization &civ) {
+    return strm << "Civilization"
+                << "\nintelligence: " << civ.intelligence_
+                << "\nfriendliness: " << civ.friendliness_
+                << "\nemotionality: " << civ.emotionality_
+                << "\ntribalism:    " << civ.tribalism_
+                << "\nage:          " << civ.age_ << "\n";
+  }
 }
-}
+
 
 
 int main() {
