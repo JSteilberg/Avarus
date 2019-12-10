@@ -29,7 +29,7 @@ tools: KeyCode.o Logger.o
 worldgen: Civilization.o
 	$(CXX) $(CXXFLAGS) $(LIB) -o worldgen.out Civilization.o
 
-Civilization.o: src/worldgen/Civilization.cpp
+Civilization.o: src/worldgen/Civilization.cpp include/CivAttribute.hpp
 	$(COMP) src/worldgen/Civilization.cpp
 
 KeyCode.o: src/tools/KeyCode.cpp
